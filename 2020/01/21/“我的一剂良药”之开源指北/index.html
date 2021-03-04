@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN,zh-TW,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lihuimignxs.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文收录于 Gitee 官方“开源指北”项目的“开源故事”目录下，更多精彩故事可戳这里： 开源指北 。 文章较长，适合闲来无事时“食用”（阅读）。  开篇开源指北是 Gitee 开源社区送给所有开源人的一份保姆级开源百科，它的出现让开源相关知识不再像“沧海遗珠”一样散落在瀚海苍茫，让初识开源者可以从容地面对开源之海的首次“起航”，让众多热衷开源的开源爱好者在这里畅谈其所想。 不得不说，开源指北项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="“我的一剂良药”之开源指北">
+<meta property="og:url" content="http://lihuimignxs.github.io/2020/01/21/%E2%80%9C%E6%88%91%E7%9A%84%E4%B8%80%E5%89%82%E8%89%AF%E8%8D%AF%E2%80%9D%E4%B9%8B%E5%BC%80%E6%BA%90%E6%8C%87%E5%8C%97/index.html">
+<meta property="og:site_name" content="江先生的杂货铺">
+<meta property="og:description" content="本文收录于 Gitee 官方“开源指北”项目的“开源故事”目录下，更多精彩故事可戳这里： 开源指北 。 文章较长，适合闲来无事时“食用”（阅读）。  开篇开源指北是 Gitee 开源社区送给所有开源人的一份保姆级开源百科，它的出现让开源相关知识不再像“沧海遗珠”一样散落在瀚海苍茫，让初识开源者可以从容地面对开源之海的首次“起航”，让众多热衷开源的开源爱好者在这里畅谈其所想。 不得不说，开源指北项目">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-01-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-21T16:00:00.000Z">
+<meta property="article:author" content="西狩">
+<meta property="article:tag" content="开源">
+<meta property="article:tag" content="感悟">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://lihuimignxs.github.io/2020/01/21/%E2%80%9C%E6%88%91%E7%9A%84%E4%B8%80%E5%89%82%E8%89%AF%E8%8D%AF%E2%80%9D%E4%B9%8B%E5%BC%80%E6%BA%90%E6%8C%87%E5%8C%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>“我的一剂良药”之开源指北 | 江先生的杂货铺</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="江先生的杂货铺" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">江先生的杂货铺</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lihuimignxs.github.io/2020/01/21/%E2%80%9C%E6%88%91%E7%9A%84%E4%B8%80%E5%89%82%E8%89%AF%E8%8D%AF%E2%80%9D%E4%B9%8B%E5%BC%80%E6%BA%90%E6%8C%87%E5%8C%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="西狩">
+      <meta itemprop="description" content="生活 | 技术 | 感悟">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="江先生的杂货铺">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          “我的一剂良药”之开源指北
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-21 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-21T00:00:00+08:00">2020-01-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-22 00:00:00" itemprop="dateModified" datetime="2020-01-22T00:00:00+08:00">2020-01-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E6%BA%90/" itemprop="url" rel="index"><span itemprop="name">开源</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/21/%E2%80%9C%E6%88%91%E7%9A%84%E4%B8%80%E5%89%82%E8%89%AF%E8%8D%AF%E2%80%9D%E4%B9%8B%E5%BC%80%E6%BA%90%E6%8C%87%E5%8C%97/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/21/%E2%80%9C%E6%88%91%E7%9A%84%E4%B8%80%E5%89%82%E8%89%AF%E8%8D%AF%E2%80%9D%E4%B9%8B%E5%BC%80%E6%BA%90%E6%8C%87%E5%8C%97/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文收录于 Gitee 官方“开源指北”项目的“开源故事”目录下，更多精彩故事可戳这里： <a target="_blank" rel="noopener" href="https://gitee.com/gitee-community/opensource-guide/tree/master">开源指北</a> 。</p>
+<p><strong>文章较长，适合闲来无事时“食用”（阅读）。</strong> </p>
+<h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>开源指北是 Gitee 开源社区送给所有开源人的一份保姆级开源百科，它的出现让开源相关知识不再像“沧海遗珠”一样散落在瀚海苍茫，让初识开源者可以从容地面对开源之海的首次“起航”，让众多热衷开源的开源爱好者在这里畅谈其所想。</p>
+<p>不得不说，开源指北项目的发起是一个非常有趣的想法，其秉持着“开源问题由开源来解决”的思想，吸引了众多开源爱好者参与到这项开源运动中来，我也是其中一员。这是我参与的第一个开源项目，在拟定标题时再三思忖，结合自身的亲身感受，最终定了这个标题。至于为什么说对我而言是“一剂良药”，在下文中我会作出解释。</p>
+<p>相比“满满的正能量”，我更希望从平常视角坦诚相待，有喜悦，有悲伤，有勇往直前，有踟蹰迷茫。不管读到这篇文章的你正拥有着哪种情绪，都能从这些稀松平常的小事中有所得，然后继续努力前行，成为更好的自己。</p>
+<p>接下来，分享一段普普通通、简简单单的故事。</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="源起"><a href="#源起" class="headerlink" title="源起"></a>源起</h2><p><strong>“青山若无素，偃蹇不相亲。要识庐山面，他年是故人。”</strong> </p>
+<p>我叫西狩，有些朋友也会叫我老江，从事 Java 开发相关工作。</p>
+<p>2020年是动荡的一年。从我的大脑里进行热词分析，浮现出来了很多“动荡”的词汇。比如：“疫情”、“大选”、“制裁”、“猝死”、“内卷”等等。我们深知处在一个贩卖焦虑的时代，但有时还是会不自觉地被这些外界的焦虑所影响，对于处在人生各种分岔路口的人们而言，受到的影响可能会更大。随着时间越走越快，看到很多新鲜的事物如雨后春笋般破土而出，陌生而又新奇。就像是面对琳琅满目的商品一样，一不小心便挑花了眼。这时我们可能会迷茫，但我们深知，自己需要去做些什么来面对它们。</p>
+<p>我不确定每个人是否都有过这种迷茫的经历，但就我个人而言，迷茫期是经常的，也是正常的。生活是一座围城，选择了漂泊但又渴望稳定，选择了努力但又渴望闲适。“有的人想得多却做得少”，我不确定这句话是否符合自己，但我深知自己做得还远远不够。大家应该都听过这样一句话：“学习最好的时间是十年前，其次是现在”。所以，<strong>不要害怕迷茫，只要敢于面对迷茫并踏出下一步，那就是有意义的。</strong> </p>
+<p>我不确定命运是否会眷顾内心和自己拧巴的人，但能够参与一项有意义的开源活动，我觉得自己是幸运的。一切的源头是从日常阅读公众号文章开始讲起，几个月前 <a target="_blank" rel="noopener" href="https://github.com/objcoding">张乘辉</a> 老师的一篇推文《使用 Hexo + Gitee 快速搭建属于自己的博客》，文章内容很简单易懂，而后我开始考虑搭建自己的博客。在搭建过程中，我 Gitee 平台上无意间看到了开源指北的开源活动，怀着一颗好奇心的自己就这样与开源指北相遇了。说实话，虽然平时也会在 Github、Gitee 上转一转，但顶多都是走马观花似的了解，并没有参与到什么开源项目中。起初自己也是随便了解一下。在了解项目简介、阅读其中几篇文章后，感觉自己对一些内容有一定的认知和共鸣，而且内容还有很多缺失，于是便尝试提交了一次 PR。</p>
+<p>故事讲到这里，我可能还并不会深陷其中。在提交后的第二天，官方小伙伴 <a target="_blank" rel="noopener" href="https://gitee.com/tenngoxars">tenngo</a> 就合并了我的 PR。及时的正向反馈让我受到了很大的鼓舞，就像是可治百病的“一剂良药”，使我无处安放的心静了下来。于是便开始了我的第一次开源之旅。</p>
+<h2 id="指天说地"><a href="#指天说地" class="headerlink" title="指天说地"></a>指天说地</h2><p><strong>“一点浩然气，千里快哉风。”</strong> </p>
+<p>在开源指北之前，其实网络上有很多开源知识的相关文章，但太过零散，不成体系，对于想要参与开源的人并不友好。开源指北最大的意义就是对开源知识的整合，它涵盖了大部分常见的入门知识，可以帮助很多想要参与开源而不知如何入手的小伙伴，所以，我想有必要分享一下在开源指北参与过程中的感受与收获。</p>
+<p>在《降临》中，有句台词让我记忆深刻：“If you immerse yourself into a foreign language, you can actually rewire your brain”。正如前文提到的迷茫期，最近一年的时间里发生了很多事情，思绪万千但却发现脚步却慢了下来。当我下意识提起自己的脚步时，却感觉似乎前方全是岔路，就在这时，开源指北出现了。在参与过程中，无论是查阅资料，还是编写文章，又或是提交 PR，都能感受到开源带给自己的活力。仔细想想，当自己毕业时，不愿在一眼望到头的生活里度过一生，那么自己对未来的迷茫和担忧就可以很好地接收了，因为这就是自己想要的生活。人生在世，不如意事常八九，大多数人都并非是一帆风顺的。<strong>与其每日杞人忧天，不如沉下心来倾听内心的想法，然后坚定地踏出接下来的每一步。</strong> </p>
+<p>在开始分享开源过程中的感悟前，先谈及了心态，是因为自己深知心态对我的重要性。在自己心静下来后，做事情的效率会有明显的提高，并且在交流、沟通以及决策上都可以更加清醒。接下来，便带着这份心态聊到哪算哪喽！</p>
+<p>开源与我的本职专业有着密切的联系，虽然是第一次参与开源，但自己对开源并不算陌生。曾经怀着激动的心情参加的每次 Pivotal 技术峰会、各种技术的 Meetup 以及各位大佬的技术分享，在这一刻似乎派上了一定的用场。这也说明了<strong>平日积累的重要性</strong>，碎片化学习虽然并不能建立起心中的一套完整的框架体系，但对自己的影响是潜移默化的。我会对每个章节进行阅读，文章结构不顺就梳理结构，上下文衔接问题就修改上下文，明显出现内容缺失就通过查阅资料再加上自己的理解进行补充。后面又进行了反复的阅读，以及关注小伙伴们提交的 PR。我们会为项目中提及的“半开源”的概念展开探讨，会对开源知识互相交流以至于忘记时间，诸如 arch、CLA、中国第一个被 OSI 认可的协议等等。我们也会因为项目中的不足而争辩，而且可能最终谁也说服不了谁，大家的思想是平等的，没有对错，而最终的结论也是有趣而一致的。那么这个结论是什么呢？其实很简单，各自提交 PR 就好了。<strong>求同存异是开源社区的不二法则，我不认可你的观点，但我尊重你表达思想的权利。</strong> </p>
+<p>因工作需要，我在 2017 年加入了 Kettle 技术交流群，经过学习掌握了它，但由于后续没有机会再使用，我对 Kettle 的熟练程度大幅度下降，更不要说现在最新的开源版本。同样的原因，我在 2019 年初加入了 Skywalking 交流群，基本属于一个“潜水者”，只是经常会查看技术交流的消息。其他社群我就不一一列举了，我之所以提到这两段经历，是想反思一下自己：为什么曾经有那么多优秀的开源项目摆在自己面前，到现在自己还是一个开源小白？我感觉有两个重要的事情自己没有做得很好：<strong>坚持和思维模式</strong>。</p>
+<ul>
+<li>参与开源不是一蹴而就的事情，我们需要花费大量的时间来将其打造成为一个更好的东西。我因为不再使用而放弃对 Kettle 的关注，所以它自然而然就离我远去了。<strong>其实大多数人都并非天才，能成为一个项目中优秀开源者的主要原因就是坚持。</strong> </li>
+<li>我学习 Kettle 只想使用它来解决问题，但从未想过自己还可以改变它。如果保持这样的思维模式继续下去，那么坚持的意义就是十分有限的了，因为我只是一个熟练工，可能永远都无法突破成为建筑师。<strong>一个目标是否能够可达，有时候需要的只是一个思维的转变。</strong> </li>
+</ul>
+<p>最近看了吴晟老师在开放原子基金会 2020 年技术峰会上发表的演讲——<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV125411E7GK?p=1&share_medium=iphone&share_plat=ios&share_source=QQ&share_tag=s_i&timestamp=1611211180&unique_k=ZKplUv">开源运营治理分论坛 - Educate Community Over Support Community</a>。演讲中很清晰地为大家讲解了我们在开源中应该关注的重点，解释了社区各种角色的职责，也谈及了对社区发展和社区生态的看法。当然，其中让人受益匪浅的内容还有很多，而且没有太多难理解的技术，更多的是对开源经验的分享，感兴趣的小伙伴可以了解一下。这也是我的一个小建议：<strong>多去与他人交谈，倾听他人的想法，我们需要在思想碰撞的过程中不断刺激自己进行思维升级。</strong> </p>
+<p>再分享一则个人觉得有趣的事情，每个开源项目都有自己的排版规则，在参与开源指北过程中，我在一个关于排版的开源项目中发现了一个有趣的协议：WTFPL。参考知乎问答“<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20865060/answer/51757033">什么是 WTFPL（Do What the Fuck You Want to Public License），为什么会有人使用这一授权许可？</a>”中的描述来了解一下：</p>
+<blockquote>
+<p>由于程序拥有所有权，所以每段代码允许大家在何种程度上自然使用就成为了一个严肃的法律问题，所以就诞生了licence这个概念。其中有一些代码是写出来让大家随意免费使用的，所以licence就要规定你可以干一切事情。可是在法律里，“允许你干任何事情”这句话并不严谨，所以随着不断的诉讼、打官司、法学家的诠释，诞生了诸如 <a target="_blank" rel="noopener" href="http://www.zhihu.com/people/c55d6c118b9141f20776588b0308e586">@IAMSK</a> 所说的一大堆授权协议。<br>但是问题来了。<br>这个协议是给程序员看的，却是由法学家和律师写的。<br>于是随着时间的推移，这些协议变得unreadable，也就是程序员根本不可能看懂。</p>
+<p>而这些协议还会越来越长，随着欧美法律不断地被新的判例充实。。。。</p>
+<p>于是一些程序员为了反抗这一恶性循环，发明了WTFPL。</p>
+<p>简而言之，就是：<strong>“你TM爱干啥干啥”</strong></p>
+</blockquote>
+<p>有趣的点在于，我仿佛能脑补出当时程序员看到冗长的法律条文和专业名词的时候抓狂的面部表情，是个很有意思的小故事。</p>
+<p>最后要说一下，个人认为，开源指北项目参与门槛并不高，虽然在内容上会尽力做到精益求精，但它的受众是每一个开源人，大家都可以在这里各抒己见。这个项目的维护也会一直开放，也希望能够在以后听到更多开源故事和开源声音。<strong>毕竟开源这件事儿，一起热闹起来才好玩嘛！</strong> </p>
+<h2 id="北窗之友"><a href="#北窗之友" class="headerlink" title="北窗之友"></a>北窗之友</h2><p><strong>“今日北窗下，自问何所为，欣然得三友，三友者为谁？琴罢辄举酒，酒罢辄吟诗。”</strong> </p>
+<p>如果说有人问：“一次开源经历中，最重要的是什么事情？是最后的结果么？”我想可能不是。当我们去做任何一件事情的时候，都无法预料到下一秒会发生什么，更不会预料到最后的结果会是什么样子，所以结论并不适合放在开源经历的第一位。正所谓兴趣是最好的老师，与其猜测未知的结果，不如遵从本心去体会在开源中遇到的所有感受。因此，<strong>一次成功的硕果固然可喜，但更重要的是享受过程。</strong> </p>
+<p>我们可以对于开源项目的任何事情畅所欲言，可以发表自己对开源项目的理解，可以讨论目前存在的问题，还可以从交流中了解到更加广阔的开源世界。当然，开源社区不会是只有一种声音，我们可以有不同的观点，可以有分歧和争辩，还可以享受每一次思想的碰撞。除了必要的社区准则以外，我们的文字、代码以及思想都是无比自由的，或许这就是开源精神带给我的一种体验。</p>
+<p>既然谈到了开源精神，那么一群志同道合的秉承开源精神的小伙伴自然是必不可少的。在此，要感谢在开源指北项目中帮助和鼓励过我的小伙伴们：</p>
+<ul>
+<li><p>感谢 <a target="_blank" rel="noopener" href="https://gitee.com/jack960330">jack960330</a> 对我编写修订过程中给予的专业指点，也感谢耐心的讲解和对我的认可，钦佩你的专业态度。</p>
+</li>
+<li><p>感谢 <a target="_blank" rel="noopener" href="https://gitee.com/taotieren">taotieren</a> 的中文排版指北项目，在了解一种排版规范的同时，还发现其使用的 WTFPL 开源协议——一个有趣的协议以及背后有趣的小故事。</p>
+</li>
+<li><p>感谢众多的开源小伙伴，我们一起沟通探讨了很多开源小知识，也通过他们了解到了很多开源项目，一起奋战的日子会是一段非常美好的回忆！</p>
+</li>
+<li><p>感谢 Gitee 小助手带我加入开源小队，还给我邮递了那么多奖品，我会继续努力的。不辜负每一次参与！</p>
+</li>
+<li><p>感谢与开源指北的不期而遇，这是我这个冬季里最温暖的“小太阳”。</p>
+</li>
+</ul>
+<p>“琴罢辄举酒，酒罢辄吟诗”，这是我理想中的开源世界。所谓“琴”、“酒”、“诗”，是代指令自己感到美好的事物——是得到认可的喜悦，是有所收获的满足，是感受到如鱼得水般的自由。我觉得开源指北就是这样的，希望它在未来成长的路上，依旧如此自由！也希望参与开源的你——<strong>Forever to be free !</strong> </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>西狩
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://lihuimignxs.github.io/2020/01/21/%E2%80%9C%E6%88%91%E7%9A%84%E4%B8%80%E5%89%82%E8%89%AF%E8%8D%AF%E2%80%9D%E4%B9%8B%E5%BC%80%E6%BA%90%E6%8C%87%E5%8C%97/" title="“我的一剂良药”之开源指北">http://lihuimignxs.github.io/2020/01/21/“我的一剂良药”之开源指北/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E6%BA%90/" rel="tag"><i class="fa fa-tag"></i> 开源</a>
+              <a href="/tags/%E6%84%9F%E6%82%9F/" rel="tag"><i class="fa fa-tag"></i> 感悟</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/30/SpringBoot%E5%A5%BD%E2%80%9C%E5%90%83%E2%80%9D%E7%9A%84%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86/" rel="next" title="SpringBoot 好“吃”的启动原理">
+      SpringBoot 好“吃”的启动原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E7%AF%87"><span class="nav-number">1.</span> <span class="nav-text">开篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E8%B5%B7"><span class="nav-number">2.</span> <span class="nav-text">源起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%A4%A9%E8%AF%B4%E5%9C%B0"><span class="nav-number">3.</span> <span class="nav-text">指天说地</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%97%E7%AA%97%E4%B9%8B%E5%8F%8B"><span class="nav-number">4.</span> <span class="nav-text">北窗之友</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="西狩"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">西狩</p>
+  <div class="site-description" itemprop="description">生活 | 技术 | 感悟</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lihuimingxs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lihuimingxs" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lihuimingxs@foxmail.com" title="E-Mail → mailto:lihuimingxs@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/qq_35529258" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_35529258" rel="noopener" target="_blank"><i class="fab fa-cuttlefish fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/lihuimingxs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;lihuimingxs" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ture</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">43k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">39 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='50,50,50' opacity='0.8' zIndex='-1' count='200' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'ajPDcSBuEtxQBvxuTtCdlBHF-gzGzoHsz',
+      appKey     : 'JaaCs8HnGB2BpDVXkiQAs419',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
