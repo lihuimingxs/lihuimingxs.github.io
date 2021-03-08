@@ -1,0 +1,1584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>MacOS11.0-brew 卡在 Updating Homebrew</title>
+    <url>/2021/02/28/MacOS11.0-brew%E5%8D%A1%E5%9C%A8Updating-Homebrew/</url>
+    <content><![CDATA[<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>使用 MacOS11.0 brew 安装软件，一直卡在 Updating Homebrew 不动。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">xs-Pro:~ xs$ brew install wget</span><br><span class="line">Updating Homebrew...</span><br></pre></td></tr></table></figure>
+
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="方法一（推荐）"><a href="#方法一（推荐）" class="headerlink" title="方法一（推荐）"></a>方法一（推荐）</h3><p>直接关闭brew每次执行命令时的自动更新</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim ~/.bash_profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新增一行</span></span><br><span class="line"><span class="built_in">export</span> HOMEBREW_NO_AUTO_UPDATE=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="方法二（未测试）"><a href="#方法二（未测试）" class="headerlink" title="方法二（未测试）"></a>方法二（未测试）</h3><p>替换brew源</p>
+<p><strong>该方法未测试</strong> </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>&quot;</span></span><br><span class="line">git remote set-url origin https://mirrors.ustc.edu.cn/brew.git</span><br><span class="line"></span><br><span class="line"><span class="comment">#替换homebrew-core.git</span></span><br><span class="line"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>/Library/Taps/homebrew/homebrew-core&quot;</span></span><br><span class="line">git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git</span><br><span class="line">brew update</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 备用地址-1</span></span><br><span class="line"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>&quot;</span></span><br><span class="line">git remote set-url origin https://git.coding.net/homebrew/homebrew.git</span><br><span class="line">brew update</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 备用地址-2</span></span><br><span class="line"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>&quot;</span></span><br><span class="line">git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/brew.git</span><br><span class="line"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>/Library/Taps/homebrew/homebrew-core&quot;</span></span><br><span class="line">git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew-core.git</span><br><span class="line">brew update</span><br></pre></td></tr></table></figure>
+
+<p>如果备用地址都不行，那就只能再换回官方地址了</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#重置brew.git</span></span><br><span class="line"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>&quot;</span></span><br><span class="line">git remote set-url origin https://github.com/Homebrew/brew.git</span><br><span class="line"></span><br><span class="line"><span class="comment">#重置homebrew-core.git</span></span><br><span class="line"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(brew --repo)</span>/Library/Taps/homebrew/homebrew-core&quot;</span></span><br><span class="line">git remote set-url origin https://github.com/Homebrew/homebrew-core.git</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://www.jianshu.com/p/7cb05a2b39a5">Mac 解决brew一直卡在Updating Homebrew</a> 作者：Harveyhhw</li>
+</ul>
+]]></content>
+      <categories>
+        <category>MacOS</category>
+      </categories>
+      <tags>
+        <tag>MacOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringBoot 好“吃”的启动原理</title>
+    <url>/2020/12/30/SpringBoot%E5%A5%BD%E2%80%9C%E5%90%83%E2%80%9D%E7%9A%84%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<h2 id="不正经的前言"><a href="#不正经的前言" class="headerlink" title="不正经的前言"></a>不正经的前言</h2><p>最近好朋友山治去面试了，晚上回来有些低迷地问我：“小西，你知道 SpringBoot 的启动流程吗？”</p>
+<p>我说：“知道呀！从 SpringApplication.run() 方法开始，首先进行实例化，实例化里主要做了4件事：根据 calsspath……”</p>
+<p>山治抬腿就是一记“恶魔风脚”：SpringBoot 的启动步骤那么多，什么 1、2、3、4，谁能记得住啊！</p>
+<p>在被乔巴施展”还我漂漂拳“以后，我痛定思痛，暗暗发誓一定要写篇比美女还好看的文章教会山治，让他吃透这道看似难啃的“菜”。</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="料理的二三事"><a href="#料理的二三事" class="headerlink" title="料理的二三事"></a>料理的二三事</h2><h3 id="选材说明"><a href="#选材说明" class="headerlink" title="选材说明"></a>选材说明</h3><p>首先，做一份料理，一定要准备好采购清单。如果只有菜谱没有选材说明，最终做出来的味道可能并没有那么好。哪怕随便做一道家常菜，需要放大葱还是香葱也是有讲究的，而不同年份的葡萄酿制的酒就更不用说了。</p>
+<blockquote>
+<p>正确的选材示例：山治的料理笔记。</p>
+<p>错误的选材实例：路飞不看笔记误吃有毒鱼皮。</p>
+</blockquote>
+<h3 id="料理的主要流程"><a href="#料理的主要流程" class="headerlink" title="料理的主要流程"></a>料理的主要流程</h3><p>现在，咱们来聊聊吃货该聊的事情：想要做一道菜需要做些什么？</p>
+<h3 id="料理三要素"><a href="#料理三要素" class="headerlink" title="料理三要素"></a>料理三要素</h3><p>来看一下料理三要素：</p>
+<ol>
+<li>做饭的场地</li>
+<li>完美的食材</li>
+<li>优秀的厨师</li>
+</ol>
+<p>当然，虽然在家里一个人就可以做了，但是不要小看料理呀！咱们要聊就聊 big restaurant。比如一家让你难忘的餐厅：海上餐厅“BARATI”。你想要的东西——上面提到的三要素，餐厅后厨全都有。Ok！下面就可以准备料理了。</p>
+<h3 id="料理步骤"><a href="#料理步骤" class="headerlink" title="料理步骤"></a>料理步骤</h3><p>料理的步骤很简单，包括准备步骤和开始步骤。</p>
+<h3 id="料理准备"><a href="#料理准备" class="headerlink" title="料理准备"></a>料理准备</h3><p>让我们来安排一场完美的料理。BARATI 料理的准备步骤：</p>
+<ol>
+<li>选择储存食材的冰箱</li>
+<li>选择料理的主食材</li>
+<li>根据点菜单确定料理菜系</li>
+<li>准备料理需要的菜谱</li>
+<li>指定处理食材的厨师</li>
+<li>指定做料理的主厨</li>
+</ol>
+<h3 id="料理开始"><a href="#料理开始" class="headerlink" title="料理开始"></a>料理开始</h3><p>“高端的食材只需要简单的烹饪”。重头戏开始了！BARATI 料理的工作流程：</p>
+<ol>
+<li>允许外卖</li>
+<li>厨师待命</li>
+<li>加载点菜单的要求（如：不要香菜）</li>
+<li>准备料理所需的锅碗瓢盆，并通知厨师准备好了</li>
+<li>忽略没必要了解的信息（如：食材的价格）</li>
+<li>指定菜品装饰</li>
+<li>根据菜系，获取对应菜谱</li>
+<li>设置突发情况报告人（如：点的菜没有了）</li>
+<li>厨师查看锅碗瓢盆、菜谱和点菜单的要求</li>
+<li>处理食材</li>
+<li>料理完成后，根据点菜单的要求定制</li>
+<li>是否查看客人反馈</li>
+<li>食材准备就绪</li>
+<li>通知所有可以干活的厨师</li>
+<li>准备开工</li>
+</ol>
+<p>突发报告人处理突发情况（点的菜没有了，需要告诉服务员）</p>
+<p>就这样，一顿完美的料理就做好了。</p>
+<h2 id="欢迎来到“BARATI”"><a href="#欢迎来到“BARATI”" class="headerlink" title="欢迎来到“BARATI”"></a>欢迎来到“BARATI”</h2><h3 id="选材说明-1"><a href="#选材说明-1" class="headerlink" title="选材说明"></a>选材说明</h3><p>学技术也是一样，版本说明就是料理的选材说明。遵循“就地取材”原则，本次选用的“主料”是平时项目上使用的 <code>SpringBoot 2.1.5.RELEASE</code> 版本。依赖如下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.5.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="“BARATI”后厨主要流程"><a href="#“BARATI”后厨主要流程" class="headerlink" title="“BARATI”后厨主要流程"></a>“BARATI”后厨主要流程</h3><blockquote>
+<p>以 SpringApplication.run() 方法为例</p>
+</blockquote>
+<h4 id="料理三要素-1"><a href="#料理三要素-1" class="headerlink" title="料理三要素"></a>料理三要素</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StartApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 做饭的场地</span></span><br><span class="line">    <span class="comment">// 2. 完美的食材</span></span><br><span class="line">    <span class="comment">// 3. 优秀的厨师</span></span><br><span class="line">    SpringApplication.run(StartApplication.class, args);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>做饭的场地：SpringApplication</li>
+<li>完美的食材：所有通过 SpringBoot 自动配置扫描，由 ClassLoader 加载的 Class</li>
+<li>优秀的厨师：在启动过程中所有 ApplicationListener 和 ApplicationRunner</li>
+</ol>
+<h4 id="料理步骤-1"><a href="#料理步骤-1" class="headerlink" title="料理步骤"></a>料理步骤</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ConfigurableApplicationContext <span class="title">run</span><span class="params">(Class&lt;?&gt;[] primarySources,</span></span></span><br><span class="line"><span class="function"><span class="params">			String[] args)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 1. 料理准备</span></span><br><span class="line">  <span class="comment">// 2. 料理开始</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> SpringApplication(primarySources).run(args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>料理准备</p>
+<p>new SpringApplication(primarySources) 方法，SpringApplication 的初始化</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SpringApplication</span><span class="params">(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 1. 选择储存食材的冰箱 &gt;&gt; 可指定的类加载器，与 classpath 相关，默认为null，加载时使用 DefaultResourceLoader</span></span><br><span class="line">  <span class="keyword">this</span>.resourceLoader = resourceLoader;</span><br><span class="line">  <span class="comment">// 2. 选择料理的主食材 &gt;&gt; 设置传入的主源类</span></span><br><span class="line">  Assert.notNull(primarySources, <span class="string">&quot;PrimarySources must not be null&quot;</span>);</span><br><span class="line">  <span class="keyword">this</span>.primarySources = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(Arrays.asList(primarySources));</span><br><span class="line">  <span class="comment">// 3. 根据点菜单确定料理菜系 &gt;&gt; 通过加载的 class 判断web应用类型（NONE、SERVLET、REACTIVE）</span></span><br><span class="line">  <span class="keyword">this</span>.webApplicationType = WebApplicationType.deduceFromClasspath();</span><br><span class="line">  <span class="comment">// 4. 准备料理需要的菜谱 &gt;&gt; 通过 getClassLoader()，查找并加载所有 ApplicationContextInitializer</span></span><br><span class="line">  setInitializers((Collection) getSpringFactoriesInstances(</span><br><span class="line">    ApplicationContextInitializer.class));</span><br><span class="line">  <span class="comment">// 5. 指定处理食材的厨师 &gt;&gt; 通过 getClassLoader()，查找并加载所有 ApplicationListener</span></span><br><span class="line">  setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));</span><br><span class="line">  <span class="comment">// 6. 指定做料理的主厨 &gt;&gt; 推断并设置 main 函数所在的 class</span></span><br><span class="line">  <span class="keyword">this</span>.mainApplicationClass = deduceMainApplicationClass();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>料理开始</p>
+<p>SpringApplication.run(args) 方法，SpringBoot 实际启动的流程</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ConfigurableApplicationContext <span class="title">run</span><span class="params">(String... args)</span> </span>&#123;</span><br><span class="line">  StopWatch stopWatch = <span class="keyword">new</span> StopWatch();</span><br><span class="line">  stopWatch.start();</span><br><span class="line">  ConfigurableApplicationContext context = <span class="keyword">null</span>;</span><br><span class="line">  Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">  <span class="comment">// 1. 允许外卖 &gt;&gt; 主要允许服务器只提供服务，不提供显示器和界面展示的情况，类似只支持外带，不支持店内就餐</span></span><br><span class="line">  configureHeadlessProperty();</span><br><span class="line">  <span class="comment">// 2. 厨师待命 &gt;&gt; 获取所有监听者，进入监听状态</span></span><br><span class="line">  SpringApplicationRunListeners listeners = getRunListeners(args);</span><br><span class="line">  listeners.starting();</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 3. 加载点菜单的要求（如：不要香菜） &gt;&gt; 读取传入 args 参数</span></span><br><span class="line">    ApplicationArguments applicationArguments = <span class="keyword">new</span> DefaultApplicationArguments(</span><br><span class="line">      args);</span><br><span class="line">    <span class="comment">// 4. 准备料理所需的锅碗瓢盆，并通知厨师准备好了 &gt;&gt; 设置环境变量，通知监听者</span></span><br><span class="line">    ConfigurableEnvironment environment = prepareEnvironment(listeners,</span><br><span class="line">                                                             applicationArguments);</span><br><span class="line">    <span class="comment">// 5. 忽略没必要了解的信息（如：食材的价格） &gt;&gt; 忽略 BeanInfo 信息，主要为了提高启动速度</span></span><br><span class="line">    configureIgnoreBeanInfo(environment);</span><br><span class="line">    <span class="comment">// 6. 设置菜品装饰 &gt;&gt; 设置 Banner</span></span><br><span class="line">    Banner printedBanner = printBanner(environment);</span><br><span class="line">    <span class="comment">// 7. 根据菜系，获取对应菜谱 &gt;&gt; 根据应用类型（是 Servlet，还是 Reactive），创建对应上下文</span></span><br><span class="line">    context = createApplicationContext();</span><br><span class="line">    <span class="comment">// 8. 设置突发情况报告人（如：点的菜没有了） &gt;&gt; 加载 SpringBoot 异常上报类</span></span><br><span class="line">    exceptionReporters = getSpringFactoriesInstances(</span><br><span class="line">      SpringBootExceptionReporter.class,</span><br><span class="line">      <span class="keyword">new</span> Class[] &#123; ConfigurableApplicationContext.class &#125;, context);</span><br><span class="line">    <span class="comment">// 9. 厨师查看锅碗瓢盆、菜谱和点菜单的要求 &gt;&gt; 根据环境变量、监听者、启动参数和 Banner，装载上下文</span></span><br><span class="line">    prepareContext(context, environment, listeners, applicationArguments,</span><br><span class="line">                   printedBanner);</span><br><span class="line">    <span class="comment">// 10. 处理食材 &gt;&gt; 刷新上下文</span></span><br><span class="line">    refreshContext(context);</span><br><span class="line">    <span class="comment">// 11. 料理完成后，根据点菜单的要求定制 &gt;&gt; 空操作，刷新上下文后的预留扩展点</span></span><br><span class="line">    afterRefresh(context, applicationArguments);</span><br><span class="line">    stopWatch.stop();</span><br><span class="line">    <span class="comment">// 12. 是否查看客人反馈 &gt;&gt; 设置日志信息打印</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.logStartupInfo) &#123;</span><br><span class="line">      <span class="keyword">new</span> StartupInfoLogger(<span class="keyword">this</span>.mainApplicationClass)</span><br><span class="line">        .logStarted(getApplicationLog(), stopWatch);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 13. 食材准备就绪 &gt;&gt; 发布 ApplicationStartedEvent 事件，表示监听者任务完成</span></span><br><span class="line">    listeners.started(context);</span><br><span class="line">    <span class="comment">// 14. 通知所有可以干活的厨师 &gt;&gt; 调用 ApplicationRunner，CommandLineRunner 的 run 方法</span></span><br><span class="line">    callRunners(context, applicationArguments);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">    <span class="comment">// * 处理突发情况 &gt;&gt; 如果启动异常，处理 exceptionReporters 中的异常信息，并抛出异常</span></span><br><span class="line">    handleRunFailure(context, ex, exceptionReporters, listeners);</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(ex);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 15. 准备开工 &gt;&gt; 发布 ApplicationReadyEvent 事件，表示应用就绪</span></span><br><span class="line">    listeners.running(context);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">    <span class="comment">// * 处理突发情况 &gt;&gt; 如果启动异常，处理 exceptionReporters 中的异常信息，并抛出异常</span></span><br><span class="line">    handleRunFailure(context, ex, exceptionReporters, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(ex);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> context;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本篇文章想达到的目的是：<strong>将源码映射到现实生活的事件，加深对源码的解读，希望将晦涩难度的源码变成一件有趣的事情</strong>。此文只是作为一个吃货的兴趣篇，并不是特别严谨，在 SpringBoot 启动过程中，还有很多精妙的细节需要继续推敲，我会在后续文章中，对它们进行剖析。当然，由于自身水平限制，有些比喻可能并不一定十分恰当，希望各位老板见仁见智地去理解。若发现不当之处，欢迎私信沟通交流！</p>
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2021/01/01/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<hr>
+<span id="more"></span>
+<hr>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>默认</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>开源世界里的重要理念：上游优先（UpStream First）</title>
+    <url>/2021/02/28/%E5%BC%80%E6%BA%90%E4%B8%96%E7%95%8C%E9%87%8C%E7%9A%84%E9%87%8D%E8%A6%81%E7%90%86%E5%BF%B5%EF%BC%9A%E4%B8%8A%E6%B8%B8%E4%BC%98%E5%85%88%EF%BC%88UpStream-First%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h2><p>2016 年，Thomas Cameron 在一次五分钟闪电演讲中提到了“Upstream first”的概念，也就是我们所说的“上游优先”：</p>
+<blockquote>
+<p>Part of Red Hat’s commitment to open source, Cameron explains, is committing code to upstream projects. The company is a top contributor to the Linux kernel, glibc/GCC, OpenStack/RDO, KVM, JBoss.org projects, GNOME, and more.</p>
+<p>“We recognize that we are beholden to open source communities for our success,” Cameron said. “And we owe a debt of gratitude to those open source communities and we are responsible for contributing as much code as we can back to those communities because everyone gets better when we do that.”</p>
+</blockquote>
+<hr>
+<span id="more"></span>
+
+<hr>
+<p>将这次演讲单独说明，是因为这是目前找到的关于“Upstream first”的最早资料，但这并不代表就是它的出处，上游优先这一概念的出处尚需考究。</p>
+<p>2017 年，Dave Neary 在 TM 会场上阐述了“Upstream first”对开源世界的重要性：</p>
+<blockquote>
+<p>“Upstream first” development is the idea that any changes (features, bug fixes) which you want to include in a product based on an open source project should be submitted to the project first, before being included in the product. This ensures that you minimize your long-term maintenance burden.</p>
+<p>……</p>
+<p>By engaging upstream first, you can get quick course corrections when your initial approach does not match community expectations, and you maintain patches against the very latest development tree. By building relationships with the upstream community, you will have an easier time getting changes accepted. And you maintain the possibility to ship features or patches in earlier versions by “backporting” features to the stable branch on which you have based your product.</p>
+</blockquote>
+<p>在读完上面的案例，相信你一定对上游优先有了一定的好奇：上游优先究竟是什么呢？它对开源社区有什么影响呢？</p>
+<p>下面，让我们带着疑问一起来了解一下。</p>
+<h2 id="什么是上游优先？"><a href="#什么是上游优先？" class="headerlink" title="什么是上游优先？"></a>什么是上游优先？</h2><p>直接与开源社区互动并在源头上解决问题的办法，被称为上游优先（Upstream first）。</p>
+<p>所谓上游，是一个相对的概念，意为“靠近源头的一方”。在开源社区中，主要指的是开源社区维护的主干版本。而所谓下游，是指基于上游开源项目衍生出的项目或产品。在 Github、Gitee 等代码管理平台中对开源项目的 fork 操作，就是一种对上游代码的拓展。</p>
+<p>那么，上游优先就很好理解了：基于开源项目的任何修改都应该提交优先提交给项目本身，然后再包含在自己的产品中。与之相反的处理方式是只基于自己产品进行维护，对上游不做反馈。</p>
+<h2 id="为什么要使用“上游优先”？"><a href="#为什么要使用“上游优先”？" class="headerlink" title="为什么要使用“上游优先”？"></a>为什么要使用“上游优先”？</h2><p>上游优先是开源社区提出的优秀的开源理念，那么它优秀在哪里呢？</p>
+<p><strong>举个简单的例子：</strong> </p>
+<p>葵花派长老将葵花点穴手传授给了白展堂和祝无双，在每次施展葵花点穴手时，都需要大喊一声：“葵花点穴手！”</p>
+<p>这一天，长老对两人说：堂堂、双双，你们修炼已经圆满，为师已经没有什么能够传授给你们的了，各自下山游历吧！说罢便闭关修炼去了。</p>
+<p>白展堂来到了同福客栈，因为葵花点穴手需要念五个字，被郭芙蓉四个字的排山倒海打得鼻青脸肿。</p>
+<p>正所谓人总是在被虐中成长，白展堂发现使用一种手法只需要喊“葵花点”就可以施展武功，终于打败郭芙蓉。</p>
+<p>随后，白展堂回到葵花派，将这种手法汇报给了长老，长老飞鸽传书，告知了所有门派弟子。</p>
+<p>葵花派从此发扬光大，双双成为了衙门的捕快，各大弟子也都成为了惩恶扬善的侠客！</p>
+<p><strong>那么问题来了：如果白展堂没有将这种手法告知长老，会怎么样呢？</strong> </p>
+<p>有两种可能。</p>
+<p>其一，白展堂此生未收徒，葵花派因“葵花点穴手”需要念五个字，逐渐式微，从此江湖再也没有葵花派的威名。</p>
+<p>其二，白展堂广收门徒，每日传授和教导子弟，将“葵花点”手法发扬光大，但每日忙忙碌碌，不仅要教导弟子学习“葵花点”手法，还要回葵花派学习长老闭关研习出来的新武功。</p>
+<p><strong>说到这里，我想大家已经明白了我所要表达的意思了。</strong> </p>
+<p>白展堂研究出“葵花点”的手法后，回门派告知长老，这种行为就是“上游优先”。</p>
+<p>为什么要使用“上游优先”？相信从这则小故事不难看出：</p>
+<ul>
+<li><strong>利于上游合并</strong>：随着时间的推移，下游的修改越晚反馈给上游，上游变越难合并下游的修改。<ul>
+<li>假如白展堂在临死前再将“葵花点”手法告知门派，门派的葵花点穴手早就出到 9527 版了，手法可能很难和 9527 版葵花点穴手融合。</li>
+</ul>
+</li>
+<li><strong>减轻维护负担</strong>：下游自己维护的成本太高，提高给上游维护，会降低下游维护成本。<ul>
+<li>葵花派除了长老授课以外，要求白展堂单独授课讲解“葵花点”手法，白展堂打王者荣耀的时间都没有了，更别说研习新武功。白展堂整理出手法秘籍交给长老，由长老统一传授，白展堂又可以快意江湖了。</li>
+</ul>
+</li>
+<li><strong>便于合作共赢</strong>：通过和上游合作，可以更为顺畅地与上游达成一致，得到上游的认可，也更容易将上游的修改合并进来。<ul>
+<li>白展堂因贡献了“葵花点”手法被尊称为首席大弟子，长老在“葵花点”的基础上研习出提高葵花点穴手定身时长的法门，白展堂第一时间得到秘籍修炼，如鱼得水。</li>
+<li>反之，白展堂没有贡献“葵花点”手法自己自行修炼，长老研习出提高葵花点穴手定身时长的法门，白展堂发现和“葵花点”手法运功路线不一致，难以习得新版葵花点穴手，无法提升威力。</li>
+</ul>
+</li>
+</ul>
+<h2 id="使用“上游优先”需要做什么？"><a href="#使用“上游优先”需要做什么？" class="headerlink" title="使用“上游优先”需要做什么？"></a>使用“上游优先”需要做什么？</h2><p>首先，需要<strong>与上游达成合作</strong>。达成合作是反馈给上游的捷径，越密切的合作者提出的想法，越容易被上游所接受。</p>
+<p>其次，需要<strong>保持与上游的沟通</strong>。达成合作不是一蹴而就的事情，需要与上游加强沟通，及时了解上游动态，否则，无法确保你的想法与上游的想法是否一致。</p>
+<p>最后，需要<strong>将修改及时反馈给上游</strong>。上游的修改需要成本，及时的反馈可以节省成本，这也是上游收费接收下游修改的一个重要标准。及时的反馈，能够让合作变得更加通畅。</p>
+<h2 id="哪些开源组织或公司使用“上游优先”？"><a href="#哪些开源组织或公司使用“上游优先”？" class="headerlink" title="哪些开源组织或公司使用“上游优先”？"></a>哪些开源组织或公司使用“上游优先”？</h2><p>在开源世界中，开源项目对“上游优先”的宣传并不多，但实际上大部分开源项目对“上游优先”都是非常认可的。</p>
+<p>“上游优先”的理念更加像是一种约定俗成，除了一些知名开源项目可能有提到或宣讲过该理念以外，更多的是默默践行这一理念。有很多开源项目没有对“上游优先”做过多的解释，但在开源过程中对开源项目的必要修改都会反馈到上游。</p>
+<p>下面列举一些明确采用“上游优先”的部分开源组织或公司：</p>
+<ul>
+<li>RedHat：红帽组织对“上游优先”可谓是彻底贯彻，网站上能够搜到的关于“上游优先”的文章和演讲，红帽可谓是不遗余力。</li>
+<li>OpenEuler：OpenEuler 是华为的一个开源项目，用 OpenEuler 自己的话来说：OpenEuler 来自于社区，回馈到社区。</li>
+<li>Google Chromium：Google Chromium 官方的 Design Documents 中，将 Upstream First 放在了 General 一栏中。</li>
+<li>The Linux Foundation：LF 官网在“Best Practices to Contribute Code Upstream”中，可以找到 Upstream First 的介绍。</li>
+<li>……（更多案例，欢迎补充）</li>
+</ul>
+<h2 id="特别感谢"><a href="#特别感谢" class="headerlink" title="特别感谢"></a>特别感谢</h2><p>之所以编写本文，在此要特别感谢开源路上认识的杰克老师（码云ID：@jack960330 ）对我的指点和支持！</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://opensource.com/article/16/12/why-red-hat-takes-upstream-first-approach">Why Red Hat takes an ‘upstream first’ approach</a> By  <a href="https://opensource.com/users/admin">Opensource.com (Red Hat)</a> [Dec 05, 2016]</li>
+<li><a href="https://inform.tmforum.org/features-and-analysis/2017/05/upstream-first-building-products-open-source-software/">Upstream first: Building products from open source software</a> By <a href="https://inform.tmforum.org/author/296076-dave-neary/">Dave Neary, SDN and NFV with Open Source at Red Hat</a> [May, 2017]</li>
+<li><a href="http://opensourceway.community/posts/opensource_culture/what_is_upstream_and_its_benefits/">开源软件项目的“上游优先”解惑</a> By <a href="http://opensourceway.community/posts/the_way_of_open_source/open_source_way/">opensourceway</a> [Nov 13, 2017]</li>
+<li><a href="https://willemjiang.github.io/opensource/2019/10/29/UpStream-first.html">上游优先地开发</a> By <a href="https://willemjiang.github.io/">Willem Jiang‘s Blog</a> [Oct 29, 2019]</li>
+<li><a href="https://www.infoq.cn/article/zP9erqJmIK6IAWfUHBoW">开源社区对开发者的价值到底有多大？</a> By <a href="https://www.infoq.cn/profile/11D1D4FAE98CEA/publish">Eileen</a> [Apr 29, 2020]</li>
+</ul>
+]]></content>
+      <categories>
+        <category>开源</category>
+      </categories>
+      <tags>
+        <tag>开源</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>“我的一剂良药”之开源指北</title>
+    <url>/2020/01/21/%E2%80%9C%E6%88%91%E7%9A%84%E4%B8%80%E5%89%82%E8%89%AF%E8%8D%AF%E2%80%9D%E4%B9%8B%E5%BC%80%E6%BA%90%E6%8C%87%E5%8C%97/</url>
+    <content><![CDATA[<p>本文收录于 Gitee 官方“开源指北”项目的“开源故事”目录下，更多精彩故事可戳这里： <a href="https://gitee.com/gitee-community/opensource-guide/tree/master">开源指北</a> 。</p>
+<p><strong>文章较长，适合闲来无事时“食用”（阅读）。</strong> </p>
+<h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>开源指北是 Gitee 开源社区送给所有开源人的一份保姆级开源百科，它的出现让开源相关知识不再像“沧海遗珠”一样散落在瀚海苍茫，让初识开源者可以从容地面对开源之海的首次“起航”，让众多热衷开源的开源爱好者在这里畅谈其所想。</p>
+<p>不得不说，开源指北项目的发起是一个非常有趣的想法，其秉持着“开源问题由开源来解决”的思想，吸引了众多开源爱好者参与到这项开源运动中来，我也是其中一员。这是我参与的第一个开源项目，在拟定标题时再三思忖，结合自身的亲身感受，最终定了这个标题。至于为什么说对我而言是“一剂良药”，在下文中我会作出解释。</p>
+<p>相比“满满的正能量”，我更希望从平常视角坦诚相待，有喜悦，有悲伤，有勇往直前，有踟蹰迷茫。不管读到这篇文章的你正拥有着哪种情绪，都能从这些稀松平常的小事中有所得，然后继续努力前行，成为更好的自己。</p>
+<p>接下来，分享一段普普通通、简简单单的故事。</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="源起"><a href="#源起" class="headerlink" title="源起"></a>源起</h2><p><strong>“青山若无素，偃蹇不相亲。要识庐山面，他年是故人。”</strong> </p>
+<p>我叫西狩，有些朋友也会叫我老江，从事 Java 开发相关工作。</p>
+<p>2020年是动荡的一年。从我的大脑里进行热词分析，浮现出来了很多“动荡”的词汇。比如：“疫情”、“大选”、“制裁”、“猝死”、“内卷”等等。我们深知处在一个贩卖焦虑的时代，但有时还是会不自觉地被这些外界的焦虑所影响，对于处在人生各种分岔路口的人们而言，受到的影响可能会更大。随着时间越走越快，看到很多新鲜的事物如雨后春笋般破土而出，陌生而又新奇。就像是面对琳琅满目的商品一样，一不小心便挑花了眼。这时我们可能会迷茫，但我们深知，自己需要去做些什么来面对它们。</p>
+<p>我不确定每个人是否都有过这种迷茫的经历，但就我个人而言，迷茫期是经常的，也是正常的。生活是一座围城，选择了漂泊但又渴望稳定，选择了努力但又渴望闲适。“有的人想得多却做得少”，我不确定这句话是否符合自己，但我深知自己做得还远远不够。大家应该都听过这样一句话：“学习最好的时间是十年前，其次是现在”。所以，<strong>不要害怕迷茫，只要敢于面对迷茫并踏出下一步，那就是有意义的。</strong> </p>
+<p>我不确定命运是否会眷顾内心和自己拧巴的人，但能够参与一项有意义的开源活动，我觉得自己是幸运的。一切的源头是从日常阅读公众号文章开始讲起，几个月前 <a href="https://github.com/objcoding">张乘辉</a> 老师的一篇推文《使用 Hexo + Gitee 快速搭建属于自己的博客》，文章内容很简单易懂，而后我开始考虑搭建自己的博客。在搭建过程中，我 Gitee 平台上无意间看到了开源指北的开源活动，怀着一颗好奇心的自己就这样与开源指北相遇了。说实话，虽然平时也会在 Github、Gitee 上转一转，但顶多都是走马观花似的了解，并没有参与到什么开源项目中。起初自己也是随便了解一下。在了解项目简介、阅读其中几篇文章后，感觉自己对一些内容有一定的认知和共鸣，而且内容还有很多缺失，于是便尝试提交了一次 PR。</p>
+<p>故事讲到这里，我可能还并不会深陷其中。在提交后的第二天，官方小伙伴 <a href="https://gitee.com/tenngoxars">tenngo</a> 就合并了我的 PR。及时的正向反馈让我受到了很大的鼓舞，就像是可治百病的“一剂良药”，使我无处安放的心静了下来。于是便开始了我的第一次开源之旅。</p>
+<h2 id="指天说地"><a href="#指天说地" class="headerlink" title="指天说地"></a>指天说地</h2><p><strong>“一点浩然气，千里快哉风。”</strong> </p>
+<p>在开源指北之前，其实网络上有很多开源知识的相关文章，但太过零散，不成体系，对于想要参与开源的人并不友好。开源指北最大的意义就是对开源知识的整合，它涵盖了大部分常见的入门知识，可以帮助很多想要参与开源而不知如何入手的小伙伴，所以，我想有必要分享一下在开源指北参与过程中的感受与收获。</p>
+<p>在《降临》中，有句台词让我记忆深刻：“If you immerse yourself into a foreign language, you can actually rewire your brain”。正如前文提到的迷茫期，最近一年的时间里发生了很多事情，思绪万千但却发现脚步却慢了下来。当我下意识提起自己的脚步时，却感觉似乎前方全是岔路，就在这时，开源指北出现了。在参与过程中，无论是查阅资料，还是编写文章，又或是提交 PR，都能感受到开源带给自己的活力。仔细想想，当自己毕业时，不愿在一眼望到头的生活里度过一生，那么自己对未来的迷茫和担忧就可以很好地接收了，因为这就是自己想要的生活。人生在世，不如意事常八九，大多数人都并非是一帆风顺的。<strong>与其每日杞人忧天，不如沉下心来倾听内心的想法，然后坚定地踏出接下来的每一步。</strong> </p>
+<p>在开始分享开源过程中的感悟前，先谈及了心态，是因为自己深知心态对我的重要性。在自己心静下来后，做事情的效率会有明显的提高，并且在交流、沟通以及决策上都可以更加清醒。接下来，便带着这份心态聊到哪算哪喽！</p>
+<p>开源与我的本职专业有着密切的联系，虽然是第一次参与开源，但自己对开源并不算陌生。曾经怀着激动的心情参加的每次 Pivotal 技术峰会、各种技术的 Meetup 以及各位大佬的技术分享，在这一刻似乎派上了一定的用场。这也说明了<strong>平日积累的重要性</strong>，碎片化学习虽然并不能建立起心中的一套完整的框架体系，但对自己的影响是潜移默化的。我会对每个章节进行阅读，文章结构不顺就梳理结构，上下文衔接问题就修改上下文，明显出现内容缺失就通过查阅资料再加上自己的理解进行补充。后面又进行了反复的阅读，以及关注小伙伴们提交的 PR。我们会为项目中提及的“半开源”的概念展开探讨，会对开源知识互相交流以至于忘记时间，诸如 arch、CLA、中国第一个被 OSI 认可的协议等等。我们也会因为项目中的不足而争辩，而且可能最终谁也说服不了谁，大家的思想是平等的，没有对错，而最终的结论也是有趣而一致的。那么这个结论是什么呢？其实很简单，各自提交 PR 就好了。<strong>求同存异是开源社区的不二法则，我不认可你的观点，但我尊重你表达思想的权利。</strong> </p>
+<p>因工作需要，我在 2017 年加入了 Kettle 技术交流群，经过学习掌握了它，但由于后续没有机会再使用，我对 Kettle 的熟练程度大幅度下降，更不要说现在最新的开源版本。同样的原因，我在 2019 年初加入了 Skywalking 交流群，基本属于一个“潜水者”，只是经常会查看技术交流的消息。其他社群我就不一一列举了，我之所以提到这两段经历，是想反思一下自己：为什么曾经有那么多优秀的开源项目摆在自己面前，到现在自己还是一个开源小白？我感觉有两个重要的事情自己没有做得很好：<strong>坚持和思维模式</strong>。</p>
+<ul>
+<li>参与开源不是一蹴而就的事情，我们需要花费大量的时间来将其打造成为一个更好的东西。我因为不再使用而放弃对 Kettle 的关注，所以它自然而然就离我远去了。<strong>其实大多数人都并非天才，能成为一个项目中优秀开源者的主要原因就是坚持。</strong> </li>
+<li>我学习 Kettle 只想使用它来解决问题，但从未想过自己还可以改变它。如果保持这样的思维模式继续下去，那么坚持的意义就是十分有限的了，因为我只是一个熟练工，可能永远都无法突破成为建筑师。<strong>一个目标是否能够可达，有时候需要的只是一个思维的转变。</strong> </li>
+</ul>
+<p>最近看了吴晟老师在开放原子基金会 2020 年技术峰会上发表的演讲——<a href="https://www.bilibili.com/video/BV125411E7GK?p=1&share_medium=iphone&share_plat=ios&share_source=QQ&share_tag=s_i&timestamp=1611211180&unique_k=ZKplUv">开源运营治理分论坛 - Educate Community Over Support Community</a>。演讲中很清晰地为大家讲解了我们在开源中应该关注的重点，解释了社区各种角色的职责，也谈及了对社区发展和社区生态的看法。当然，其中让人受益匪浅的内容还有很多，而且没有太多难理解的技术，更多的是对开源经验的分享，感兴趣的小伙伴可以了解一下。这也是我的一个小建议：<strong>多去与他人交谈，倾听他人的想法，我们需要在思想碰撞的过程中不断刺激自己进行思维升级。</strong> </p>
+<p>再分享一则个人觉得有趣的事情，每个开源项目都有自己的排版规则，在参与开源指北过程中，我在一个关于排版的开源项目中发现了一个有趣的协议：WTFPL。参考知乎问答“<a href="https://www.zhihu.com/question/20865060/answer/51757033">什么是 WTFPL（Do What the Fuck You Want to Public License），为什么会有人使用这一授权许可？</a>”中的描述来了解一下：</p>
+<blockquote>
+<p>由于程序拥有所有权，所以每段代码允许大家在何种程度上自然使用就成为了一个严肃的法律问题，所以就诞生了licence这个概念。其中有一些代码是写出来让大家随意免费使用的，所以licence就要规定你可以干一切事情。可是在法律里，“允许你干任何事情”这句话并不严谨，所以随着不断的诉讼、打官司、法学家的诠释，诞生了诸如 <a href="http://www.zhihu.com/people/c55d6c118b9141f20776588b0308e586">@IAMSK</a> 所说的一大堆授权协议。<br>但是问题来了。<br>这个协议是给程序员看的，却是由法学家和律师写的。<br>于是随着时间的推移，这些协议变得unreadable，也就是程序员根本不可能看懂。</p>
+<p>而这些协议还会越来越长，随着欧美法律不断地被新的判例充实。。。。</p>
+<p>于是一些程序员为了反抗这一恶性循环，发明了WTFPL。</p>
+<p>简而言之，就是：<strong>“你TM爱干啥干啥”</strong></p>
+</blockquote>
+<p>有趣的点在于，我仿佛能脑补出当时程序员看到冗长的法律条文和专业名词的时候抓狂的面部表情，是个很有意思的小故事。</p>
+<p>最后要说一下，个人认为，开源指北项目参与门槛并不高，虽然在内容上会尽力做到精益求精，但它的受众是每一个开源人，大家都可以在这里各抒己见。这个项目的维护也会一直开放，也希望能够在以后听到更多开源故事和开源声音。<strong>毕竟开源这件事儿，一起热闹起来才好玩嘛！</strong> </p>
+<h2 id="北窗之友"><a href="#北窗之友" class="headerlink" title="北窗之友"></a>北窗之友</h2><p><strong>“今日北窗下，自问何所为，欣然得三友，三友者为谁？琴罢辄举酒，酒罢辄吟诗。”</strong> </p>
+<p>如果说有人问：“一次开源经历中，最重要的是什么事情？是最后的结果么？”我想可能不是。当我们去做任何一件事情的时候，都无法预料到下一秒会发生什么，更不会预料到最后的结果会是什么样子，所以结论并不适合放在开源经历的第一位。正所谓兴趣是最好的老师，与其猜测未知的结果，不如遵从本心去体会在开源中遇到的所有感受。因此，<strong>一次成功的硕果固然可喜，但更重要的是享受过程。</strong> </p>
+<p>我们可以对于开源项目的任何事情畅所欲言，可以发表自己对开源项目的理解，可以讨论目前存在的问题，还可以从交流中了解到更加广阔的开源世界。当然，开源社区不会是只有一种声音，我们可以有不同的观点，可以有分歧和争辩，还可以享受每一次思想的碰撞。除了必要的社区准则以外，我们的文字、代码以及思想都是无比自由的，或许这就是开源精神带给我的一种体验。</p>
+<p>既然谈到了开源精神，那么一群志同道合的秉承开源精神的小伙伴自然是必不可少的。在此，要感谢在开源指北项目中帮助和鼓励过我的小伙伴们：</p>
+<ul>
+<li><p>感谢 <a href="https://gitee.com/jack960330">jack960330</a> 对我编写修订过程中给予的专业指点，也感谢耐心的讲解和对我的认可，钦佩你的专业态度。</p>
+</li>
+<li><p>感谢 <a href="https://gitee.com/taotieren">taotieren</a> 的中文排版指北项目，在了解一种排版规范的同时，还发现其使用的 WTFPL 开源协议——一个有趣的协议以及背后有趣的小故事。</p>
+</li>
+<li><p>感谢众多的开源小伙伴，我们一起沟通探讨了很多开源小知识，也通过他们了解到了很多开源项目，一起奋战的日子会是一段非常美好的回忆！</p>
+</li>
+<li><p>感谢 Gitee 小助手带我加入开源小队，还给我邮递了那么多奖品，我会继续努力的。不辜负每一次参与！</p>
+</li>
+<li><p>感谢与开源指北的不期而遇，这是我这个冬季里最温暖的“小太阳”。</p>
+</li>
+</ul>
+<p>“琴罢辄举酒，酒罢辄吟诗”，这是我理想中的开源世界。所谓“琴”、“酒”、“诗”，是代指令自己感到美好的事物——是得到认可的喜悦，是有所收获的满足，是感受到如鱼得水般的自由。我觉得开源指北就是这样的，希望它在未来成长的路上，依旧如此自由！也希望参与开源的你——<strong>Forever to be free !</strong> </p>
+]]></content>
+      <categories>
+        <category>开源</category>
+      </categories>
+      <tags>
+        <tag>开源</tag>
+        <tag>感悟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Cross-Origin Read Blocking (CORB) blocked cross-origin response 问题</title>
+    <url>/2021/03/08/cross-origin-read-blocking%E4%B8%8EMinIO/</url>
+    <content><![CDATA[<h2 id="问题起因"><a href="#问题起因" class="headerlink" title="问题起因"></a>问题起因</h2><p>今天测试文件上传功能，发现图片上传正常但无法显示，前端浏览器控制台报错如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Cross-Origin Read Blocking (CORB) blocked cross-origin response http:&#x2F;&#x2F;minio.xs.com&#x2F;minio&#x2F;default&#x2F;a&#x2F;111.jpg with MIME type text&#x2F;html. See https:&#x2F;&#x2F;www.chromestatus.com&#x2F;feature&#x2F;5629709824032768 for more details.</span><br></pre></td></tr></table></figure>
+
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="部署环境"><a href="#部署环境" class="headerlink" title="部署环境"></a>部署环境</h2><p>操作系统：Centos7 Linux 系统</p>
+<p>部署方式：Rancher + Kubernates Ingress + MinIO</p>
+<p>部署版本：Rancher 2.3.6、Kubernate Client 1.16.1、Kubernate Server 1.17.4、MinIO 2019-10-12T01:39:57Z</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>图片上传成功，但无法显示，如下图。</p>
+<p><img src="http://lihuimignxs.github.io/2021/03/08/cross-origin-read-blocking%E4%B8%8EMinIO/image-20210308162619746.png" alt="image-20210308162619746"></p>
+<h2 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h2><p><strong>排除文件上传问题</strong> </p>
+<p>首先，我将图片地址到地址栏，直接访问图片地址，发现直接访问跳转到 MinIO 的 UI 界面，文件上传成功，MinIO 服务中存在该文件。</p>
+<p><strong>定位图片展示问题</strong> </p>
+<p>然后，我打开浏览器调试工具，选中图片，将图片地址直接放在标签内访问。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;http://minio.xs.com/minio/default/a/111.jpg&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>由于直接访问地址，应该不会存在跨域问题，但图片依旧无法显示。</p>
+<p>再使用 MinIO 中 Share Object 功能生成分享链接，依旧放入标签内访问。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;http://minio.xs.com/default/a/111.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=xs%2F20210308%2F%2Fs3%2Faws4_request&amp;X-Amz-Date=20210308T084710Z&amp;X-Amz-Expires=432000&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=220fde35c7053a32bc9837632zfabc7b3d632b2d1efb2a43e83a4e03b8689dd1&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>此时，发现图片可以正常显示。</p>
+<p><strong>猜测和沟通</strong> </p>
+<p>那么，这时我猜测是 MinIO 访问控制导致的，而我了解到，就在今天上午，我们的运维小伙伴刚刚将 MinIO 从 Rancher 中迁移出来，做了独立部署。</p>
+<p>再仔细一看错误信息：<code>with MIME type text/html</code>。哦！为什么请求图片返回的是文本信息？</p>
+<p>此时，我更加确信了自己的猜测，应该是在访问 MinIO 图片的时候，发现权限不足，返回了错误的 Html 信息，所以图片才会无法展示。</p>
+<p><strong>修改 MinIO 访问权限</strong> </p>
+<p>进入 MinIO 的 UI 界面中，鼠标放在左侧目录，点击右侧出现的三个小白点。</p>
+<p><img src="http://lihuimignxs.github.io/2021/03/08/cross-origin-read-blocking%E4%B8%8EMinIO/image-20210308165512273.png" alt="image-20210308165512273"></p>
+<p>选择 <code>Edit policy</code>，弹出权限设置页面。</p>
+<p><img src="http://lihuimignxs.github.io/2021/03/08/cross-origin-read-blocking%E4%B8%8EMinIO/image-20210308165409223.png" alt="image-20210308165409223"></p>
+<p>在弹出页面的第二列，选择 <code>Read and Write</code> 后，点击 <code>Add</code> 按钮，完成权限设置。</p>
+<p><img src="http://lihuimignxs.github.io/2021/03/08/cross-origin-read-blocking%E4%B8%8EMinIO/image-20210308165701102.png" alt="image-20210308165701102"></p>
+<p>再次访问页面，发现图片已经可以正常展示了。</p>
+<p><img src="http://lihuimignxs.github.io/2021/03/08/cross-origin-read-blocking%E4%B8%8EMinIO/image-20210308165959603.png" alt="image-20210308165959603"></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>登录 MinIO UI 界面，添加或修改 MinIO 文件访问权限为 <code>Read and Write</code> ，即可解决。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果遇到 CORB 问题，那就说明调用接口的实际返回结果和预期不符，需要分析为什么会出现异常的返回值。就如本例中，请求了一张图片，但由于权限问题导致无法访问，接口返回了 <code>text/html</code> 的文本信息，这种报错信息在现在的系统中非常常见，仔细分析就能找到原因。</p>
+<p>So, Good Luck! Guys!</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://blog.csdn.net/YangzaiLeHeHe/article/details/109447129">Cross-Origin Read Blocking (CORB) blocked cross-origin response</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>跨域</category>
+      </categories>
+      <tags>
+        <tag>跨域</tag>
+        <tag>CORB</tag>
+        <tag>MinIO</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>必知必会面试题之 Java 反射</title>
+    <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E5%8F%8D%E5%B0%84/</url>
+    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
+<ul>
+<li><a href="#%E5%8F%8D%E5%B0%84%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86">反射的实现原理</a> </li>
+<li><a href="#%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86">注解的实现原理</a> </li>
+<li><a href="#%E5%8F%8D%E5%B0%84%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E8%B0%83%E7%94%A8%E7%A7%81%E6%9C%89%E6%96%B9%E6%B3%95%E3%80%81%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%90%8D%E3%80%81%E8%8E%B7%E5%8F%96%E7%88%B6%E7%B1%BB%E7%A7%81%E6%9C%89%E6%96%B9%E6%B3%95%EF%BC%9F">反射是否可以调用私有方法、获取参数名、获取父类私有方法？</a>  </li>
+</ul>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h3 id="反射的实现原理"><a href="#反射的实现原理" class="headerlink" title="反射的实现原理"></a>反射的实现原理</h3><p>在 Java 中是通过 Class.forName(classname) 来获取类的信息，实现反射机制的。</p>
+<h3 id="注解的实现原理"><a href="#注解的实现原理" class="headerlink" title="注解的实现原理"></a>注解的实现原理</h3><p>注解是基于 Java 反射来实现的。</p>
+<h3 id="反射是否可以调用私有方法、获取参数名、获取父类私有方法？"><a href="#反射是否可以调用私有方法、获取参数名、获取父类私有方法？" class="headerlink" title="反射是否可以调用私有方法、获取参数名、获取父类私有方法？"></a>反射是否可以调用私有方法、获取参数名、获取父类私有方法？</h3><p>可以。我们可以通过反射拿到对应的 class 对象，然后通过 class.getDeclaredConstructors() 拿到全部构造器，获取构造器的名称、参数、修饰符等信息；可以通过 class.getDeclaredMethods() 拿到全部方法，获取方法的名称、参数、修饰符等信息；可以通过 class.getSuperclass().getDeclaredMethod() 获取父类全部方法。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>必知必会面试题之 Java 8 新特性</title>
+    <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava8%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>[Lambda 表达式](#Lambda 表达式) </p>
+<p><a href="#%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8">方法引用</a> </p>
+<p><a href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3">函数式接口</a> </p>
+<p><a href="#%E9%BB%98%E8%AE%A4%E6%96%B9%E6%B3%95">默认方法</a> </p>
+<p><a href="#Stream">Stream</a> </p>
+<p>[Optional 类](#Optional 类) </p>
+<p>[Nashorn、JavaScript 引擎](#Nashorn、JavaScript 引擎) </p>
+<p>[LocalDate API](#LocalDate API) </p>
+<p>[Base 64](#Base 64) </p>
+<h2 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>特点：</p>
+<ul>
+<li><strong>可选类型声明：</strong>不需要声明参数类型，编译器可以统一识别参数值。</li>
+<li><strong>可选的参数圆括号：</strong>一个参数无需定义圆括号，但多个参数需要定义圆括号。</li>
+<li><strong>可选的大括号：</strong>如果主体包含了一个语句，就不需要使用大括号。</li>
+<li><strong>可选的返回关键字：</strong>如果主体只有一个表达式返回值则编译器会自动返回值，大括号需要指定明表达式返回了一个数值。</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>最好不要在 Lambda 表达式内复杂的处理逻辑，只用来做数据处理</li>
+<li>Lambda 表达式内使用外层局部变量，该局部变量不可修改，如果需要修改，需要将局部变量赋值给一个不做修改的新对象，使用新对象进行处理。</li>
+</ul>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Item&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="comment">// 转化</span></span><br><span class="line">List&lt;Long&gt;        list1 = list.stream().map(Item::getId).collect(Collectors.toList());</span><br><span class="line">Map&lt;Long, String&gt; map1  = list.stream().collect(Collectors.toMap(Item::getId, Item::getName));</span><br><span class="line"><span class="comment">// 分组</span></span><br><span class="line">Map&lt;String, List&lt;Item&gt;&gt; itemMap = list.stream().collect(Collectors.groupingBy(Item::getGroup));</span><br><span class="line"><span class="comment">// 求最大值</span></span><br><span class="line">Optional&lt;Item&gt; maxDish = list.stream()</span><br><span class="line">  .collect(Collectors.maxBy(Comparator.comparing(Item::getId)));</span><br><span class="line"><span class="comment">// 求最小值</span></span><br><span class="line">Optional&lt;Item&gt; minDish = list.stream()</span><br><span class="line">  .collect(Collectors.minBy(Comparator.comparing(Item::getId)));</span><br><span class="line"><span class="comment">// 求和</span></span><br><span class="line">Long sum = list1.stream().mapToLong(Long::longValue).sum();</span><br><span class="line"><span class="comment">// 排序</span></span><br><span class="line">List&lt;Long&gt; list2 = list1.stream().sorted().collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 过滤</span></span><br><span class="line">List&lt;Item&gt; list3 = list.stream().filter(item -&gt; item.getName() != <span class="keyword">null</span>)</span><br><span class="line">  .collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 去重</span></span><br><span class="line">List&lt;Long&gt; list4 = list1.stream().distinct().collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><p>方法引用通过方法的名字来指向一个方法。</p>
+<p>方法引用可以使语言的构造更紧凑简洁，减少冗余代码。</p>
+<p>方法引用使用一对冒号 <strong>::</strong> 。</p>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1.构造器引用</span></span><br><span class="line"><span class="keyword">final</span> Car car = Car.create( Car::<span class="keyword">new</span> );</span><br><span class="line"><span class="keyword">final</span> List&lt; Car &gt; cars = Arrays.asList( car );</span><br><span class="line"><span class="comment">// 2.静态方法引用</span></span><br><span class="line">cars.forEach( Car::collide );</span><br><span class="line"><span class="comment">// 3.特定类的任意对象的方法引用</span></span><br><span class="line">cars.forEach( Car::repair );</span><br><span class="line"><span class="comment">// 4.特定对象的方法引用</span></span><br><span class="line">cars.forEach( car::follow );</span><br><span class="line"><span class="comment">// ------------------------</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Supplier</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span> </span>&#123;&#125;</span><br><span class="line">	<span class="comment">//Supplier 是 jdk1.8 的接口，这里和 lambda 一起使用了</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Car <span class="title">create</span><span class="params">(<span class="keyword">final</span> Supplier&lt;Car&gt; supplier)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> supplier.get();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">collide</span><span class="params">(<span class="keyword">final</span> Car car)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Collided &quot;</span> + car.toString());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">follow</span><span class="params">(<span class="keyword">final</span> Car another)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Following the &quot;</span> + another.toString());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">repair</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Repaired &quot;</span> + <span class="keyword">this</span>.toString());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h2><h2 id="默认方法"><a href="#默认方法" class="headerlink" title="默认方法"></a>默认方法</h2><h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><h3 id="Spliterator"><a href="#Spliterator" class="headerlink" title="Spliterator"></a>Spliterator</h3><p>Spliterator 是一个分割迭代器（Spliterator Iterator），顾名思义，作用就是用来分隔数据，以便于 Stream 中可以进行并行流计算。</p>
+<h2 id="Optional-类"><a href="#Optional-类" class="headerlink" title="Optional 类"></a>Optional 类</h2><p>Optional 类是一个可以为 null 的容器对象。如果值存在则 isPresent() 方法会返回 true，调用 get() 方法会返回该对象。</p>
+<p>Optional 是个容器：它可以保存类型 T 的值，或者仅仅保存 null。Optional 提供很多有用的方法，这样我们就不用显式进行空值检测。</p>
+<p>Optional 类的引入很好的解决空指针异常。</p>
+<h2 id="Nashorn、JavaScript-引擎"><a href="#Nashorn、JavaScript-引擎" class="headerlink" title="Nashorn、JavaScript 引擎"></a>Nashorn、JavaScript 引擎</h2><h2 id="新的日期时间-API"><a href="#新的日期时间-API" class="headerlink" title="新的日期时间 API"></a>新的日期时间 API</h2><h2 id="Base-64"><a href="#Base-64" class="headerlink" title="Base 64"></a>Base 64</h2><p>——————————————————————————————————————————————</p>
+<blockquote>
+<p>原创：西狩</p>
+<p>编写日期 / 修订日期：2020-12-30 / 2020-12-30</p>
+<p>版权声明：本文为博主原创文章，遵循 CC BY-NC-SA-4.0 版权协议，转载请附上原文出处链接和本声明。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>必知必会面试题之Java IO 流</title>
+    <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava-IO%E6%B5%81/</url>
+    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
+<ul>
+<li><a href="#IO%E6%B5%81%E7%9A%84%E7%A7%8D%E7%B1%BB">IO 流的种类</a> </li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E7%9A%84IO%E6%B5%81">常见的 IO 流</a> <ul>
+<li><a href="#%E5%AD%97%E8%8A%82%E6%B5%81">字节流</a> </li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E6%B5%81">字符流</a> </li>
+</ul>
+</li>
+<li>[常见的 IO 类型](#常见的 IO 类型) <ul>
+<li><a href="#BIO">BIO</a> </li>
+<li><a href="#NIO">NIO</a> </li>
+<li><a href="#AIO">AIO</a> </li>
+</ul>
+</li>
+<li><a href="#NIO%E7%9A%84%E7%BB%84%E6%88%90">NIO 的组成</a> </li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%B6%E6%8B%B7%E8%B4%9D">什么是零拷贝</a> </li>
+</ul>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="IO-流的种类"><a href="#IO-流的种类" class="headerlink" title="IO 流的种类"></a>IO 流的种类</h2><ul>
+<li>按照流的流向，可以分为<strong>输入流</strong>和<strong>输出流</strong>；</li>
+<li>按照操作单元，可以分为<strong>字节流</strong>和<strong>字符流</strong>；</li>
+<li>按照流的角色，可以分为<strong>节点流</strong>和<strong>处理流</strong>。</li>
+</ul>
+<h2 id="常见的-IO-流"><a href="#常见的-IO-流" class="headerlink" title="常见的 IO 流"></a>常见的 IO 流</h2><h3 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h3><ul>
+<li>FileInputStream</li>
+<li>FileOutputStream</li>
+<li>PipedInputStream</li>
+<li>PipedOutputStream</li>
+<li>ByteArrayInputStream</li>
+<li>ByteArrayOutputStream</li>
+<li>BufferedInputStream</li>
+<li>BufferedOutputStream</li>
+<li>DataInputStream</li>
+<li>DataOutputStream</li>
+<li>ObjectInputStream</li>
+<li>ObjectOutputStream</li>
+<li>SequenceInputStream</li>
+<li>PrintOutputStream</li>
+</ul>
+<h3 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h3><ul>
+<li><p>FileReader</p>
+</li>
+<li><p>FileWriter</p>
+</li>
+<li><p>PipedReader</p>
+</li>
+<li><p>PipedWriter</p>
+</li>
+<li><p>CharArrayReader</p>
+</li>
+<li><p>CharArrayWriter</p>
+</li>
+<li><p>BufferedReader</p>
+</li>
+<li><p>BufferedWriter</p>
+</li>
+<li><p>InputStreamReader</p>
+</li>
+<li><p>OutputStreamWriter</p>
+</li>
+<li><p>PrintWriter</p>
+</li>
+</ul>
+<h2 id="常见的-IO-类型"><a href="#常见的-IO-类型" class="headerlink" title="常见的 IO 类型"></a>常见的 IO 类型</h2><h3 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h3><p>BIO 是指<strong>同步阻塞 IO（Blocking I/O）</strong>。一次数据的读取或写入会阻塞当前线程，直到本次数据传输结束。操作简单，适合活动连接数较小的情况。</p>
+<h3 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h3><p>NIO 是在 Java 1.4 中引入的新的 I/O 模型，因为被称为 New IO。但随着技术的快速发展，NIO 也不再“新”了，因此，我们现在更习惯以它的特性来称其为：<strong>同步非阻塞 IO（Non-Blocking I/O）</strong>。</p>
+<p>NIO 提供了 Channel、Selector、Buffer 等抽象，实现了多路复用。此外，NIO 还提供了 SocketChannel 和 ServerSocketChannel 两种不同的套接字通道实现，分别对应 BIO 中的 Socket 和 ServerSocket。</p>
+<blockquote>
+<p> <strong>NIO 并非只是非阻塞的</strong>，NIO 同时支持阻塞、非阻塞两种模式，只是因为 NIO 主要就是为了提高 IO 性能而诞生的，所以强调了其核心特性：非阻塞。在日常使用中，我们也更为倾向于 NIO 的非阻塞模式，以获得更高的吞吐量和并发量。</p>
+</blockquote>
+<h3 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h3><p>AIO 是在 Java 7 中引入的<strong>异步非阻塞 IO（Asynchronous I/O）</strong>。AIO 是基于事件和回调机制实现的，当操作发生后，会直接得到返回，释放 IO 资源，实际操作的执行则交给其他线程来处理，处理完成后通知相应的线程进行后续的操作。</p>
+<h2 id="NIO-的组成"><a href="#NIO-的组成" class="headerlink" title="NIO 的组成"></a>NIO 的组成</h2><ul>
+<li><p>缓冲区（Buffer）：用来存储待传输的数据，通过 Channel 进行数据传输。</p>
+</li>
+<li><p>直接缓冲区（DirectByteBuffer）：使用堆外内存创建的缓冲区，可以减少一次堆内内存到堆外内存的数据拷贝。</p>
+<blockquote>
+<p>使用堆外内存创建和销毁缓冲区的成本更高且不可控，通常会使用内存池来提高性能。</p>
+</blockquote>
+</li>
+<li><p>通道（Channel）：用来建立数据传输需要的连接，并传输 Buffer 中的数据。</p>
+<blockquote>
+<p>数据虽然需要通过 Channel 进行传输，但 Channel 是不直接操作数据的，Channel 只负责建立连接并确认传输内容，实际数据的传输是通过</p>
+</blockquote>
+</li>
+<li><p>选择器（Selector）：用来管理 Channel 和分配</p>
+</li>
+</ul>
+<h2 id="什么是零拷贝"><a href="#什么是零拷贝" class="headerlink" title="什么是零拷贝"></a>什么是零拷贝</h2><p>在 Java 程序中，使用 <strong>read() 或 write() 方法拷贝</strong>，需要在堆内开辟内存空间存储文件流，再从堆内拷贝到堆外，最后从堆外拷贝到操作系统内核，由 DMA 读写到磁盘。期间需要经过两次复制，且用户态和内核态的交互，因此传输效率较慢。</p>
+<p>而在操作系统中提供了 <strong>mmap() 方法</strong>，我们可以在程序中调用该方法，系统会直接在内核开辟内存空间，直接将文件流传输到内核开辟出的内存空间，由 DMA 读写到磁盘。该方法通过减少文件流的拷贝过程和用户态、内核态的交互，从而提高了文件传输的效率。我们把这种方法，称为“零拷贝”。</p>
+<p>当然，零拷贝虽然可以提高文件传输效率，但也并非没有缺点的。由于程序直接传入内核内存空间，在发生 IO 异常、宕机等异常情况下，使用零拷贝有可能会导致数据流的丢失。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>必知必会面试题之 Java 泛型</title>
+    <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%9B%E5%9E%8B/</url>
+    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
+<ul>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8">泛型的类型安全</a> </li>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E4%B8%8A%E9%99%90">泛型上限</a> </li>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E4%B8%8B%E9%99%90">泛型下限</a> </li>
+</ul>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h3 id="泛型的类型安全"><a href="#泛型的类型安全" class="headerlink" title="泛型的类型安全"></a>泛型的类型安全</h3><p>JDK 1.5 以后引入了泛型的概念，通过泛型能够帮助我们在程序处理中将处理逻辑抽象出来，提高代码复用性。泛型的使用一般遵循类型约束，以此保证泛型类型的安全性。举个例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">private</span> T atrribute;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtrribute</span><span class="params">(T atrribute)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.atrribute = atrribute;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getAtrribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    retrun atrribute;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PersonAtrribute</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> height;</span><br><span class="line">  <span class="keyword">private</span> vision;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DuckAtrribute</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> tail;</span><br><span class="line">  <span class="keyword">private</span> wing;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemoService</span>() </span>&#123;</span><br><span class="line">  Person person = <span class="keyword">new</span> Person();</span><br><span class="line">  PersonAtrribute personAtrribute = <span class="keyword">new</span> PersonAtrribute();</span><br><span class="line">  DuckAtrribute duckAtrribute = <span class="keyword">new</span> DuckAtrribute();</span><br><span class="line">  person.setAtrribute(personAtrribute);</span><br><span class="line">  person.setAtrribute(duckAtrribute);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述例子中，DemoService 中错误地将 DuckAtrribute 放入了 Person 的扩展属性中，这显然是不合理的，这也就是我们所关注的泛型安全性问题。</p>
+<p>如果没有类型约束，泛型中就可以存放任何类型的东西，那么当你创建这样的一个泛型时，你就无法预知泛型的使用者会拿它做什么。也许有一天，你会发现自己设计的泛型已经在系统里使用地十分混乱，这显然不是我们设计时想要看到的。因此，我们需要对泛型进行约束。</p>
+<p>泛型约束包括两种：extends 和 super。extends 决定了泛型的上限，super 决定了泛型的下限。</p>
+<h3 id="泛型上限"><a href="#泛型上限" class="headerlink" title="泛型上限"></a>泛型上限</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 泛型可以接受E类型或者E的子类类型。</span></span><br><span class="line">? extends E</span><br></pre></td></tr></table></figure>
+
+<p>extends 规定了泛型的上限。当泛型使用 extends 时，使用泛型的类所实现的类型都受 extends 继承类的约束，如果继承了 Person，泛型传进来 Duck 就是不被允许的。</p>
+<h3 id="泛型下限"><a href="#泛型下限" class="headerlink" title="泛型下限"></a>泛型下限</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 可以接受E类型，或者E的父类型。</span></span><br><span class="line">? <span class="keyword">super</span> E</span><br></pre></td></tr></table></figure>
+
+<p>super 规定了泛型的下限，当泛型使用 super 时，使用泛型的类所实现的类型都受 super 父类的约束，如果 super 的是一个属性类，属性类里包括 age 和 sex，那么实现泛型的时候就必须要具备这两种属性。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>必知必会面试题之 Java 集合</title>
+    <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E9%9B%86%E5%90%88/</url>
+    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
+<ul>
+<li><a href="#List">List</a> <ul>
+<li><a href="#ArrayList%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0">ArrayList 的底层实现</a> </li>
+<li><a href="#ArrayList%E5%A6%82%E4%BD%95%E6%89%A9%E5%AE%B9%EF%BC%9F">ArrayList 如何扩容？</a> </li>
+</ul>
+</li>
+<li><a href="#Map">Map</a> <ul>
+<li><a href="#HashMap%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0">HashMap 的底层实现</a> </li>
+<li><a href="#JDK1.8%E4%B8%ADHashMap%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BC%95%E5%85%A5%E7%BA%A2%E9%BB%91%E6%A0%91%EF%BC%9F">JDK 1.8 中 HashMap 为什么要引入红黑树？</a> </li>
+<li><a href="#HashMap%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%BD%BF%E7%94%A8%E9%93%BE%E8%A1%A8%EF%BC%9F%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%BC%9A%E4%BD%BF%E7%94%A8%E7%BA%A2%E9%BB%91%E6%A0%91%EF%BC%9F">HashMap 什么情况使用链表？什么情况会使用红黑树？</a> </li>
+</ul>
+</li>
+</ul>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><h4 id="ArrayList-的底层实现"><a href="#ArrayList-的底层实现" class="headerlink" title="ArrayList 的底层实现"></a>ArrayList 的底层实现</h4><p>ArrayList 是基于数组实现的，是一个动态数组，其容量能自动增长，类似于 C 语言中的动态申请内存，动态增长内存。</p>
+<p>ArrayList 不是线程安全的，只能用在单线程环境下，多线程环境下可以考虑用 Collections.synchronizedList(List l) 函数返回一个线程安全的 ArrayList 类，也可以使用并发包下的 CopyOnWriteArrayList 类。</p>
+<h4 id="ArrayList-如何扩容？"><a href="#ArrayList-如何扩容？" class="headerlink" title="ArrayList 如何扩容？"></a>ArrayList 如何扩容？</h4><p>数组进行扩容时，会将老数组中的元素重新拷贝一份到新的数组中，每次数组容量的增长大约是其原容量的1.5倍。这种操作的代价是很高的，因此在实际使用时，我们应该尽量避免数组容量的扩张。</p>
+<p>当我们可预知要保存的元素的多少时，要在构造 ArrayList 实例时，就指定其容量，以避免数组扩容的发生。或者根据实际需求，通过调用 ensureCapacity 方法来手动增加 ArrayList 实例的容量。</p>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><h4 id="HashMap-的底层实现"><a href="#HashMap-的底层实现" class="headerlink" title="HashMap 的底层实现"></a>HashMap 的底层实现</h4><p>JDK 1.8 之前使用<strong>数组 + 单链表</strong>实现，JDK 1.8 以后使用<strong>数组 + 单链表/红黑树</strong>实现。</p>
+<h4 id="JDK-1-8-中-HashMap-为什么要引入红黑树？"><a href="#JDK-1-8-中-HashMap-为什么要引入红黑树？" class="headerlink" title="JDK 1.8 中 HashMap 为什么要引入红黑树？"></a>JDK 1.8 中 HashMap 为什么要引入红黑树？</h4><p>当 HashMap 中出现较多哈希冲突时，链表有可能会变得非常长，而链表是从链表的 head 或者 tail 查询的，效率会随着长度的增长而降低。引入红黑树就是为了解决链表过长带来的查询效率问题。红黑树的树形结构使原本查询链表的时间复杂度 O(n) 降到了 O(logn)。</p>
+<h4 id="HashMap-什么情况使用链表？什么情况会使用红黑树？"><a href="#HashMap-什么情况使用链表？什么情况会使用红黑树？" class="headerlink" title="HashMap 什么情况使用链表？什么情况会使用红黑树？"></a>HashMap 什么情况使用链表？什么情况会使用红黑树？</h4><p>若桶中链表元素超过 8 时，会自动转化成红黑树；若桶中元素小于等于 6 时，树结构还原成链表形式。</p>
+<p>原因：</p>
+<ul>
+<li>红黑树的平均查找长度是log(n)，长度为8，查找长度为log(8)=3，链表的平均查找长度为n/2，当长度为8时，平均查找长度为8/2=4，这才有转换成树的必要。</li>
+<li>链表长度如果是小于等于6，6/2=3，虽然速度也很快的，但是转化为树结构和生成树的时间并不会太短。</li>
+<li>中间有个差值7可以防止链表和树之间频繁的转换。假设一下，如果设计成链表个数超过8则链表转换成树结构，链表个数小于8则树结构转换成链表，如果一个HashMap不停的插入、删除元素，链表个数在8左右徘徊，就会频繁的发生树转链表、链表转树，效率会很低。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一次 RocketMQ broker 因内存不足导致的启动失败</title>
+    <url>/2021/01/12/%E8%AE%B0%E4%B8%80%E6%AC%A1%20RocketMQ-broker%E5%9B%A0%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%E5%AF%BC%E8%87%B4%E7%9A%84%E5%90%AF%E5%8A%A8%E5%A4%B1%E8%B4%A5/</url>
+    <content><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><strong>该小节交代问题发生的背景，急需解决问题的小伙伴，可以跳过本节，直接看下一小节</strong>。</p>
+<p>因为项目提测，需要搭建一套测试环境。所以呢，是时候展示真正的技术啦！在搞定了容器、中间件、项目镜像后，小西登录系统对各大模块的功能进行测试。事情到了这里，小西本来应该会就这样愉快地完成了部署任务，可是生活总是会给你带来意想不到的“惊喜”。</p>
+<ul>
+<li><p>在测试一类预警事件消息时，忽然发现压根没有消息，就去 RocketMQ 的控制台界面查看，发现控制台原本应该乖乖被监控的 broker 一个都不在了。</p>
+</li>
+<li><p>在不考虑 broker 不会自己罢工跑掉的情况下，登录服务器查看 broker 服务，发现服务没有启动成功。</p>
+</li>
+<li><p>再查看 broker 的启动日志，发现启动报错了。</p>
+</li>
+</ul>
+<p>于是，就有了这篇分享。</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="部署环境"><a href="#部署环境" class="headerlink" title="部署环境"></a>部署环境</h2><p>操作系统：Centos7 Linux 系统</p>
+<p>部署方式：Docker 容器 + docker-compose 容器编排</p>
+<p>部署版本：RocketMQ 4.4.0</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>开发环境访问 RocketMQ 控制台，发现 broker 服务宕机。登录服务器查看日志发现以下报错：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Java HotSpot(TM) 64-Bit Server VM warning: INFO: os::commit_memory(0x00000000c0000000, 7163871232, 0) failed; error&#x3D;</span><br><span class="line"> ...</span><br><span class="line">#</span><br><span class="line"># There is insufficient memory for the Java Runtime Environment to continue.</span><br><span class="line"># Native memory allocation (mmap) failed to map 7163871232 bytes for Failed to commit area from 0x00000000c0000000 to</span><br><span class="line"> ...</span><br></pre></td></tr></table></figure>
+
+<p>提示内存分配无法满足 7163871232 字节的需求。那为什么会出现这个问题呢？</p>
+<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><h3 id="重启broker"><a href="#重启broker" class="headerlink" title="重启broker"></a>重启broker</h3><p>刚开始没有排查日志时，以为环境被人停掉了，所以对 broker 进行了重启。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@172-30-1-135 nginx]# docker-compose restart</span><br></pre></td></tr></table></figure>
+
+<p>发现 broker 启动依旧失败，而 namesrv 和 console 启动正常。</p>
+<h3 id="分析启动脚本"><a href="#分析启动脚本" class="headerlink" title="分析启动脚本"></a>分析启动脚本</h3><p>登录 RocketMQ 的 docker 容器。</p>
+<p>注意：<strong>因为 broker 无法启动，使用 docker exec 是无法进入容器的，需要使用 docker run 命令进入容器</strong>。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@37-128-28-177 nginx]# docker run -it rocketmqinc/rocketmq:4.4.0 bash</span><br></pre></td></tr></table></figure>
+
+<p>查看启动脚本 broker.sh</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[rocketmq@38bc66dd72c3 bin]$ vi runbroker.sh</span><br></pre></td></tr></table></figure>
+
+<p>发现 runbroker.sh 启动脚本中有最大允许堆内存的配置项 <code>MAX_POSSIBLE_HEAP</code> 。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="meta">#</span><span class="bash"> Get the max heap used by a jvm, <span class="built_in">which</span> used all the ram available to the container.</span></span><br><span class="line">if [ -z &quot;$MAX_POSSIBLE_HEAP&quot; ]</span><br><span class="line">then</span><br><span class="line">        MAX_POSSIBLE_RAM_STR=$(java -XX:+UnlockExperimentalVMOptions -XX:MaxRAMFraction=1 -XshowSettings:vm -version |&amp; awk &#x27;/Max\. Heap Size \(Estimated\): [0-9KMG]+/&#123; print $5&#125;&#x27;)</span><br><span class="line">        MAX_POSSIBLE_RAM=$MAX_POSSIBLE_RAM_STR</span><br><span class="line">        CAL_UNIT=$&#123;MAX_POSSIBLE_RAM_STR: -1&#125;</span><br><span class="line">        if [ &quot;$CAL_UNIT&quot; == &quot;G&quot; -o &quot;$CAL_UNIT&quot; == &quot;g&quot; ]; then</span><br><span class="line">                MAX_POSSIBLE_RAM=$(echo $&#123;MAX_POSSIBLE_RAM_STR:0:$&#123;#MAX_POSSIBLE_RAM_STR&#125;-1&#125; `expr 1 \* 1024 \* 1024 \* 1024` | awk &#x27;&#123;printf &quot;%d&quot;,$1*$2&#125;&#x27;)</span><br><span class="line">        elif [ &quot;$CAL_UNIT&quot; == &quot;M&quot; -o &quot;$CAL_UNIT&quot; == &quot;m&quot; ]; then</span><br><span class="line">                MAX_POSSIBLE_RAM=$(echo $&#123;MAX_POSSIBLE_RAM_STR:0:$&#123;#MAX_POSSIBLE_RAM_STR&#125;-1&#125; `expr 1 \* 1024 \* 1024` | awk &#x27;&#123;printf &quot;%d&quot;,$1*$2&#125;&#x27;)</span><br><span class="line">        elif [ &quot;$CAL_UNIT&quot; == &quot;K&quot; -o &quot;$CAL_UNIT&quot; == &quot;k&quot; ]; then</span><br><span class="line">                MAX_POSSIBLE_RAM=$(echo $&#123;MAX_POSSIBLE_RAM_STR:0:$&#123;#MAX_POSSIBLE_RAM_STR&#125;-1&#125; `expr 1 \* 1024` | awk &#x27;&#123;printf &quot;%d&quot;,$1*$2&#125;&#x27;)</span><br><span class="line">        fi</span><br><span class="line">        MAX_POSSIBLE_HEAP=$[MAX_POSSIBLE_RAM/4]</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Dynamically calculate parameters, <span class="keyword">for</span> reference.</span></span><br><span class="line">Xms=$MAX_POSSIBLE_HEAP</span><br><span class="line">Xmx=$MAX_POSSIBLE_HEAP</span><br><span class="line">Xmn=$[MAX_POSSIBLE_HEAP/2]</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>从脚本中可以看出，在 runborker.sh 脚本中， <code>MAX_POSSIBLE_HEAP</code> 参数值会通过参数进行设置，而如果没有任何设置就会走下面这个判断：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">MAX_POSSIBLE_HEAP=$[MAX_POSSIBLE_RAM/4]</span><br></pre></td></tr></table></figure>
+
+<p>也就是说 <code>MAX_POSSIBLE_HEAP</code> 参数如果没有指定，它会使用四分之一的最大可用内存 <code>MAX_POSSIBLE_RAM</code> ，这一机制可以保护服务器的操作系统不会因为被服务占据全部内存而无法正常运行。但当服务器的可用内存较小时，这个四分之一对于 RocketMQ 来说就有些“捉襟见肘”了。所以，也就导致了 RocketMQ 因内存不足而无法启动。</p>
+<p>分析出原因以后，就可以考虑通过<strong>显式指定参数</strong>的方式解决这个问题。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="方案一：修改最大堆内存"><a href="#方案一：修改最大堆内存" class="headerlink" title="方案一：修改最大堆内存"></a>方案一：修改最大堆内存</h3><p>退出 docker 容器，修改 RocketMQ 服务 <code>docker-compose.yml</code> 文件，给 broker 指定 <code>MAX_POSSIBLE_HEAP</code> 参数，指定为 <code>1024m</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">broker:</span><br><span class="line">    image: rocketmqinc/rocketmq:4.4.0</span><br><span class="line">    container_name: rmqbroker</span><br><span class="line">    ports:</span><br><span class="line">      - 10909:10909</span><br><span class="line">      - 10911:10911</span><br><span class="line">      - 10912:10912</span><br><span class="line">    volumes:</span><br><span class="line">      - /data/admin/app/yunying/mq/logs/broker:/home/rocketmq/logs</span><br><span class="line">      - /data/admin/app/yunying/mq/broker:/home/rocketmq/store</span><br><span class="line">      - /data/admin/app/yunying/mq/broker.conf:/opt/rocketmq-4.4.0/conf/broker.conf</span><br><span class="line">    command: sh  mqbroker -n 172.30.1.135:9876 -c /opt/rocketmq-4.4.0/conf/broker.conf</span><br><span class="line">    depends_on:</span><br><span class="line">      - namesrv</span><br><span class="line">    environment:</span><br><span class="line">      - &quot;autoCreateTopicEnable=true&quot;</span><br><span class="line">      - &quot;JAVA_HOME=/usr/lib/jvm/jre&quot;</span><br><span class="line">      # 指定堆内存大小</span><br><span class="line">      - &quot;MAX_POSSIBLE_HEAP=1024m&quot;</span><br><span class="line">      - TZ=Asia/Shanghai</span><br></pre></td></tr></table></figure>
+
+<p>重启 broker。查看日志，发现以下报错。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;opt&#x2F;rocketmq-4.4.0&#x2F;bin&#x2F;runbroker.sh: line 58: 1024m: value too great for base (error token is &quot;1024m&quot;)</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>由于原始问题报错信息中的单位是 bytes，考虑到参数单位可能与 JVM 内存设置参数不同，再次修改堆内存配置。</p>
+<p>重启 broker，启动成功。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[admin@zw-yunying-172.30.1.135 mq]$ docker logs -f --tail 10 rmqbroker</span><br><span class="line">The broker[broker-a, 172.30.1.135:10911] boot success. serializeType=JSON and name server is 172.30.1.135:9876</span><br></pre></td></tr></table></figure>
+
+<p>至此，问题解决。</p>
+<h3 id="方案二：修改JVM元空间大小"><a href="#方案二：修改JVM元空间大小" class="headerlink" title="方案二：修改JVM元空间大小"></a>方案二：修改JVM元空间大小</h3><p>本方案是网上查找资料发现的解决方案，报错问题类似但不完全一致。该方案没有做验证，不确定是否能够解决该问题。</p>
+<p>感兴趣的小伙伴可以验证一下，下面是问题描述和解决方案。</p>
+<p>问题描述为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">JRE version: (8.0_172-b11) (build )</span><br><span class="line">Java VM: Java HotSpot(TM) 64-Bit Server VM (25.172-b11 mixed mode linux-amd64 compressed oops)</span><br><span class="line">Java运行时环境的内存不足，无法继续，本机内存分配（mmap）未能映射8589934592字节，用于提交保留内存</span><br></pre></td></tr></table></figure>
+
+<p>解决方案如下：</p>
+<p>找到 runserver.sh 和 runbroker.sh，编辑</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">JAVA_OPT=”$&#123;JAVA_OPT&#125; -server -Xms256m -Xmx1024m -Xmn125m -XX:MetaspaceSize=1024m -XX:MaxMetaspaceSize=1024m”</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://blog.csdn.net/u014362882/article/details/80422136">搭建RocketMQ踩的坑-内存不足</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>RocketMQ</category>
+      </categories>
+      <tags>
+        <tag>消息中间件</tag>
+        <tag>RocketMQ</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>必知必会面试题之 Java 基础</title>
+    <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
+<ul>
+<li><a href="#%E6%95%B0%E6%8D%AE%E8%AE%A1%E9%87%8F%E5%8D%95%E4%BD%8D">数据计量单位</a> </li>
+<li><a href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7">面向对象三大特性</a> </li>
+<li><a href="#%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">基础数据类型</a> </li>
+<li><a href="#%E6%B3%A8%E9%87%8A%E6%A0%BC%E5%BC%8F">注释格式</a> </li>
+</ul>
+<hr>
+<span id="more"></span>
+
+<hr>
+<ul>
+<li><a href="#%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6">访问修饰符</a> </li>
+<li><a href="#%E8%BF%90%E7%AE%97%E7%AC%A6">运算符</a> <ul>
+<li><a href="#%E7%AE%97%E6%95%B0%E8%BF%90%E7%AE%97%E7%AC%A6">算数运算符</a> </li>
+<li><a href="#%E5%85%B3%E7%B3%BB%E8%BF%90%E7%AE%97%E7%AC%A6">关系运算符</a> </li>
+<li><a href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6">位运算符</a> </li>
+<li><a href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6">逻辑运算符</a> </li>
+<li><a href="#%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6">赋值运算符</a> </li>
+<li><a href="#%E4%B8%89%E7%9B%AE%E8%A1%A8%E8%BE%BE%E5%BC%8F">三目表达式</a> </li>
+<li><a href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7">运算符优先级</a> </li>
+</ul>
+</li>
+<li><a href="%E6%8B%B7%E8%B4%9D">拷贝</a> <ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B5%85%E6%8B%B7%E8%B4%9D%EF%BC%9F">什么是浅拷贝？</a> </li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B5%85%E6%8B%B7%E8%B4%9D%EF%BC%9F">什么是浅拷贝？</a> </li>
+</ul>
+</li>
+<li><a href="#%E9%87%8D%E5%86%99%E4%B8%8E%E9%87%8D%E8%BD%BD">重写与重载</a> <ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8D%E5%86%99%EF%BC%9F">什么是重写？</a> </li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8D%E8%BD%BD%EF%BC%9F">什么是重载？</a> </li>
+<li><a href="#%E9%87%8D%E5%86%99%E4%B8%8E%E9%87%8D%E8%BD%BD%E7%9A%84%E5%8C%BA%E5%88%AB">重写与重载的区别</a> </li>
+</ul>
+</li>
+<li><a href="#%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92%E4%B8%8E%E5%80%BC%E4%BC%A0%E9%80%92">引用传递与值传递</a> </li>
+<li><a href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6">类加载机制</a> <ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%EF%BC%9F">什么是双亲委派？</a> </li>
+<li><a href="#%E5%A6%82%E4%BD%95%E6%89%93%E7%A0%B4%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%EF%BC%9F">如何打破双亲委派？</a> </li>
+</ul>
+</li>
+<li><a href="#Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B">Java 内存模型</a> <ul>
+<li><a href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE">缓存一致性协议</a> </li>
+<li><a href="#%E7%BC%93%E5%AD%98%E8%A1%8C">缓存行</a> </li>
+<li><a href="#%E7%BC%93%E5%AD%98%E8%A1%8C%E5%AF%B9%E9%BD%90">缓存行对齐</a> </li>
+<li><a href="#%E5%90%88%E5%B9%B6%E5%86%99">合并写</a> </li>
+<li><a href="#Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%8C%85%E6%8B%AC%E5%93%AA%E4%BA%9B%E4%B8%9C%E8%A5%BF%EF%BC%9F">Java 内存模型包括哪些东西？</a> </li>
+<li><a href="#Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E4%B8%AD%EF%BC%8C%E5%93%AA%E4%BA%9B%E5%AF%B9%E8%B1%A1%E6%98%AF%E7%8E%B0%E5%9C%BA%E7%A7%81%E6%9C%89%E7%9A%84%EF%BC%9F%E5%93%AA%E4%BA%9B%E5%AF%B9%E8%B1%A1%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%85%AC%E6%9C%89%E7%9A%84%EF%BC%9F">Java 内存模型中，哪些对象是现场私有的？哪些对象是线程公有的？</a> </li>
+<li><a href="#Java%E5%85%AB%E5%A4%A7%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C">Java 八大原子操作</a> </li>
+</ul>
+</li>
+</ul>
+<h3 id="数据计量单位"><a href="#数据计量单位" class="headerlink" title="数据计量单位"></a>数据计量单位</h3><p>8bit(位)=1Byte(字节) </p>
+<p>1024Byte(字节)=1KB</p>
+<p>1024KB=1MB</p>
+<p>1024MB=1GB</p>
+<p>1024GB=1TB</p>
+<p>1024TB=PB</p>
+<p>1024PB=1EB</p>
+<p>1024EB=1ZB</p>
+<p>1024ZB=1YB</p>
+<p>1024YB=1BB</p>
+<h3 id="面向对象三大特性"><a href="#面向对象三大特性" class="headerlink" title="面向对象三大特性"></a>面向对象三大特性</h3><p>封装：<strong>隐藏不想对外暴露的信息</strong>，提高安全性；<strong>抽取公共代码</strong>，提高可复用性。</p>
+<p>继承：<strong>继承为类的扩展提供了一种方式</strong>。有利于修改公共属性或方法，父类修改，所有子类无需重复修改。</p>
+<p>多态：类的<strong>多态体现在重写和重载</strong>，重写通过继承来实现，重载通过相同方法的不同参数来实现。</p>
+<h3 id="基础数据类型"><a href="#基础数据类型" class="headerlink" title="基础数据类型"></a>基础数据类型</h3><table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>位数</th>
+<th>取值范围</th>
+<th>可转类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>byte</td>
+<td>8</td>
+<td>-128 ~ 127（-2^7 ~ 2^7-1）</td>
+<td></td>
+</tr>
+<tr>
+<td>short</td>
+<td>16</td>
+<td>-32,768 ~ 32,767（-2^15 ~ 2^15-1）</td>
+<td>int、long、float、double</td>
+</tr>
+<tr>
+<td>int</td>
+<td>32</td>
+<td>-2,147,483,648 ~ 2,147,483,647（-2^31 ~ 2^31-1）</td>
+<td>long、float、double</td>
+</tr>
+<tr>
+<td>long</td>
+<td>64</td>
+<td>-9,223,372,036,854,775,808 ~ 9,223,372,036,854,775,807（-2^63 ~ 2^63-1）</td>
+<td>int、long、float、double</td>
+</tr>
+<tr>
+<td>float</td>
+<td>32</td>
+<td></td>
+<td>double</td>
+</tr>
+<tr>
+<td>double</td>
+<td>64</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>char</td>
+<td>16</td>
+<td>\u0000 ~ \uffff（65 ~ 535）</td>
+<td>int、long、float、double</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>1</td>
+<td>true、false</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="注释格式"><a href="#注释格式" class="headerlink" title="注释格式"></a>注释格式</h3><ul>
+<li><p>单行注释：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// this is a comment</span></span><br></pre></td></tr></table></figure></li>
+<li><p>多行注释：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* this is a comment */</span></span><br></pre></td></tr></table></figure></li>
+<li><p>文档注释：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * this is a comment</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="访问修饰符"><a href="#访问修饰符" class="headerlink" title="访问修饰符"></a>访问修饰符</h3><table>
+<thead>
+<tr>
+<th>修饰符</th>
+<th>当前类</th>
+<th>同包</th>
+<th>子类</th>
+<th>其他包</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>private</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td>default</td>
+<td>√</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td>protected</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>×</td>
+</tr>
+<tr>
+<td>public</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+</tbody></table>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><h4 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h4><table>
+<thead>
+<tr>
+<th align="left">操作符</th>
+<th align="left">描述</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+</td>
+<td align="left">加法 - 相加运算符两侧的值</td>
+<td align="left">A + B = 30</td>
+</tr>
+<tr>
+<td align="left">-</td>
+<td align="left">减法 - 左操作数减去右操作数</td>
+<td align="left">A – B = -10</td>
+</tr>
+<tr>
+<td align="left">*</td>
+<td align="left">乘法 - 相乘操作符两侧的值</td>
+<td align="left">A * B = 200</td>
+</tr>
+<tr>
+<td align="left">/</td>
+<td align="left">除法 - 左操作数除以右操作数</td>
+<td align="left">B / A = 2</td>
+</tr>
+<tr>
+<td align="left">％</td>
+<td align="left">取余 - 左操作数除以右操作数的余数</td>
+<td align="left">B % A = 0</td>
+</tr>
+<tr>
+<td align="left">++</td>
+<td align="left">自增: 操作数的值增加1</td>
+<td align="left">B++ = 21 或 ++B = 21</td>
+</tr>
+<tr>
+<td align="left">–</td>
+<td align="left">自减: 操作数的值减少1</td>
+<td align="left">B– == 19 或 –B == 19</td>
+</tr>
+</tbody></table>
+<h4 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h4><table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">==</td>
+<td align="left">检查如果两个操作数的值是否相等，如果相等则条件为真。</td>
+<td align="left">(A == B) 为假。</td>
+</tr>
+<tr>
+<td align="left">!=</td>
+<td align="left">检查如果两个操作数的值是否相等，如果值不相等则条件为真。</td>
+<td align="left">(A != B) 为真。</td>
+</tr>
+<tr>
+<td align="left">&gt;</td>
+<td align="left">检查左操作数的值是否大于右操作数的值，如果是那么条件为真。</td>
+<td align="left">(A &gt; B) 为假。</td>
+</tr>
+<tr>
+<td align="left">&lt;</td>
+<td align="left">检查左操作数的值是否小于右操作数的值，如果是那么条件为真。</td>
+<td align="left">(A &lt; B) 为真。</td>
+</tr>
+<tr>
+<td align="left">&gt;=</td>
+<td align="left">检查左操作数的值是否大于或等于右操作数的值，如果是那么条件为真。</td>
+<td align="left">(A &gt;= B) 为假。</td>
+</tr>
+<tr>
+<td align="left">&lt;=</td>
+<td align="left">检查左操作数的值是否小于或等于右操作数的值，如果是那么条件为真。</td>
+<td align="left">(A &lt;= B) 为真。</td>
+</tr>
+</tbody></table>
+<h4 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h4><table>
+<thead>
+<tr>
+<th align="left">操作符</th>
+<th align="left">描述</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&amp;</td>
+<td align="left">与。如果相对应位都是 1，则结果为 1，否则为 0</td>
+<td align="left">(A &amp; B) 得到12，即 0000 1100</td>
+</tr>
+<tr>
+<td align="left">|</td>
+<td align="left">或。如果相对应位都是 0，则结果为 0，否则为 1</td>
+<td align="left">(A | B) 得到 61，即 0011 1101</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">异或。如果相对应位值相同，则结果为 0，否则为1</td>
+<td align="left">(A ^ B) 得到 49，即 0011 0001</td>
+</tr>
+<tr>
+<td align="left">~</td>
+<td align="left">取反。翻转操作数的每一位，即 0 变成 1，1 变成 0。</td>
+<td align="left">(~A) 得到 -61，即 1100 0011</td>
+</tr>
+<tr>
+<td align="left">&lt;&lt;</td>
+<td align="left">左移。左操作数按位左移右操作数指定的位数。</td>
+<td align="left">A &lt;&lt; 2 得到 240，即 1111 0000</td>
+</tr>
+<tr>
+<td align="left">&gt;&gt;</td>
+<td align="left">右移。左操作数按位右移右操作数指定的位数。</td>
+<td align="left">A &gt;&gt; 2 得到 15，即 1111</td>
+</tr>
+<tr>
+<td align="left">&gt;&gt;&gt;</td>
+<td align="left">无符号右移。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。</td>
+<td align="left">A&gt;&gt;&gt;2 得到 15，即 0000 1111</td>
+</tr>
+</tbody></table>
+<h4 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h4><table>
+<thead>
+<tr>
+<th align="left">操作符</th>
+<th align="left">描述</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&amp;&amp;</td>
+<td align="left">逻辑与，也称短路与。当且仅当两个操作数都为真，条件才为真。若第一个操作数为假，则第二个操作数不再判断。</td>
+<td align="left">(A &amp;&amp; B) 为假。</td>
+</tr>
+<tr>
+<td align="left">||</td>
+<td align="left">逻辑或，也称短路或。如果任何两个操作数任何一个为真，条件为真。若第一个操作数为假，则第二个操作数不再判断。</td>
+<td align="left">(A || B) 为真。</td>
+</tr>
+<tr>
+<td align="left">!</td>
+<td align="left">逻辑非。用来反转操作数的逻辑状态。如果条件为 true，则使用逻辑非运算符将得到 false。</td>
+<td align="left">!(A &amp;&amp; B) 为真。</td>
+</tr>
+</tbody></table>
+<h4 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h4><table>
+<thead>
+<tr>
+<th align="left">操作符</th>
+<th align="left">描述</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">=</td>
+<td align="left">简单的赋值运算符，将右操作数的值赋给左侧操作数</td>
+<td align="left">C = A + B 将把 A + B 得到的值赋给 C</td>
+</tr>
+<tr>
+<td align="left">+=</td>
+<td align="left">加和赋值操作符，它把左操作数和右操作数相加赋值给左操作数</td>
+<td align="left">C += A 等价于 C = C + A</td>
+</tr>
+<tr>
+<td align="left">-=</td>
+<td align="left">减和赋值操作符，它把左操作数和右操作数相减赋值给左操作数</td>
+<td align="left">C -= A 等价于 C = C - A</td>
+</tr>
+<tr>
+<td align="left">*=</td>
+<td align="left">乘和赋值操作符，它把左操作数和右操作数相乘赋值给左操作数</td>
+<td align="left">C *= A 等价于 C = C * A</td>
+</tr>
+<tr>
+<td align="left">/=</td>
+<td align="left">除和赋值操作符，它把左操作数和右操作数相除赋值给左操作数</td>
+<td align="left">C /= A，C 与 A 同类型时等价于 C = C / A</td>
+</tr>
+<tr>
+<td align="left">％=</td>
+<td align="left">取模和赋值操作符，它把左操作数和右操作数取模后赋值给左操作数</td>
+<td align="left">C ％= A 等价于 C = C ％ A</td>
+</tr>
+<tr>
+<td align="left">&lt;&lt;=</td>
+<td align="left">左移位赋值运算符</td>
+<td align="left">C &lt;&lt;= 2 等价于 C = C &lt;&lt; 2</td>
+</tr>
+<tr>
+<td align="left">&gt;&gt;=</td>
+<td align="left">右移位赋值运算符</td>
+<td align="left">C &gt;&gt;= 2 等价于 C = C &gt;&gt; 2</td>
+</tr>
+<tr>
+<td align="left">&amp;=</td>
+<td align="left">按位与赋值运算符</td>
+<td align="left">C &amp;= 2 等价于 C = C &amp; 2</td>
+</tr>
+<tr>
+<td align="left">^=</td>
+<td align="left">按位异或赋值操作符</td>
+<td align="left">C ^ = 2 等价于 C = C ^ 2</td>
+</tr>
+<tr>
+<td align="left">|=</td>
+<td align="left">按位或赋值操作符</td>
+<td align="left">C | = 2 等价于 C = C | 2</td>
+</tr>
+</tbody></table>
+<h4 id="三目表达式"><a href="#三目表达式" class="headerlink" title="三目表达式"></a>三目表达式</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 若 a == b 成立，返回 true，否则返回 false</span></span><br><span class="line"><span class="keyword">boolean</span> flag = (a == b) ? <span class="keyword">true</span> : <span class="keyword">false</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="运算符优先级"><a href="#运算符优先级" class="headerlink" title="运算符优先级"></a>运算符优先级</h4><blockquote>
+<p> 所谓“好记性不如烂笔头”。实际开发中，尽量使用括号来明确优先级，提高代码可读性，而非使用复杂的运算符复合运算。</p>
+<p> 如：((x++) &amp;&amp; (y + 1) || z == 0)</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>运算符</th>
+<th>结合性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>()、[]、{}</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>2</td>
+<td>!、+、-、~、++、–</td>
+<td>从右向左</td>
+</tr>
+<tr>
+<td>3</td>
+<td>*、/、%</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>4</td>
+<td>+、-</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>5</td>
+<td>«、»、&gt;&gt;&gt;</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>6</td>
+<td>&lt;、&lt;=、&gt;、&gt;=、instanceof</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>7</td>
+<td>==、!=</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>8</td>
+<td>&amp;</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>9</td>
+<td>^</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>10</td>
+<td>|</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>11</td>
+<td>&amp;&amp;</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>12</td>
+<td>||</td>
+<td>从左向右</td>
+</tr>
+<tr>
+<td>13</td>
+<td>?:</td>
+<td>从右向左</td>
+</tr>
+<tr>
+<td>14</td>
+<td>=、+=、-=、*=、/=、&amp;=、|=、^=、~=、«=、»=、&gt;&gt;&gt;=</td>
+<td>从右向左</td>
+</tr>
+</tbody></table>
+<h3 id="拷贝"><a href="#拷贝" class="headerlink" title="拷贝"></a>拷贝</h3><h4 id="什么是浅拷贝？"><a href="#什么是浅拷贝？" class="headerlink" title="什么是浅拷贝？"></a>什么是浅拷贝？</h4><p>被复制对象的所有变量值与原对象相同，但引用变量仍然指向原来的对象。即浅拷贝只复制对象本身，而不复制对象中引用的对象。</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Teacher teacher = <span class="keyword">new</span> Teacher();</span><br><span class="line">teacher.setName(<span class="string">&quot;赵大&quot;</span>);</span><br><span class="line">teacher.setAge(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">Student student1 = <span class="keyword">new</span> Student();</span><br><span class="line">student1.setName(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">student1.setAge(<span class="number">21</span>);</span><br><span class="line">student1.setTeacher(teacher);</span><br><span class="line"></span><br><span class="line">Student student2 = (Student) student1.clone();</span><br><span class="line">System.out.println(<span class="string">&quot;李四&quot;</span>);</span><br><span class="line">System.out.println(student2.getName());</span><br><span class="line">System.out.println(student2.getAge());</span><br><span class="line">System.out.println(student2.getTeacher().getName());</span><br><span class="line">System.out.println(student2.getTeacher().getAge());</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;修改老师的信息后-------------&quot;</span>);</span><br><span class="line"><span class="comment">// 修改老师名称</span></span><br><span class="line">teacher.setName(<span class="string">&quot;John&quot;</span>);</span><br><span class="line"><span class="comment">// 两个学生的老师均发生变化</span></span><br><span class="line">System.out.println(student1.getTeacher().getName());</span><br><span class="line">System.out.println(student2.getTeacher().getName());</span><br></pre></td></tr></table></figure>
+
+<h4 id="什么是深拷贝？"><a href="#什么是深拷贝？" class="headerlink" title="什么是深拷贝？"></a>什么是深拷贝？</h4><p>深拷贝是一个整个独立的对象拷贝，深拷贝会拷贝所有的属性，并拷贝属性指向的动态分配的内存。</p>
+<p>深拷贝的方法包括：</p>
+<ol>
+<li><p>重写 clone() 方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> String  name;</span><br><span class="line">  <span class="keyword">private</span> Integer age;</span><br><span class="line">  <span class="keyword">private</span> Teacher teacher;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 省略 get/set 方法</span></span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">    Student3 student = (Student3) <span class="keyword">super</span>.clone();</span><br><span class="line">    <span class="comment">// 复制一个新的 Teacher 对象实例，并设置到新的 student 对象实例中</span></span><br><span class="line">    student.setTeacher((Teacher2) student.getTeacher().clone());</span><br><span class="line">    <span class="keyword">return</span> student;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>使用序列化实现</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Teacher</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 省略 get/set 方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">private</span> Teacher3 teacher;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 省略 get/set 方法</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">deepClone</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 序列化</span></span><br><span class="line">        ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(bos);</span><br><span class="line">        oos.writeObject(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 反序列化</span></span><br><span class="line">        ByteArrayInputStream bis = <span class="keyword">new</span> ByteArrayInputStream(bos.toByteArray());</span><br><span class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(bis);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ois.readObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="重写与重载"><a href="#重写与重载" class="headerlink" title="重写与重载"></a>重写与重载</h3><h4 id="什么是重写？"><a href="#什么是重写？" class="headerlink" title="什么是重写？"></a>什么是重写？</h4><p>重写是指子类对父类允许访问的方法进行重新编写，返回值和形参都不能改变。<strong>即方法入参出参不变，实现逻辑重写</strong>。</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OverrideParent</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">(String <span class="keyword">var</span>)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="keyword">var</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OverrideChild</span> <span class="keyword">extends</span> <span class="title">OverrideParent</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 重写父类的 m1() 方法</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">(String <span class="keyword">var</span>)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="keyword">var</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 子类的 m1() 方法：与父类 m1() 方法的形参不同</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">(<span class="keyword">int</span> <span class="keyword">var</span>)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="keyword">var</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 子类的 m1() 方法：与父类 m1() 方法的形参、返回值不同</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">m1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;var&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;var&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="什么是重载？"><a href="#什么是重载？" class="headerlink" title="什么是重载？"></a>什么是重载？</h4><p>重载是指一个类中存在多个同名方法，且方法的形参不同。<strong>即方法名称相同、形参不同</strong>。</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OverloadClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;key&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">    System.out.println(key);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">(String key, Integer value)</span> </span>&#123;</span><br><span class="line">    System.out.println(key);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="重写与重载的区别"><a href="#重写与重载的区别" class="headerlink" title="重写与重载的区别"></a>重写与重载的区别</h4><ol>
+<li>重写要求方法名、入参、返回值相同，重载只同名方法的入参不同（类型、个数、顺序至少有一个不同）。</li>
+<li>重写要求子类不能缩小父类方法的访问权限，重载与访问权限无关。</li>
+<li>重写要求子类方法不能抛出比父类方法更多的异常（但子类方法可以不抛出异常），重载与异常范围无关。</li>
+<li>重写是子类对父类方法的覆盖行为，重载是一个类的多态性。</li>
+<li>重写方法不能被定义为 final，重载方法可以被定义为 final。</li>
+</ol>
+<h3 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h3><h4 id="什么是双亲委派？"><a href="#什么是双亲委派？" class="headerlink" title="什么是双亲委派？"></a>什么是双亲委派？</h4><p>在类加载过程中，子类会先去父类查找，如果找到，则从父类缓存加载。如果没找到，再由父类指派子类进行加载。</p>
+<p>双亲委派机制主要出于安全来考虑。比如自定义 java.lang.String，如果不先去父类查找，相当于 Bootstrap 加载器的 java.lang.String 被篡改了。</p>
+<h4 id="如何打破双亲委派？"><a href="#如何打破双亲委派？" class="headerlink" title="如何打破双亲委派？"></a>如何打破双亲委派？</h4><ol>
+<li><p>重写 loadClass() 方法</p>
+<blockquote>
+<p>JDK 1.2 之前，自定义 ClassLoader 都必须重写 loadClass()</p>
+</blockquote>
+</li>
+<li><p>ThreadContextClassLoader 可以实现基础类调用实现类代码，通过 thread.setContextClassLoader 指定</p>
+</li>
+<li><p>热启动，热部署</p>
+<blockquote>
+<p>OSGI、Tomcat 都有自己的模块指定 Classloader（可以加载同一类库的不同版本）</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="Java-内存模型"><a href="#Java-内存模型" class="headerlink" title="Java 内存模型"></a>Java 内存模型</h3><h4 id="缓存一致性协议"><a href="#缓存一致性协议" class="headerlink" title="缓存一致性协议"></a>缓存一致性协议</h4><p>现代 CPU 的数据一致性实现 = 缓存锁(MESI 等) + 总线锁。缓存一致性协议一般是指缓存锁层面的协议，目前缓存一致性协议的实现有很多种，比较常见的就是 Intel 所使用 <strong>MESI</strong> 协议。</p>
+<p>MESI 协议定义了四种状态，分别是 Modified、Exclusive、Shared 和 Invalid。</p>
+<ul>
+<li>Modified 状态：该Cache line有效，数据被修改且未同步到内存，数据和内存数据不一致，数据只存在于本 Cache 中。</li>
+<li>Exclusive 状态：该Cache line有效，数据由单 CPU 独占，数据和内存数据一致，数据只存在于本 Cache 中。</li>
+<li>Shared 状态：该Cache line有效，数据由所有 CPU 共享，数据和内存数据一致，数据存在于所有 Cache 中。</li>
+<li>Invalid 状态：该Cache line无效。</li>
+</ul>
+<h4 id="缓存行"><a href="#缓存行" class="headerlink" title="缓存行"></a>缓存行</h4><p>读取缓存以 Cache Line 为基本单位，目前 64 bytes。</p>
+<p>位于同一缓存行的两个不同数据，被两个不同 CPU 锁定，产生互相影响的伪共享问题，使用缓存行的对齐能够有效解决伪共享问题，提高处理效率。</p>
+<h4 id="缓存行的对齐"><a href="#缓存行的对齐" class="headerlink" title="缓存行的对齐"></a>缓存行的对齐</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//一个缓存行64个字节，设置56个的占位符，令要插入的数据单独占用一行缓存行</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Padding</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">long</span> p1,p2,p3,p4,p5,p6,p7;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">T</span> <span class="keyword">extends</span> <span class="title">Padding</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">long</span> x = <span class="number">0L</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> T[] arr = <span class="keyword">new</span> T[<span class="number">2</span>];</span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">  arr[<span class="number">0</span>] = <span class="keyword">new</span> T();</span><br><span class="line">  arr[<span class="number">1</span>] = <span class="keyword">new</span> T();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">  Thread t1 = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">long</span> i = <span class="number">0</span>; i &lt; <span class="number">1000_0000L</span>; i++) &#123;</span><br><span class="line">      arr[<span class="number">0</span>].x = i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  Thread t2 = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">long</span> i = <span class="number">0</span>; i &lt; <span class="number">1000_0000L</span>; i++) &#123;</span><br><span class="line">      arr[<span class="number">0</span>].x = i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  t1.start();</span><br><span class="line">  t2.start();</span><br><span class="line">  t1.join();</span><br><span class="line">  t1.join();</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用缓存行对齐的开源软件：Disruptor（号称单机效率最高的队列）</li>
+</ul>
+<h4 id="合并写"><a href="#合并写" class="headerlink" title="合并写"></a>合并写</h4><p>如果 CPU 需要访问的地址 hash 之后并不在缓存行（cache line）中，那么缓存中对应位置的缓存行（cache line）会失效，以便让新的值可以取代该位置的现有值。例如，如果我们有两个地址，通过 hash 算法 hash 到同一缓存行，那么新的值会覆盖老的值。</p>
+<p>当 CPU 执行存储指令（store）时，它会尝试将数据写到离 CPU 最近的 L1 缓存。如果这时出现缓存失效，CPU 会访问下一级缓存。这时无论是英特尔还是许多其他厂商的 CPU 都会使用被称为“合并写（write combining）”的技术。</p>
+<p>当请求 L2 缓存行的所有权的时候，最典型的是将处理器的 store buffers 中某一项写入内存的期间， 在缓存子系统（cache sub-system）准备好接收、处理的数据的期间，CPU 可以继续处理其他指令。当数据不在任何缓存层中缓存时，将获得最大的优势。</p>
+<p>当连串的写操作需要修改相同的缓存行时，会变得非常有趣。在修改提交到 L2 缓存之前，这连串的写操作会首先合并到缓冲区（buffer）。 这些 64 字节的缓冲（buffers ）维护在一个 64 位的区域中，每一个字节（byte）对应一个位（bit），当缓冲区被传输到外缓存后，标志缓存是否有效。随后，硬件在读取缓存之前会先读取缓冲区。</p>
+<p>如果我们可以在缓冲区被传输到外缓存之前能够填补这些缓冲区（buffers ），那么我们将大大提高传输总线的效率。由于这些缓冲区的数量是有限的，并且它们根据 CPU 的型号有所不同。例如在 Intel CPU，你只能保证在同一时间拿到 4 个。这意味着，在一个循环中，你不应该同时写超过 4 个截然不同的内存位置，否则你讲不能从合并写（write combining）的中受益。</p>
+<h4 id="Java-内存模型包括哪些东西？"><a href="#Java-内存模型包括哪些东西？" class="headerlink" title="Java 内存模型包括哪些东西？"></a>Java 内存模型包括哪些东西？</h4><p>程序计数器、方法区、本地方法栈、虚拟机方法栈、堆。</p>
+<h4 id="Java-内存模型中，哪些对象是线程私有的？哪些对象是线程公有的？"><a href="#Java-内存模型中，哪些对象是线程私有的？哪些对象是线程公有的？" class="headerlink" title="Java 内存模型中，哪些对象是线程私有的？哪些对象是线程公有的？"></a>Java 内存模型中，哪些对象是线程私有的？哪些对象是线程公有的？</h4><p>程序计数器、本地方法栈、虚拟机方法栈是线程私有的，方法区、堆是线程公有的。</p>
+<h4 id="如何保证特定情况下不乱序"><a href="#如何保证特定情况下不乱序" class="headerlink" title="如何保证特定情况下不乱序"></a>如何保证特定情况下不乱序</h4><p><strong>硬件层面：使用内存屏障</strong></p>
+<ul>
+<li><strong>sfence</strong>:  store| 在sfence指令前的写操作当必须在sfence指令后的写操作前完成。</li>
+<li><strong>lfence</strong>：load | 在lfence指令前的读操作当必须在lfence指令后的读操作前完成。</li>
+<li><strong>mfence</strong>：mix | 在mfence指令前的读写操作当必须在mfence指令后的读写操作前完成。</li>
+</ul>
+<blockquote>
+<p>原子指令，如x86上的”lock …” 指令是一个Full Barrier，执行时会锁住内存子系统来确保执行顺序，甚至跨多个CPU。Software Locks通常使用了内存屏障或原子指令来实现变量可见性和保持程序顺序</p>
+</blockquote>
+<p><strong>JVM层面：使用 JSR133 规范</strong></p>
+<ul>
+<li><p>LoadLoad屏障：</p>
+<p>对于这样的语句 Load1; LoadLoad; Load2， 在 Load2 及后续读取操作要读取的数据被访问前，保证 Load1 要读取的数据被读取完毕。</p>
+</li>
+<li><p>StoreStore屏障：</p>
+<p>对于这样的语句 Store1; StoreStore; Store2，在 Store2 及后续写入操作执行前，保证 Store1 的写入操作对其它处理器可见。</p>
+</li>
+<li><p>LoadStore屏障：</p>
+<p>对于这样的语句 Load1; LoadStore; Store2，在 Store2 及后续写入操作被刷出前，保证 Load1 要读取的数据被读取完毕。</p>
+</li>
+<li><p>StoreLoad屏障：</p>
+<p>对于这样的语句 Store1; StoreLoad; Load2，在 Load2 及后续所有读取操作执行前，保证 Store1 的写入对所有处理器可见。</p>
+</li>
+</ul>
+<h4 id="java-八大原子操作"><a href="#java-八大原子操作" class="headerlink" title="java 八大原子操作"></a>java 八大原子操作</h4><blockquote>
+<p>最新的 JSR-133 已经放弃了这种描述，但 JMM 没有变化。</p>
+</blockquote>
+<p><strong>lock</strong>：主内存，标识变量为线程独占</p>
+<p><strong>unlock</strong>：主内存，解锁线程独占变量</p>
+<p><strong>read</strong>：主内存，读取内容到工作内存</p>
+<p><strong>write</strong>：主内存，写变量值</p>
+<p><strong>load</strong>：工作内存，read 后的值放入线程本地变量副本</p>
+<p><strong>use</strong>：工作内存，传值给执行引擎</p>
+<p><strong>assign</strong>：工作内存，执行引擎结果赋值给线程本地变量</p>
+<p><strong>store</strong>：工作内存，存值到主内存给 write 备用</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>必知必会面试题之 Java 注解</title>
+    <url>/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
+<ul>
+<li><p><a href="#%E5%85%83%E6%B3%A8%E8%A7%A3">元注解</a> </p>
+<ul>
+<li><p><a href="#@Documented">@Documented</a> </p>
+</li>
+<li><p><a href="#@Indexed">@Indexed</a> </p>
+</li>
+<li><p><a href="#@Retention">@Retention</a> </p>
+</li>
+<li><p><a href="#@Target">@Target</a> </p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<span id="more"></span>
+
+<hr>
+<ul>
+<li><p><a href="#%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3">常用注解</a> </p>
+<ul>
+<li><p><a href="#@Deprecated">@Deprecated</a> </p>
+</li>
+<li><p><a href="#@FunctionalInterface">@FunctionalInterface</a> </p>
+</li>
+<li><p><a href="#@Override">@Override</a> </p>
+</li>
+<li><p><a href="#@PostConstruct">@PostConstruct</a> </p>
+</li>
+<li><p><a href="#@SafeVarargs">@SafeVarargs</a> </p>
+</li>
+<li><p><a href="#@SuppressWarnings">@SuppressWarnings</a> </p>
+</li>
+</ul>
+</li>
+<li><p><a href="#%E9%99%84%E5%BD%95">附录</a> </p>
+<ul>
+<li><a href="#ElementType">ElementType</a> </li>
+<li><a href="#RetentionPolicy">RetentionPolicy</a> </li>
+<li><a href="#@SuppressWarnings%E5%85%B3%E9%94%AE%E5%AD%97">@SuppressWarnings 关键字</a> </li>
+</ul>
+</li>
+</ul>
+<h2 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h2><h3 id="Documented"><a href="#Documented" class="headerlink" title="@Documented"></a>@Documented</h3><p>仅用在注解类上，表示在使用 javadoc 工具生成帮助文档时，使用该注解的类会在 API 文档中展示该注解。</p>
+<p><strong>注解版本：1.5+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<ul>
+<li><p>创建一个注解类 TestAnnotation</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xs.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Documented;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> TestAnnotation &#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> &quot;javadoc&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>创建一个使用该注解的类 DocumentTest</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xs.annotation;</span><br><span class="line"></span><br><span class="line"><span class="meta">@TestAnnotation</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DocumentedTest</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>生成 javadoc（使用 javadoc 命令 或 使用 eclipse、IDEA 等 IDE 提供的 javadoc 生成工具）</p>
+</li>
+<li><p>打开生成的 API 文档（/doc/index.html），如下：</p>
+<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-wKKTIUib-1614172467381)(必知必会之Java注解.assets/image-20210219181622050.png)]</p>
+</li>
+<li><p>若删除注解类 TestAnnotation 中的 @Documented 注解，再次生成 javadoc，<strong>注解消失</strong>。</p>
+<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-eBIAda2g-1614172467384)(必知必会之Java注解.assets/image-20210219182152788.png)]</p>
+</li>
+</ul>
+<h3 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h3><p>仅用在注解类上，被它修饰的注解具有继承性。也就是说，在一个类上使用被 @Inherited 标注的注解，其子类也会继承这些被 @Inherited 标注的注解。</p>
+<p><strong>注解版本：1.5+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<ul>
+<li><p>创建一个带有 @Inherited 的注解类 InheritedAnnotation</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xs.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Inherited;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InheritedAnnotation &#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> &quot;Inherited&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>创建一个使用该注解的类 InheritedParent</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xs.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.xs.annotation.TestInheritedAnnotation;</span><br><span class="line"></span><br><span class="line"><span class="meta">@InheritedAnnotation(value=&quot;parent&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InheritedParent</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>为 InheritedParent 类创建子类 InheritedChild</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xs.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.xs.annotation.InheritedParent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InheritedChild</span> <span class="keyword">extends</span> <span class="title">InheritedParent</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Class&lt;InheritedChild&gt; child = InheritedChild.class;</span><br><span class="line">		InheritedAnnotation annotation = child.getAnnotation(InheritedAnnotation.class);</span><br><span class="line">		System.out.println(annotation.value());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>运行 main 方法，输出如下。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">parent</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h3><p>仅用在注解类上，用来描述注解保留的时间范围。一共有三种策略，定义在 <a href="#RetentionPolicy">RetentionPolicy</a> 枚举中，分别是：源文件保留、编译期保留、运行期保留，默认值为编译期保留。运行期保留可以用来获取注解信息。</p>
+<p><strong>注解版本：1.5+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<ul>
+<li><p>分别实现三种策略</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xs.annotation.meta;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SourcePolicy &#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.CLASS)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> ClassPolicy &#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> RuntimePolicy &#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>创建一个类，并使用以上三种注解去注解三个方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xs.annotation.meta;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RetentionTest</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@SourcePolicy</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sourcePolicy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@ClassPolicy</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">classPolicy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@RuntimePolicy</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">runtimePolicy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>生成字节码文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">javap -verbose RetentionClass</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">## 以下为输出结果 ###</span></span></span><br><span class="line">警告: 二进制文件RetentionClass包含com.xs.annotation.meta.RetentionClass</span><br><span class="line">Classfile /Users/lihuiming/git/xs/xs-technology/xs-learning-annotation/target/classes/com/xs/annotation/meta/RetentionClass.class</span><br><span class="line">  Last modified 2021-2-20; size 709 bytes</span><br><span class="line">  MD5 checksum 88516f888e7e83d00ffe708e32d852a0</span><br><span class="line">  Compiled from &quot;RetentionClass.java&quot;</span><br><span class="line">public class com.xs.annotation.meta.RetentionClass</span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: 52</span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER</span><br><span class="line">Constant pool:</span><br><span class="line"><span class="meta">   #</span><span class="bash">1 = Methodref          <span class="comment">#3.#20         // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span></span></span><br><span class="line"><span class="meta">   #</span><span class="bash">2 = Class              <span class="comment">#21            // com/xs/annotation/meta/RetentionClass</span></span></span><br><span class="line"><span class="meta">   #</span><span class="bash">3 = Class              <span class="comment">#22            // java/lang/Object</span></span></span><br><span class="line"><span class="meta">   #</span><span class="bash">4 = Utf8               &lt;init&gt;</span></span><br><span class="line"><span class="meta">   #</span><span class="bash">5 = Utf8               ()V</span></span><br><span class="line"><span class="meta">   #</span><span class="bash">6 = Utf8               Code</span></span><br><span class="line"><span class="meta">   #</span><span class="bash">7 = Utf8               LineNumberTable</span></span><br><span class="line"><span class="meta">   #</span><span class="bash">8 = Utf8               LocalVariableTable</span></span><br><span class="line"><span class="meta">   #</span><span class="bash">9 = Utf8               this</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">10 = Utf8               Lcom/xs/annotation/meta/RetentionClass;</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">11 = Utf8               sourcePolicy</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">12 = Utf8               classPolicy</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">13 = Utf8               RuntimeInvisibleAnnotations</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">14 = Utf8               Lcom/xs/annotation/meta/RetentionClassPolicy;</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">15 = Utf8               runtimePolicy</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">16 = Utf8               RuntimeVisibleAnnotations</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">17 = Utf8               Lcom/xs/annotation/meta/RetentionRuntimePolicy;</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">18 = Utf8               SourceFile</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">19 = Utf8               RetentionClass.java</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">20 = NameAndType        <span class="comment">#4:#5          // &quot;&lt;init&gt;&quot;:()V</span></span></span><br><span class="line"><span class="meta">  #</span><span class="bash">21 = Utf8               com/xs/annotation/meta/RetentionClass</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">22 = Utf8               java/lang/Object</span></span><br><span class="line">&#123;</span><br><span class="line">  public com.xs.annotation.meta.RetentionClass();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=1, args_size=1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 8: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       5     0  this   Lcom/xs/annotation/meta/RetentionClass;</span><br><span class="line"></span><br><span class="line">  public void sourcePolicy();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=0, locals=1, args_size=1</span><br><span class="line">         0: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 12: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       1     0  this   Lcom/xs/annotation/meta/RetentionClass;</span><br><span class="line"></span><br><span class="line">  public void classPolicy();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=0, locals=1, args_size=1</span><br><span class="line">         0: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 16: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       1     0  this   Lcom/xs/annotation/meta/RetentionClass;</span><br><span class="line">    RuntimeInvisibleAnnotations:</span><br><span class="line">      0: #14()</span><br><span class="line"></span><br><span class="line">  public void runtimePolicy();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=0, locals=1, args_size=1</span><br><span class="line">         0: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 20: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       1     0  this   Lcom/xs/annotation/meta/RetentionClass;</span><br><span class="line">    RuntimeVisibleAnnotations:</span><br><span class="line">      0: #17()</span><br><span class="line">&#125;</span><br><span class="line">SourceFile: &quot;RetentionClass.java&quot;</span><br></pre></td></tr></table></figure></li>
+<li><p>从字节码可以看出，编译器没有记录下 sourcePolicy() 方法的注解信息，分别使用了 RuntimeInvisibleAnnotations 和 RuntimeVisibleAnnotations 属性去记录了classPolicy()方法 和 runtimePolicy()方法 的注解信息。</p>
+</li>
+</ul>
+<h3 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h3><p>仅用在注解类上，用来标注注解的元素类型（<a href="#ElementType">ElementType</a>），即设置注解的适用范围。如果没有标注 @Target，那么该注解可以作用在任何地方。</p>
+<p><strong>注解版本：1.5+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> javax.validation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.annotation.ElementType.CONSTRUCTOR;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.annotation.ElementType.FIELD;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.annotation.ElementType.METHOD;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.annotation.ElementType.PARAMETER;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.annotation.ElementType.TYPE_USE;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.annotation.RetentionPolicy.RUNTIME;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Documented;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(&#123; METHOD, FIELD, CONSTRUCTOR, PARAMETER, TYPE_USE &#125;)</span></span><br><span class="line"><span class="meta">@Retention(RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Valid &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h2><h3 id="Deprecated"><a href="#Deprecated" class="headerlink" title="@Deprecated"></a>@Deprecated</h3><p>标注在类、接口、成员方法和成员变量上，表示某个元素（类、方法等）已过时。当其他程序使用已过时的元素时，编译器将会给出警告。</p>
+<p><strong>注解版本：1.5+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Deprecated</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeprecatedClass</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Deprecated</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">int</span> value;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Deprecated</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Deprecated&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="FunctionalInterface"><a href="#FunctionalInterface" class="headerlink" title="@FunctionalInterface"></a>@FunctionalInterface</h3><p>Java 8 版本后，Java引入函数式编程。@FunctionalInterface 就是 Java 8 版本新增的注解，用来标注函数式接口。</p>
+<p>什么是函数式接口？如果接口中只有一个抽象方法（可以包含多个默认方法或多个 static 方法），那么该接口就是函数式接口。函数式接口是为 Java 8 的 Lambda 表达式准备的。</p>
+<p>@FunctionalInterface 本身只起到标注作用，用来告诉编译器检查这个接口是否符合函数式接口的规范（只能包含一个抽象方法）。</p>
+<p><strong>注解版本：1.8+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.boot;</span><br><span class="line"></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ApplicationRunner</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">(ApplicationArguments args)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Override"><a href="#Override" class="headerlink" title="@Override"></a>@Override</h3><p>标注在方法上，用来标注方法为重写方法。</p>
+<p><strong>注解版本：1.5+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Parent</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Parent&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Child</span> <span class="keyword">extends</span> <span class="title">Parent</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Child&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="PostConstruct"><a href="#PostConstruct" class="headerlink" title="@PostConstruct"></a>@PostConstruct</h3><p>@PostConstruct 该注解被用来修饰一个非静态的 void() 方法。被 @PostConstruct 修饰的方法会<strong>在服务器加载 Servlet 的时候运行，并且只会被服务器执行一次</strong>。PostConstruct 在<strong>构造函数之后</strong>执行，<strong>init() 方法之前</strong>执行。</p>
+<p>该注解的方法在 Spring 整个 Bean 初始化中的执行顺序：<strong>Constructor（构造方法） -&gt; @Autowired（依赖注入） -&gt; @PostConstruct（注释的方法）</strong>。</p>
+<p><strong>注解版本：1.0+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> Test test = <span class="keyword">new</span> Test();</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="keyword">private</span> OtherService otherService;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@PostConstruct</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;init&quot;</span>);</span><br><span class="line">    test.otherService = otherService;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SafeVarargs"><a href="#SafeVarargs" class="headerlink" title="@SafeVarargs"></a>@SafeVarargs</h3><p>标注在 static 或 final 方法上，表示被该注解修饰的方法取消显示指定的编译器警告。</p>
+<p><strong>注解版本：1.7+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeVarargsClass</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 没有 @SafeVarargs 会有编译警告</span></span><br><span class="line">    display(<span class="string">&quot;10&quot;</span>, <span class="number">20</span>, <span class="number">30</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@SafeVarargs</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">m1</span><span class="params">(T... array)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (T arg : array) &#123;</span><br><span class="line">      System.out.println(arg.getClass().getName() + <span class="string">&quot;：&quot;</span> + arg);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SuppressWarnings"><a href="#SuppressWarnings" class="headerlink" title="@SuppressWarnings"></a>@SuppressWarnings</h3><p>标注在类或方法上，表示被该注解修饰的程序元素（以及该程序元素中的所有子元素）取消显示指定的编译器警告，且会一直作用于该程序元素的所有子元素。</p>
+<p>注解的使用有以下三种：</p>
+<ul>
+<li><p>抑制单类型的警告：@SuppressWarnings(“unchecked”)</p>
+</li>
+<li><p>抑制多类型的警告：@SuppressWarnings(“unchecked”,”rawtypes”)</p>
+</li>
+<li><p>抑制所有类型的警告：@SuppressWarnings(“unchecked”)</p>
+</li>
+</ul>
+<p>全部关键字请参考附录：[@SuppressWarnings 关键字](#@SuppressWarnings 关键字) </p>
+<p><strong>注解版本：1.5+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SuppressWarnings(&quot;unchecked&quot;,&quot;rawtypes&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuppressWarningsClass</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;unchecked&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="ElementType"><a href="#ElementType" class="headerlink" title="ElementType"></a>ElementType</h3><blockquote>
+<p>The constants of this enumerated type provide a simple classification of the syntactic locations where annotations may appear in a Java program. These constants are used in {@link Target java.lang.annotation.Target} meta-annotations to specify where it is legal to write annotations of a given type.</p>
+</blockquote>
+<p><strong>版本：1.5+</strong> </p>
+<table>
+<thead>
+<tr>
+<th>取值</th>
+<th>释义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TYPE</td>
+<td>用于描述类、接口（包括注解类型）、枚举</td>
+</tr>
+<tr>
+<td>FIELD</td>
+<td>用于描述字段（包括枚举、常量）</td>
+</tr>
+<tr>
+<td>METHOD</td>
+<td>用于描述方法</td>
+</tr>
+<tr>
+<td>PARAMETER</td>
+<td>用于描述形参</td>
+</tr>
+<tr>
+<td>CONSTRUCTOR</td>
+<td>用于描述构造器</td>
+</tr>
+<tr>
+<td>LOCAL_VARIABLE</td>
+<td>用于描述局部变量</td>
+</tr>
+<tr>
+<td>ANNOTATION_TYPE</td>
+<td>用于描述注解类型</td>
+</tr>
+<tr>
+<td>PACKAGE</td>
+<td>用于描述包</td>
+</tr>
+<tr>
+<td>TYPE_PARAMETER</td>
+<td>JAVA 8 新增，作用在泛型上</td>
+</tr>
+<tr>
+<td>TYPE_USE</td>
+<td>JAVA 8 新增，用于描述任何类型</td>
+</tr>
+</tbody></table>
+<h3 id="RetentionPolicy"><a href="#RetentionPolicy" class="headerlink" title="RetentionPolicy"></a>RetentionPolicy</h3><blockquote>
+<p>Annotation retention policy.  The constants of this enumerated type describe the various policies for retaining annotations.  They are used in conjunction with the {@link Retention} meta-annotation type to specify how long annotations are to be retained.</p>
+</blockquote>
+<p><strong>版本：1.5+</strong> </p>
+<table>
+<thead>
+<tr>
+<th>取值</th>
+<th>释义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SOURCE</td>
+<td>注解只保留在源文件，当Java文件编译成class文件的时候，注解被遗弃；</td>
+</tr>
+<tr>
+<td>CLASS</td>
+<td>注解被保留到 class文件，但jvm加载class文件时候被遗弃，默认为该级别；</td>
+</tr>
+<tr>
+<td>RUNTIME</td>
+<td>注解不仅被保存到 class文件中，jvm加载class文件之后，仍然存在；</td>
+</tr>
+</tbody></table>
+<h3 id="SuppressWarnings-关键字"><a href="#SuppressWarnings-关键字" class="headerlink" title="@SuppressWarnings 关键字"></a>@SuppressWarnings 关键字</h3><table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>all</td>
+<td>抑制所有警告</td>
+</tr>
+<tr>
+<td>boxing</td>
+<td>抑制装箱、拆箱操作时候的警告</td>
+</tr>
+<tr>
+<td>cast</td>
+<td>抑制映射相关的警告</td>
+</tr>
+<tr>
+<td>dep-ann</td>
+<td>抑制启用注释的警告</td>
+</tr>
+<tr>
+<td>deprecation</td>
+<td>抑制过期方法警告</td>
+</tr>
+<tr>
+<td>fallthrough</td>
+<td>抑制在 switch 中缺失 breaks 的警告</td>
+</tr>
+<tr>
+<td>finally</td>
+<td>抑制 finally 模块没有返回的警告</td>
+</tr>
+<tr>
+<td>hiding</td>
+<td>抑制相对于隐藏变量的局部变量的警告</td>
+</tr>
+<tr>
+<td>incomplete-switch</td>
+<td>忽略不完整的 switch 语句</td>
+</tr>
+<tr>
+<td>nls</td>
+<td>忽略非 nls 格式的字符</td>
+</tr>
+<tr>
+<td>null</td>
+<td>忽略对 null 的操作</td>
+</tr>
+<tr>
+<td>rawtypes</td>
+<td>使用 generics 时忽略没有指定相应的类型</td>
+</tr>
+<tr>
+<td>restriction</td>
+<td>抑制禁止使用劝阻或禁止引用的警告</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>忽略在 serializable 类中没有声明 serialVersionUID 变量</td>
+</tr>
+<tr>
+<td>static-access</td>
+<td>抑制不正确的静态访问方式警告</td>
+</tr>
+<tr>
+<td>synthetic-access</td>
+<td>抑制子类没有按最优方法访问内部类的警告</td>
+</tr>
+<tr>
+<td>unchecked</td>
+<td>抑制没有进行类型检查操作的警告</td>
+</tr>
+<tr>
+<td>unqualified-field-access</td>
+<td>抑制没有权限访问的域的警告</td>
+</tr>
+<tr>
+<td>unused</td>
+<td>抑制没被使用过的代码的警告</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+</search>

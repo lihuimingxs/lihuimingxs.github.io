@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-jiang.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-jiang.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-jiang.png">
+  <link rel="mask-icon" href="/images/logo-jiang.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=PingFang SC:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lihuimignxs.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="目录不定期更新中……  IO 流的种类  常见的 IO 流  字节流  字符流    [常见的 IO 类型](#常见的 IO 类型)  BIO  NIO  AIO    NIO 的组成  什么是零拷贝">
+<meta property="og:type" content="article">
+<meta property="og:title" content="必知必会面试题之Java IO 流">
+<meta property="og:url" content="http://lihuimignxs.github.io/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava-IO%E6%B5%81/index.html">
+<meta property="og:site_name" content="江先生的杂货铺">
+<meta property="og:description" content="目录不定期更新中……  IO 流的种类  常见的 IO 流  字节流  字符流    [常见的 IO 类型](#常见的 IO 类型)  BIO  NIO  AIO    NIO 的组成  什么是零拷贝">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-02-23T16:00:00.000Z">
+<meta property="article:author" content="西狩">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://lihuimignxs.github.io/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava-IO%E6%B5%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>必知必会面试题之Java IO 流 | 江先生的杂货铺</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">江先生的杂货铺</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lihuimingxs" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lihuimignxs.github.io/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava-IO%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="西狩">
+      <meta itemprop="description" content="生活 | 技术 | 感悟">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="江先生的杂货铺">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          必知必会面试题之Java IO 流
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-24 00:00:00" itemprop="dateCreated datePublished" datetime="2021-01-24T00:00:00+08:00">2021-01-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-24 00:00:00" itemprop="dateModified" datetime="2021-02-24T00:00:00+08:00">2021-02-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava-IO%E6%B5%81/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/24/必知必会之Java-IO流/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
+<ul>
+<li><a href="#IO%E6%B5%81%E7%9A%84%E7%A7%8D%E7%B1%BB">IO 流的种类</a> </li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E7%9A%84IO%E6%B5%81">常见的 IO 流</a> <ul>
+<li><a href="#%E5%AD%97%E8%8A%82%E6%B5%81">字节流</a> </li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E6%B5%81">字符流</a> </li>
+</ul>
+</li>
+<li>[常见的 IO 类型](#常见的 IO 类型) <ul>
+<li><a href="#BIO">BIO</a> </li>
+<li><a href="#NIO">NIO</a> </li>
+<li><a href="#AIO">AIO</a> </li>
+</ul>
+</li>
+<li><a href="#NIO%E7%9A%84%E7%BB%84%E6%88%90">NIO 的组成</a> </li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%B6%E6%8B%B7%E8%B4%9D">什么是零拷贝</a> </li>
+</ul>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="IO-流的种类"><a href="#IO-流的种类" class="headerlink" title="IO 流的种类"></a>IO 流的种类</h2><ul>
+<li>按照流的流向，可以分为<strong>输入流</strong>和<strong>输出流</strong>；</li>
+<li>按照操作单元，可以分为<strong>字节流</strong>和<strong>字符流</strong>；</li>
+<li>按照流的角色，可以分为<strong>节点流</strong>和<strong>处理流</strong>。</li>
+</ul>
+<h2 id="常见的-IO-流"><a href="#常见的-IO-流" class="headerlink" title="常见的 IO 流"></a>常见的 IO 流</h2><h3 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h3><ul>
+<li>FileInputStream</li>
+<li>FileOutputStream</li>
+<li>PipedInputStream</li>
+<li>PipedOutputStream</li>
+<li>ByteArrayInputStream</li>
+<li>ByteArrayOutputStream</li>
+<li>BufferedInputStream</li>
+<li>BufferedOutputStream</li>
+<li>DataInputStream</li>
+<li>DataOutputStream</li>
+<li>ObjectInputStream</li>
+<li>ObjectOutputStream</li>
+<li>SequenceInputStream</li>
+<li>PrintOutputStream</li>
+</ul>
+<h3 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h3><ul>
+<li><p>FileReader</p>
+</li>
+<li><p>FileWriter</p>
+</li>
+<li><p>PipedReader</p>
+</li>
+<li><p>PipedWriter</p>
+</li>
+<li><p>CharArrayReader</p>
+</li>
+<li><p>CharArrayWriter</p>
+</li>
+<li><p>BufferedReader</p>
+</li>
+<li><p>BufferedWriter</p>
+</li>
+<li><p>InputStreamReader</p>
+</li>
+<li><p>OutputStreamWriter</p>
+</li>
+<li><p>PrintWriter</p>
+</li>
+</ul>
+<h2 id="常见的-IO-类型"><a href="#常见的-IO-类型" class="headerlink" title="常见的 IO 类型"></a>常见的 IO 类型</h2><h3 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h3><p>BIO 是指<strong>同步阻塞 IO（Blocking I/O）</strong>。一次数据的读取或写入会阻塞当前线程，直到本次数据传输结束。操作简单，适合活动连接数较小的情况。</p>
+<h3 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h3><p>NIO 是在 Java 1.4 中引入的新的 I/O 模型，因为被称为 New IO。但随着技术的快速发展，NIO 也不再“新”了，因此，我们现在更习惯以它的特性来称其为：<strong>同步非阻塞 IO（Non-Blocking I/O）</strong>。</p>
+<p>NIO 提供了 Channel、Selector、Buffer 等抽象，实现了多路复用。此外，NIO 还提供了 SocketChannel 和 ServerSocketChannel 两种不同的套接字通道实现，分别对应 BIO 中的 Socket 和 ServerSocket。</p>
+<blockquote>
+<p> <strong>NIO 并非只是非阻塞的</strong>，NIO 同时支持阻塞、非阻塞两种模式，只是因为 NIO 主要就是为了提高 IO 性能而诞生的，所以强调了其核心特性：非阻塞。在日常使用中，我们也更为倾向于 NIO 的非阻塞模式，以获得更高的吞吐量和并发量。</p>
+</blockquote>
+<h3 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h3><p>AIO 是在 Java 7 中引入的<strong>异步非阻塞 IO（Asynchronous I/O）</strong>。AIO 是基于事件和回调机制实现的，当操作发生后，会直接得到返回，释放 IO 资源，实际操作的执行则交给其他线程来处理，处理完成后通知相应的线程进行后续的操作。</p>
+<h2 id="NIO-的组成"><a href="#NIO-的组成" class="headerlink" title="NIO 的组成"></a>NIO 的组成</h2><ul>
+<li><p>缓冲区（Buffer）：用来存储待传输的数据，通过 Channel 进行数据传输。</p>
+</li>
+<li><p>直接缓冲区（DirectByteBuffer）：使用堆外内存创建的缓冲区，可以减少一次堆内内存到堆外内存的数据拷贝。</p>
+<blockquote>
+<p>使用堆外内存创建和销毁缓冲区的成本更高且不可控，通常会使用内存池来提高性能。</p>
+</blockquote>
+</li>
+<li><p>通道（Channel）：用来建立数据传输需要的连接，并传输 Buffer 中的数据。</p>
+<blockquote>
+<p>数据虽然需要通过 Channel 进行传输，但 Channel 是不直接操作数据的，Channel 只负责建立连接并确认传输内容，实际数据的传输是通过</p>
+</blockquote>
+</li>
+<li><p>选择器（Selector）：用来管理 Channel 和分配</p>
+</li>
+</ul>
+<h2 id="什么是零拷贝"><a href="#什么是零拷贝" class="headerlink" title="什么是零拷贝"></a>什么是零拷贝</h2><p>在 Java 程序中，使用 <strong>read() 或 write() 方法拷贝</strong>，需要在堆内开辟内存空间存储文件流，再从堆内拷贝到堆外，最后从堆外拷贝到操作系统内核，由 DMA 读写到磁盘。期间需要经过两次复制，且用户态和内核态的交互，因此传输效率较慢。</p>
+<p>而在操作系统中提供了 <strong>mmap() 方法</strong>，我们可以在程序中调用该方法，系统会直接在内核开辟内存空间，直接将文件流传输到内核开辟出的内存空间，由 DMA 读写到磁盘。该方法通过减少文件流的拷贝过程和用户态、内核态的交互，从而提高了文件传输的效率。我们把这种方法，称为“零拷贝”。</p>
+<p>当然，零拷贝虽然可以提高文件传输效率，但也并非没有缺点的。由于程序直接传入内核内存空间，在发生 IO 异常、宕机等异常情况下，使用零拷贝有可能会导致数据流的丢失。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"># 面试</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%9B%E5%9E%8B/" rel="prev" title="必知必会面试题之 Java 泛型">
+      <i class="fa fa-chevron-left"></i> 必知必会面试题之 Java 泛型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava8%E6%96%B0%E7%89%B9%E6%80%A7/" rel="next" title="必知必会面试题之 Java 8 新特性">
+      必知必会面试题之 Java 8 新特性 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO-%E6%B5%81%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">IO 流的种类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-IO-%E6%B5%81"><span class="nav-number">3.</span> <span class="nav-text">常见的 IO 流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E6%B5%81"><span class="nav-number">3.1.</span> <span class="nav-text">字节流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E6%B5%81"><span class="nav-number">3.2.</span> <span class="nav-text">字符流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-IO-%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">常见的 IO 类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BIO"><span class="nav-number">4.1.</span> <span class="nav-text">BIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO"><span class="nav-number">4.2.</span> <span class="nav-text">NIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIO"><span class="nav-number">4.3.</span> <span class="nav-text">AIO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO-%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-number">5.</span> <span class="nav-text">NIO 的组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="nav-number">6.</span> <span class="nav-text">什么是零拷贝</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="西狩"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">西狩</p>
+  <div class="site-description" itemprop="description">生活 | 技术 | 感悟</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lihuimingxs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lihuimingxs" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/qq_35529258" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_35529258" rel="noopener" target="_blank"><i class="fab fa-cuttlefish fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/lihuimingxs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;lihuimingxs" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">西狩</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://西狩.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://lihuimignxs.github.io/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava-IO%E6%B5%81/";
+    this.page.identifier = "2021/01/24/必知必会之Java-IO流/";
+    this.page.title = "必知必会面试题之Java IO 流";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://西狩.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

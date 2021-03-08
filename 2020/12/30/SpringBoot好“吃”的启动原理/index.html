@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-jiang.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-jiang.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-jiang.png">
+  <link rel="mask-icon" href="/images/logo-jiang.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=PingFang SC:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lihuimignxs.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="不正经的前言最近好朋友山治去面试了，晚上回来有些低迷地问我：“小西，你知道 SpringBoot 的启动流程吗？” 我说：“知道呀！从 SpringApplication.run() 方法开始，首先进行实例化，实例化里主要做了4件事：根据 calsspath……” 山治抬腿就是一记“恶魔风脚”：SpringBoot 的启动步骤那么多，什么 1、2、3、4，谁能记得住啊！ 在被乔巴施展”还我漂漂拳“">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot 好“吃”的启动原理">
+<meta property="og:url" content="http://lihuimignxs.github.io/2020/12/30/SpringBoot%E5%A5%BD%E2%80%9C%E5%90%83%E2%80%9D%E7%9A%84%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="江先生的杂货铺">
+<meta property="og:description" content="不正经的前言最近好朋友山治去面试了，晚上回来有些低迷地问我：“小西，你知道 SpringBoot 的启动流程吗？” 我说：“知道呀！从 SpringApplication.run() 方法开始，首先进行实例化，实例化里主要做了4件事：根据 calsspath……” 山治抬腿就是一记“恶魔风脚”：SpringBoot 的启动步骤那么多，什么 1、2、3、4，谁能记得住啊！ 在被乔巴施展”还我漂漂拳“">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-29T16:00:00.000Z">
+<meta property="article:author" content="西狩">
+<meta property="article:tag" content="SpringBoot">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://lihuimignxs.github.io/2020/12/30/SpringBoot%E5%A5%BD%E2%80%9C%E5%90%83%E2%80%9D%E7%9A%84%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SpringBoot 好“吃”的启动原理 | 江先生的杂货铺</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">江先生的杂货铺</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/lihuimingxs" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lihuimignxs.github.io/2020/12/30/SpringBoot%E5%A5%BD%E2%80%9C%E5%90%83%E2%80%9D%E7%9A%84%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="西狩">
+      <meta itemprop="description" content="生活 | 技术 | 感悟">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="江先生的杂货铺">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SpringBoot 好“吃”的启动原理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-30 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-30T00:00:00+08:00">2020-12-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/12/30/SpringBoot%E5%A5%BD%E2%80%9C%E5%90%83%E2%80%9D%E7%9A%84%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/30/SpringBoot好“吃”的启动原理/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="不正经的前言"><a href="#不正经的前言" class="headerlink" title="不正经的前言"></a>不正经的前言</h2><p>最近好朋友山治去面试了，晚上回来有些低迷地问我：“小西，你知道 SpringBoot 的启动流程吗？”</p>
+<p>我说：“知道呀！从 SpringApplication.run() 方法开始，首先进行实例化，实例化里主要做了4件事：根据 calsspath……”</p>
+<p>山治抬腿就是一记“恶魔风脚”：SpringBoot 的启动步骤那么多，什么 1、2、3、4，谁能记得住啊！</p>
+<p>在被乔巴施展”还我漂漂拳“以后，我痛定思痛，暗暗发誓一定要写篇比美女还好看的文章教会山治，让他吃透这道看似难啃的“菜”。</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="料理的二三事"><a href="#料理的二三事" class="headerlink" title="料理的二三事"></a>料理的二三事</h2><h3 id="选材说明"><a href="#选材说明" class="headerlink" title="选材说明"></a>选材说明</h3><p>首先，做一份料理，一定要准备好采购清单。如果只有菜谱没有选材说明，最终做出来的味道可能并没有那么好。哪怕随便做一道家常菜，需要放大葱还是香葱也是有讲究的，而不同年份的葡萄酿制的酒就更不用说了。</p>
+<blockquote>
+<p>正确的选材示例：山治的料理笔记。</p>
+<p>错误的选材实例：路飞不看笔记误吃有毒鱼皮。</p>
+</blockquote>
+<h3 id="料理的主要流程"><a href="#料理的主要流程" class="headerlink" title="料理的主要流程"></a>料理的主要流程</h3><p>现在，咱们来聊聊吃货该聊的事情：想要做一道菜需要做些什么？</p>
+<h3 id="料理三要素"><a href="#料理三要素" class="headerlink" title="料理三要素"></a>料理三要素</h3><p>来看一下料理三要素：</p>
+<ol>
+<li>做饭的场地</li>
+<li>完美的食材</li>
+<li>优秀的厨师</li>
+</ol>
+<p>当然，虽然在家里一个人就可以做了，但是不要小看料理呀！咱们要聊就聊 big restaurant。比如一家让你难忘的餐厅：海上餐厅“BARATI”。你想要的东西——上面提到的三要素，餐厅后厨全都有。Ok！下面就可以准备料理了。</p>
+<h3 id="料理步骤"><a href="#料理步骤" class="headerlink" title="料理步骤"></a>料理步骤</h3><p>料理的步骤很简单，包括准备步骤和开始步骤。</p>
+<h3 id="料理准备"><a href="#料理准备" class="headerlink" title="料理准备"></a>料理准备</h3><p>让我们来安排一场完美的料理。BARATI 料理的准备步骤：</p>
+<ol>
+<li>选择储存食材的冰箱</li>
+<li>选择料理的主食材</li>
+<li>根据点菜单确定料理菜系</li>
+<li>准备料理需要的菜谱</li>
+<li>指定处理食材的厨师</li>
+<li>指定做料理的主厨</li>
+</ol>
+<h3 id="料理开始"><a href="#料理开始" class="headerlink" title="料理开始"></a>料理开始</h3><p>“高端的食材只需要简单的烹饪”。重头戏开始了！BARATI 料理的工作流程：</p>
+<ol>
+<li>允许外卖</li>
+<li>厨师待命</li>
+<li>加载点菜单的要求（如：不要香菜）</li>
+<li>准备料理所需的锅碗瓢盆，并通知厨师准备好了</li>
+<li>忽略没必要了解的信息（如：食材的价格）</li>
+<li>指定菜品装饰</li>
+<li>根据菜系，获取对应菜谱</li>
+<li>设置突发情况报告人（如：点的菜没有了）</li>
+<li>厨师查看锅碗瓢盆、菜谱和点菜单的要求</li>
+<li>处理食材</li>
+<li>料理完成后，根据点菜单的要求定制</li>
+<li>是否查看客人反馈</li>
+<li>食材准备就绪</li>
+<li>通知所有可以干活的厨师</li>
+<li>准备开工</li>
+</ol>
+<p>突发报告人处理突发情况（点的菜没有了，需要告诉服务员）</p>
+<p>就这样，一顿完美的料理就做好了。</p>
+<h2 id="欢迎来到“BARATI”"><a href="#欢迎来到“BARATI”" class="headerlink" title="欢迎来到“BARATI”"></a>欢迎来到“BARATI”</h2><h3 id="选材说明-1"><a href="#选材说明-1" class="headerlink" title="选材说明"></a>选材说明</h3><p>学技术也是一样，版本说明就是料理的选材说明。遵循“就地取材”原则，本次选用的“主料”是平时项目上使用的 <code>SpringBoot 2.1.5.RELEASE</code> 版本。依赖如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.5.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="“BARATI”后厨主要流程"><a href="#“BARATI”后厨主要流程" class="headerlink" title="“BARATI”后厨主要流程"></a>“BARATI”后厨主要流程</h3><blockquote>
+<p>以 SpringApplication.run() 方法为例</p>
+</blockquote>
+<h4 id="料理三要素-1"><a href="#料理三要素-1" class="headerlink" title="料理三要素"></a>料理三要素</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StartApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 做饭的场地</span></span><br><span class="line">    <span class="comment">// 2. 完美的食材</span></span><br><span class="line">    <span class="comment">// 3. 优秀的厨师</span></span><br><span class="line">    SpringApplication.run(StartApplication.class, args);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>做饭的场地：SpringApplication</li>
+<li>完美的食材：所有通过 SpringBoot 自动配置扫描，由 ClassLoader 加载的 Class</li>
+<li>优秀的厨师：在启动过程中所有 ApplicationListener 和 ApplicationRunner</li>
+</ol>
+<h4 id="料理步骤-1"><a href="#料理步骤-1" class="headerlink" title="料理步骤"></a>料理步骤</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ConfigurableApplicationContext <span class="title">run</span><span class="params">(Class&lt;?&gt;[] primarySources,</span></span></span><br><span class="line"><span class="function"><span class="params">			String[] args)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 1. 料理准备</span></span><br><span class="line">  <span class="comment">// 2. 料理开始</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> SpringApplication(primarySources).run(args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>料理准备</p>
+<p>new SpringApplication(primarySources) 方法，SpringApplication 的初始化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SpringApplication</span><span class="params">(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 1. 选择储存食材的冰箱 &gt;&gt; 可指定的类加载器，与 classpath 相关，默认为null，加载时使用 DefaultResourceLoader</span></span><br><span class="line">  <span class="keyword">this</span>.resourceLoader = resourceLoader;</span><br><span class="line">  <span class="comment">// 2. 选择料理的主食材 &gt;&gt; 设置传入的主源类</span></span><br><span class="line">  Assert.notNull(primarySources, <span class="string">&quot;PrimarySources must not be null&quot;</span>);</span><br><span class="line">  <span class="keyword">this</span>.primarySources = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(Arrays.asList(primarySources));</span><br><span class="line">  <span class="comment">// 3. 根据点菜单确定料理菜系 &gt;&gt; 通过加载的 class 判断web应用类型（NONE、SERVLET、REACTIVE）</span></span><br><span class="line">  <span class="keyword">this</span>.webApplicationType = WebApplicationType.deduceFromClasspath();</span><br><span class="line">  <span class="comment">// 4. 准备料理需要的菜谱 &gt;&gt; 通过 getClassLoader()，查找并加载所有 ApplicationContextInitializer</span></span><br><span class="line">  setInitializers((Collection) getSpringFactoriesInstances(</span><br><span class="line">    ApplicationContextInitializer.class));</span><br><span class="line">  <span class="comment">// 5. 指定处理食材的厨师 &gt;&gt; 通过 getClassLoader()，查找并加载所有 ApplicationListener</span></span><br><span class="line">  setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));</span><br><span class="line">  <span class="comment">// 6. 指定做料理的主厨 &gt;&gt; 推断并设置 main 函数所在的 class</span></span><br><span class="line">  <span class="keyword">this</span>.mainApplicationClass = deduceMainApplicationClass();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>料理开始</p>
+<p>SpringApplication.run(args) 方法，SpringBoot 实际启动的流程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ConfigurableApplicationContext <span class="title">run</span><span class="params">(String... args)</span> </span>&#123;</span><br><span class="line">  StopWatch stopWatch = <span class="keyword">new</span> StopWatch();</span><br><span class="line">  stopWatch.start();</span><br><span class="line">  ConfigurableApplicationContext context = <span class="keyword">null</span>;</span><br><span class="line">  Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">  <span class="comment">// 1. 允许外卖 &gt;&gt; 主要允许服务器只提供服务，不提供显示器和界面展示的情况，类似只支持外带，不支持店内就餐</span></span><br><span class="line">  configureHeadlessProperty();</span><br><span class="line">  <span class="comment">// 2. 厨师待命 &gt;&gt; 获取所有监听者，进入监听状态</span></span><br><span class="line">  SpringApplicationRunListeners listeners = getRunListeners(args);</span><br><span class="line">  listeners.starting();</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 3. 加载点菜单的要求（如：不要香菜） &gt;&gt; 读取传入 args 参数</span></span><br><span class="line">    ApplicationArguments applicationArguments = <span class="keyword">new</span> DefaultApplicationArguments(</span><br><span class="line">      args);</span><br><span class="line">    <span class="comment">// 4. 准备料理所需的锅碗瓢盆，并通知厨师准备好了 &gt;&gt; 设置环境变量，通知监听者</span></span><br><span class="line">    ConfigurableEnvironment environment = prepareEnvironment(listeners,</span><br><span class="line">                                                             applicationArguments);</span><br><span class="line">    <span class="comment">// 5. 忽略没必要了解的信息（如：食材的价格） &gt;&gt; 忽略 BeanInfo 信息，主要为了提高启动速度</span></span><br><span class="line">    configureIgnoreBeanInfo(environment);</span><br><span class="line">    <span class="comment">// 6. 设置菜品装饰 &gt;&gt; 设置 Banner</span></span><br><span class="line">    Banner printedBanner = printBanner(environment);</span><br><span class="line">    <span class="comment">// 7. 根据菜系，获取对应菜谱 &gt;&gt; 根据应用类型（是 Servlet，还是 Reactive），创建对应上下文</span></span><br><span class="line">    context = createApplicationContext();</span><br><span class="line">    <span class="comment">// 8. 设置突发情况报告人（如：点的菜没有了） &gt;&gt; 加载 SpringBoot 异常上报类</span></span><br><span class="line">    exceptionReporters = getSpringFactoriesInstances(</span><br><span class="line">      SpringBootExceptionReporter.class,</span><br><span class="line">      <span class="keyword">new</span> Class[] &#123; ConfigurableApplicationContext.class &#125;, context);</span><br><span class="line">    <span class="comment">// 9. 厨师查看锅碗瓢盆、菜谱和点菜单的要求 &gt;&gt; 根据环境变量、监听者、启动参数和 Banner，装载上下文</span></span><br><span class="line">    prepareContext(context, environment, listeners, applicationArguments,</span><br><span class="line">                   printedBanner);</span><br><span class="line">    <span class="comment">// 10. 处理食材 &gt;&gt; 刷新上下文</span></span><br><span class="line">    refreshContext(context);</span><br><span class="line">    <span class="comment">// 11. 料理完成后，根据点菜单的要求定制 &gt;&gt; 空操作，刷新上下文后的预留扩展点</span></span><br><span class="line">    afterRefresh(context, applicationArguments);</span><br><span class="line">    stopWatch.stop();</span><br><span class="line">    <span class="comment">// 12. 是否查看客人反馈 &gt;&gt; 设置日志信息打印</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.logStartupInfo) &#123;</span><br><span class="line">      <span class="keyword">new</span> StartupInfoLogger(<span class="keyword">this</span>.mainApplicationClass)</span><br><span class="line">        .logStarted(getApplicationLog(), stopWatch);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 13. 食材准备就绪 &gt;&gt; 发布 ApplicationStartedEvent 事件，表示监听者任务完成</span></span><br><span class="line">    listeners.started(context);</span><br><span class="line">    <span class="comment">// 14. 通知所有可以干活的厨师 &gt;&gt; 调用 ApplicationRunner，CommandLineRunner 的 run 方法</span></span><br><span class="line">    callRunners(context, applicationArguments);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">    <span class="comment">// * 处理突发情况 &gt;&gt; 如果启动异常，处理 exceptionReporters 中的异常信息，并抛出异常</span></span><br><span class="line">    handleRunFailure(context, ex, exceptionReporters, listeners);</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(ex);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 15. 准备开工 &gt;&gt; 发布 ApplicationReadyEvent 事件，表示应用就绪</span></span><br><span class="line">    listeners.running(context);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">    <span class="comment">// * 处理突发情况 &gt;&gt; 如果启动异常，处理 exceptionReporters 中的异常信息，并抛出异常</span></span><br><span class="line">    handleRunFailure(context, ex, exceptionReporters, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(ex);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> context;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本篇文章想达到的目的是：<strong>将源码映射到现实生活的事件，加深对源码的解读，希望将晦涩难度的源码变成一件有趣的事情</strong>。此文只是作为一个吃货的兴趣篇，并不是特别严谨，在 SpringBoot 启动过程中，还有很多精妙的细节需要继续推敲，我会在后续文章中，对它们进行剖析。当然，由于自身水平限制，有些比喻可能并不一定十分恰当，希望各位老板见仁见智地去理解。若发现不当之处，欢迎私信沟通交流！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SpringBoot/" rel="tag"># SpringBoot</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/21/%E2%80%9C%E6%88%91%E7%9A%84%E4%B8%80%E5%89%82%E8%89%AF%E8%8D%AF%E2%80%9D%E4%B9%8B%E5%BC%80%E6%BA%90%E6%8C%87%E5%8C%97/" rel="prev" title="“我的一剂良药”之开源指北">
+      <i class="fa fa-chevron-left"></i> “我的一剂良药”之开源指北
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/01/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E6%AD%A3%E7%BB%8F%E7%9A%84%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">不正经的前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%99%E7%90%86%E7%9A%84%E4%BA%8C%E4%B8%89%E4%BA%8B"><span class="nav-number">2.</span> <span class="nav-text">料理的二三事</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%9D%90%E8%AF%B4%E6%98%8E"><span class="nav-number">2.1.</span> <span class="nav-text">选材说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%99%E7%90%86%E7%9A%84%E4%B8%BB%E8%A6%81%E6%B5%81%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">料理的主要流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%99%E7%90%86%E4%B8%89%E8%A6%81%E7%B4%A0"><span class="nav-number">2.3.</span> <span class="nav-text">料理三要素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%99%E7%90%86%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.4.</span> <span class="nav-text">料理步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%99%E7%90%86%E5%87%86%E5%A4%87"><span class="nav-number">2.5.</span> <span class="nav-text">料理准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%99%E7%90%86%E5%BC%80%E5%A7%8B"><span class="nav-number">2.6.</span> <span class="nav-text">料理开始</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0%E2%80%9CBARATI%E2%80%9D"><span class="nav-number">3.</span> <span class="nav-text">欢迎来到“BARATI”</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%9D%90%E8%AF%B4%E6%98%8E-1"><span class="nav-number">3.1.</span> <span class="nav-text">选材说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%80%9CBARATI%E2%80%9D%E5%90%8E%E5%8E%A8%E4%B8%BB%E8%A6%81%E6%B5%81%E7%A8%8B"><span class="nav-number">3.2.</span> <span class="nav-text">“BARATI”后厨主要流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%99%E7%90%86%E4%B8%89%E8%A6%81%E7%B4%A0-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">料理三要素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%99%E7%90%86%E6%AD%A5%E9%AA%A4-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">料理步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="西狩"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">西狩</p>
+  <div class="site-description" itemprop="description">生活 | 技术 | 感悟</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lihuimingxs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lihuimingxs" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/qq_35529258" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_35529258" rel="noopener" target="_blank"><i class="fab fa-cuttlefish fa-fw"></i>CSDN</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/lihuimingxs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;lihuimingxs" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">西狩</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://西狩.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://lihuimignxs.github.io/2020/12/30/SpringBoot%E5%A5%BD%E2%80%9C%E5%90%83%E2%80%9D%E7%9A%84%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86/";
+    this.page.identifier = "2020/12/30/SpringBoot好“吃”的启动原理/";
+    this.page.title = "SpringBoot 好“吃”的启动原理";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://西狩.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
