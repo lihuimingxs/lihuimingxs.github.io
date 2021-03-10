@@ -354,12 +354,7 @@
   <entry>
     <title>必知必会面试题之 Java 反射</title>
     <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E5%8F%8D%E5%B0%84/</url>
-    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
-<ul>
-<li><a href="#%E5%8F%8D%E5%B0%84%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86">反射的实现原理</a> </li>
-<li><a href="#%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86">注解的实现原理</a> </li>
-<li><a href="#%E5%8F%8D%E5%B0%84%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E8%B0%83%E7%94%A8%E7%A7%81%E6%9C%89%E6%96%B9%E6%B3%95%E3%80%81%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%90%8D%E3%80%81%E8%8E%B7%E5%8F%96%E7%88%B6%E7%B1%BB%E7%A7%81%E6%9C%89%E6%96%B9%E6%B3%95%EF%BC%9F">反射是否可以调用私有方法、获取参数名、获取父类私有方法？</a>  </li>
-</ul>
+    <content><![CDATA[<p>不定期更新中……</p>
 <hr>
 <span id="more"></span>
 
@@ -379,16 +374,13 @@
   <entry>
     <title>必知必会面试题之 Java 8 新特性</title>
     <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava8%E6%96%B0%E7%89%B9%E6%80%A7/</url>
-    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>[Lambda 表达式](#Lambda 表达式) </p>
-<p><a href="#%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8">方法引用</a> </p>
-<p><a href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3">函数式接口</a> </p>
-<p><a href="#%E9%BB%98%E8%AE%A4%E6%96%B9%E6%B3%95">默认方法</a> </p>
-<p><a href="#Stream">Stream</a> </p>
-<p>[Optional 类](#Optional 类) </p>
-<p>[Nashorn、JavaScript 引擎](#Nashorn、JavaScript 引擎) </p>
-<p>[LocalDate API](#LocalDate API) </p>
-<p>[Base 64](#Base 64) </p>
-<h2 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>特点：</p>
+    <content><![CDATA[<p>不定期更新……</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h2><p><strong>概念</strong> </p>
+<p>特点：</p>
 <ul>
 <li><strong>可选类型声明：</strong>不需要声明参数类型，编译器可以统一识别参数值。</li>
 <li><strong>可选的参数圆括号：</strong>一个参数无需定义圆括号，但多个参数需要定义圆括号。</li>
@@ -400,22 +392,47 @@
 <li>最好不要在 Lambda 表达式内复杂的处理逻辑，只用来做数据处理</li>
 <li>Lambda 表达式内使用外层局部变量，该局部变量不可修改，如果需要修改，需要将局部变量赋值给一个不做修改的新对象，使用新对象进行处理。</li>
 </ul>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Item&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="comment">// 转化</span></span><br><span class="line">List&lt;Long&gt;        list1 = list.stream().map(Item::getId).collect(Collectors.toList());</span><br><span class="line">Map&lt;Long, String&gt; map1  = list.stream().collect(Collectors.toMap(Item::getId, Item::getName));</span><br><span class="line"><span class="comment">// 分组</span></span><br><span class="line">Map&lt;String, List&lt;Item&gt;&gt; itemMap = list.stream().collect(Collectors.groupingBy(Item::getGroup));</span><br><span class="line"><span class="comment">// 求最大值</span></span><br><span class="line">Optional&lt;Item&gt; maxDish = list.stream()</span><br><span class="line">  .collect(Collectors.maxBy(Comparator.comparing(Item::getId)));</span><br><span class="line"><span class="comment">// 求最小值</span></span><br><span class="line">Optional&lt;Item&gt; minDish = list.stream()</span><br><span class="line">  .collect(Collectors.minBy(Comparator.comparing(Item::getId)));</span><br><span class="line"><span class="comment">// 求和</span></span><br><span class="line">Long sum = list1.stream().mapToLong(Long::longValue).sum();</span><br><span class="line"><span class="comment">// 排序</span></span><br><span class="line">List&lt;Long&gt; list2 = list1.stream().sorted().collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 过滤</span></span><br><span class="line">List&lt;Item&gt; list3 = list.stream().filter(item -&gt; item.getName() != <span class="keyword">null</span>)</span><br><span class="line">  .collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 去重</span></span><br><span class="line">List&lt;Long&gt; list4 = list1.stream().distinct().collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<p><strong>示例</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Item</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> Long   id;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">private</span> String group;</span><br><span class="line">  <span class="comment">// 省略 get / set 方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">  List&lt;Item&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">  <span class="comment">// 可选类型声明</span></span><br><span class="line">  <span class="comment">// 可选参数圆括号</span></span><br><span class="line">  <span class="comment">// 可选大括号</span></span><br><span class="line">  <span class="comment">// 可选返回关键字</span></span><br><span class="line">  List&lt;Long&gt; list1 = list.stream().map(Item::getId).collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 不处理复杂逻辑</span></span><br><span class="line">  <span class="comment">// - 正确示例:</span></span><br><span class="line">  list4.forEach(l -&gt; System.out.println(l));</span><br><span class="line">  <span class="comment">// - 错误示例:</span></span><br><span class="line">  list4.forEach(l -&gt; &#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (i &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;100:&quot;</span> + i);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i &lt; <span class="number">1000</span>) &#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;1000:&quot;</span> + i);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;undefined:&quot;</span> + i);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(l);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用局部变量</span></span><br><span class="line">  <span class="comment">// - 正确示例:</span></span><br><span class="line">  <span class="keyword">final</span> <span class="keyword">long</span>[] s1 = &#123;<span class="number">0L</span>&#125;;</span><br><span class="line">  list4.forEach(a -&gt; s1[<span class="number">0</span>] += a);</span><br><span class="line">  <span class="comment">// - 错误示例:</span></span><br><span class="line">  <span class="keyword">long</span> s2 = <span class="number">0L</span>;</span><br><span class="line">  list4.forEach(a -&gt; s2 += a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
-<h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><p>方法引用通过方法的名字来指向一个方法。</p>
+<h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><p><strong>概念</strong> </p>
+<p>方法引用通过方法的名字来指向一个方法。</p>
 <p>方法引用可以使语言的构造更紧凑简洁，减少冗余代码。</p>
 <p>方法引用使用一对冒号 <strong>::</strong> 。</p>
-<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1.构造器引用</span></span><br><span class="line"><span class="keyword">final</span> Car car = Car.create( Car::<span class="keyword">new</span> );</span><br><span class="line"><span class="keyword">final</span> List&lt; Car &gt; cars = Arrays.asList( car );</span><br><span class="line"><span class="comment">// 2.静态方法引用</span></span><br><span class="line">cars.forEach( Car::collide );</span><br><span class="line"><span class="comment">// 3.特定类的任意对象的方法引用</span></span><br><span class="line">cars.forEach( Car::repair );</span><br><span class="line"><span class="comment">// 4.特定对象的方法引用</span></span><br><span class="line">cars.forEach( car::follow );</span><br><span class="line"><span class="comment">// ------------------------</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Supplier</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span> </span>&#123;&#125;</span><br><span class="line">	<span class="comment">//Supplier 是 jdk1.8 的接口，这里和 lambda 一起使用了</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Car <span class="title">create</span><span class="params">(<span class="keyword">final</span> Supplier&lt;Car&gt; supplier)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> supplier.get();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">collide</span><span class="params">(<span class="keyword">final</span> Car car)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Collided &quot;</span> + car.toString());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">follow</span><span class="params">(<span class="keyword">final</span> Car another)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Following the &quot;</span> + another.toString());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">repair</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Repaired &quot;</span> + <span class="keyword">this</span>.toString());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>示例</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 1.构造器引用</span></span><br><span class="line">  <span class="keyword">final</span> Car car = Car.create( Car::<span class="keyword">new</span> );</span><br><span class="line">  <span class="keyword">final</span> List&lt; Car &gt; cars = Arrays.asList( car );</span><br><span class="line">  <span class="comment">// 2.静态方法引用</span></span><br><span class="line">  cars.forEach( Car::collide );</span><br><span class="line">  <span class="comment">// 3.特定类的任意对象的方法引用</span></span><br><span class="line">  cars.forEach( Car::repair );</span><br><span class="line">  <span class="comment">// 4.特定对象的方法引用</span></span><br><span class="line">  cars.forEach( car::follow );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Supplier</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span> </span>&#123;&#125;</span><br><span class="line">	<span class="comment">//Supplier 是 jdk1.8 的接口，这里和 lambda 一起使用了</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Car <span class="title">create</span><span class="params">(<span class="keyword">final</span> Supplier&lt;Car&gt; supplier)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> supplier.get();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">collide</span><span class="params">(<span class="keyword">final</span> Car car)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Collided &quot;</span> + car.toString());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">follow</span><span class="params">(<span class="keyword">final</span> Car another)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Following the &quot;</span> + another.toString());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">repair</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Repaired &quot;</span> + <span class="keyword">this</span>.toString());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
-<h2 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h2><h2 id="默认方法"><a href="#默认方法" class="headerlink" title="默认方法"></a>默认方法</h2><h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><h3 id="Spliterator"><a href="#Spliterator" class="headerlink" title="Spliterator"></a>Spliterator</h3><p>Spliterator 是一个分割迭代器（Spliterator Iterator），顾名思义，作用就是用来分隔数据，以便于 Stream 中可以进行并行流计算。</p>
-<h2 id="Optional-类"><a href="#Optional-类" class="headerlink" title="Optional 类"></a>Optional 类</h2><p>Optional 类是一个可以为 null 的容器对象。如果值存在则 isPresent() 方法会返回 true，调用 get() 方法会返回该对象。</p>
+<h2 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h2><p><strong>概念</strong> </p>
+<h2 id="默认方法"><a href="#默认方法" class="headerlink" title="默认方法"></a>默认方法</h2><p><strong>概念</strong> </p>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p><strong>概念</strong> </p>
+<p><strong>示例</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Item&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="comment">// 转化</span></span><br><span class="line">List&lt;Long&gt; list1 = list.stream().map(Item::getId).collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 转 map</span></span><br><span class="line">Map&lt;Long, String&gt; map1 = list.stream().collect(Collectors.toMap(Item::getId, Item::getName));</span><br><span class="line"><span class="comment">// 分组</span></span><br><span class="line">Map&lt;String, List&lt;Item&gt;&gt; itemMap = list.stream().collect(Collectors.groupingBy(Item::getGroup));</span><br><span class="line"><span class="comment">// 求最大值</span></span><br><span class="line">Optional&lt;Item&gt; maxDish = list.stream()</span><br><span class="line">  .collect(Collectors.maxBy(Comparator.comparing(Item::getId)));</span><br><span class="line"><span class="comment">// 求最小值</span></span><br><span class="line">Optional&lt;Item&gt; minDish = list.stream()</span><br><span class="line">  .collect(Collectors.minBy(Comparator.comparing(Item::getId)));</span><br><span class="line"><span class="comment">// 求和</span></span><br><span class="line">Long sum = list1.stream().mapToLong(Long::longValue).sum();</span><br><span class="line"><span class="comment">// 排序</span></span><br><span class="line">List&lt;Long&gt; list2 = list1.stream().sorted().collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 过滤</span></span><br><span class="line">List&lt;Item&gt; list3 = list.stream().filter(item -&gt; item.getName() != <span class="keyword">null</span>)</span><br><span class="line">  .collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 去重</span></span><br><span class="line">List&lt;Long&gt; list4 = list1.stream().distinct().collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+
+<h3 id="Spliterator"><a href="#Spliterator" class="headerlink" title="Spliterator"></a>Spliterator</h3><p><strong>概念</strong> </p>
+<p>Spliterator 是一个分割迭代器（Spliterator Iterator），顾名思义，作用就是用来分隔数据，以便于 Stream 中可以进行并行流计算。</p>
+<p>在 Java 8 中，Spliterator 是通过 Collection 接口实现 parallelStream() 方法来提供给我们使用的，它可以讲集合数据根据一定规则分割为一个个小集合，然后集合便可以通过并行计算的方式进行处理，提高集合处理速度。</p>
+<p><strong>示例</strong> </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;(Arrays.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>));</span><br><span class="line"><span class="keyword">long</span> t1 = System.currentTimeMillis();</span><br><span class="line">System.out.println(t1);</span><br><span class="line">list.stream().forEach(i -&gt; System.out.println(i));</span><br><span class="line"><span class="keyword">long</span> t2 = System.currentTimeMillis();</span><br><span class="line">System.out.println(t1 + <span class="string">&quot;, stream 耗时:&quot;</span> + (t2 - t1));</span><br><span class="line">list.parallelStream().forEach(i -&gt; System.out.println(i));</span><br><span class="line"><span class="keyword">long</span> t3 = System.currentTimeMillis();</span><br><span class="line">System.out.println(t3 + <span class="string">&quot;, parallelSteam 耗时:&quot;</span> + (t3 - t2));</span><br><span class="line"><span class="comment">// 输出结果</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">1615201828031</span></span><br><span class="line"><span class="comment">1</span></span><br><span class="line"><span class="comment">2</span></span><br><span class="line"><span class="comment">3</span></span><br><span class="line"><span class="comment">4</span></span><br><span class="line"><span class="comment">5</span></span><br><span class="line"><span class="comment">1615201828031, stream 耗时:82</span></span><br><span class="line"><span class="comment">3</span></span><br><span class="line"><span class="comment">1</span></span><br><span class="line"><span class="comment">5</span></span><br><span class="line"><span class="comment">4</span></span><br><span class="line"><span class="comment">2</span></span><br><span class="line"><span class="comment">1615201828120, parallelSteam 耗时:7</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Optional-类"><a href="#Optional-类" class="headerlink" title="Optional 类"></a>Optional 类</h2><p><strong>概念</strong> </p>
+<p>Optional 类是一个可以为 null 的容器对象。如果值存在则 isPresent() 方法会返回 true，调用 get() 方法会返回该对象。</p>
 <p>Optional 是个容器：它可以保存类型 T 的值，或者仅仅保存 null。Optional 提供很多有用的方法，这样我们就不用显式进行空值检测。</p>
 <p>Optional 类的引入很好的解决空指针异常。</p>
-<h2 id="Nashorn、JavaScript-引擎"><a href="#Nashorn、JavaScript-引擎" class="headerlink" title="Nashorn、JavaScript 引擎"></a>Nashorn、JavaScript 引擎</h2><h2 id="新的日期时间-API"><a href="#新的日期时间-API" class="headerlink" title="新的日期时间 API"></a>新的日期时间 API</h2><h2 id="Base-64"><a href="#Base-64" class="headerlink" title="Base 64"></a>Base 64</h2><p>——————————————————————————————————————————————</p>
+<p><strong>示例</strong> </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt;     list     &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">Optional&lt;Integer&gt; optional &#x3D; list.stream().findFirst();</span><br><span class="line">optional.orElse(0);</span><br><span class="line">System.out.println(optional);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Nashorn、JavaScript-引擎"><a href="#Nashorn、JavaScript-引擎" class="headerlink" title="Nashorn、JavaScript 引擎"></a>Nashorn、JavaScript 引擎</h2><p><strong>概念</strong> </p>
+<h2 id="新的日期时间-API"><a href="#新的日期时间-API" class="headerlink" title="新的日期时间 API"></a>新的日期时间 API</h2><p><strong>概念</strong> </p>
+<h2 id="Base-64"><a href="#Base-64" class="headerlink" title="Base 64"></a>Base 64</h2><p><strong>概念</strong> </p>
+<p>——————————————————————————————————————————————</p>
 <blockquote>
 <p>原创：西狩</p>
 <p>编写日期 / 修订日期：2020-12-30 / 2020-12-30</p>
@@ -433,23 +450,7 @@
   <entry>
     <title>必知必会面试题之Java IO 流</title>
     <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava-IO%E6%B5%81/</url>
-    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
-<ul>
-<li><a href="#IO%E6%B5%81%E7%9A%84%E7%A7%8D%E7%B1%BB">IO 流的种类</a> </li>
-<li><a href="#%E5%B8%B8%E8%A7%81%E7%9A%84IO%E6%B5%81">常见的 IO 流</a> <ul>
-<li><a href="#%E5%AD%97%E8%8A%82%E6%B5%81">字节流</a> </li>
-<li><a href="#%E5%AD%97%E7%AC%A6%E6%B5%81">字符流</a> </li>
-</ul>
-</li>
-<li>[常见的 IO 类型](#常见的 IO 类型) <ul>
-<li><a href="#BIO">BIO</a> </li>
-<li><a href="#NIO">NIO</a> </li>
-<li><a href="#AIO">AIO</a> </li>
-</ul>
-</li>
-<li><a href="#NIO%E7%9A%84%E7%BB%84%E6%88%90">NIO 的组成</a> </li>
-<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%B6%E6%8B%B7%E8%B4%9D">什么是零拷贝</a> </li>
-</ul>
+    <content><![CDATA[<p>不定期更新中……</p>
 <hr>
 <span id="more"></span>
 
@@ -537,26 +538,21 @@
   <entry>
     <title>必知必会面试题之 Java 泛型</title>
     <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%9B%E5%9E%8B/</url>
-    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
-<ul>
-<li><a href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8">泛型的类型安全</a> </li>
-<li><a href="#%E6%B3%9B%E5%9E%8B%E4%B8%8A%E9%99%90">泛型上限</a> </li>
-<li><a href="#%E6%B3%9B%E5%9E%8B%E4%B8%8B%E9%99%90">泛型下限</a> </li>
-</ul>
+    <content><![CDATA[<p>不定期更新中……</p>
 <hr>
 <span id="more"></span>
 
 <hr>
-<h3 id="泛型的类型安全"><a href="#泛型的类型安全" class="headerlink" title="泛型的类型安全"></a>泛型的类型安全</h3><p>JDK 1.5 以后引入了泛型的概念，通过泛型能够帮助我们在程序处理中将处理逻辑抽象出来，提高代码复用性。泛型的使用一般遵循类型约束，以此保证泛型类型的安全性。举个例子：</p>
+<h2 id="泛型的类型安全"><a href="#泛型的类型安全" class="headerlink" title="泛型的类型安全"></a>泛型的类型安全</h2><p>JDK 1.5 以后引入了泛型的概念，通过泛型能够帮助我们在程序处理中将处理逻辑抽象出来，提高代码复用性。泛型的使用一般遵循类型约束，以此保证泛型类型的安全性。举个例子：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">private</span> T atrribute;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtrribute</span><span class="params">(T atrribute)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.atrribute = atrribute;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getAtrribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    retrun atrribute;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PersonAtrribute</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> height;</span><br><span class="line">  <span class="keyword">private</span> vision;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DuckAtrribute</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> tail;</span><br><span class="line">  <span class="keyword">private</span> wing;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemoService</span>() </span>&#123;</span><br><span class="line">  Person person = <span class="keyword">new</span> Person();</span><br><span class="line">  PersonAtrribute personAtrribute = <span class="keyword">new</span> PersonAtrribute();</span><br><span class="line">  DuckAtrribute duckAtrribute = <span class="keyword">new</span> DuckAtrribute();</span><br><span class="line">  person.setAtrribute(personAtrribute);</span><br><span class="line">  person.setAtrribute(duckAtrribute);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>上述例子中，DemoService 中错误地将 DuckAtrribute 放入了 Person 的扩展属性中，这显然是不合理的，这也就是我们所关注的泛型安全性问题。</p>
 <p>如果没有类型约束，泛型中就可以存放任何类型的东西，那么当你创建这样的一个泛型时，你就无法预知泛型的使用者会拿它做什么。也许有一天，你会发现自己设计的泛型已经在系统里使用地十分混乱，这显然不是我们设计时想要看到的。因此，我们需要对泛型进行约束。</p>
 <p>泛型约束包括两种：extends 和 super。extends 决定了泛型的上限，super 决定了泛型的下限。</p>
-<h3 id="泛型上限"><a href="#泛型上限" class="headerlink" title="泛型上限"></a>泛型上限</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 泛型可以接受E类型或者E的子类类型。</span></span><br><span class="line">? extends E</span><br></pre></td></tr></table></figure>
+<h2 id="泛型上限"><a href="#泛型上限" class="headerlink" title="泛型上限"></a>泛型上限</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 泛型可以接受E类型或者E的子类类型。</span></span><br><span class="line">? extends E</span><br></pre></td></tr></table></figure>
 
 <p>extends 规定了泛型的上限。当泛型使用 extends 时，使用泛型的类所实现的类型都受 extends 继承类的约束，如果继承了 Person，泛型传进来 Duck 就是不被允许的。</p>
-<h3 id="泛型下限"><a href="#泛型下限" class="headerlink" title="泛型下限"></a>泛型下限</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 可以接受E类型，或者E的父类型。</span></span><br><span class="line">? <span class="keyword">super</span> E</span><br></pre></td></tr></table></figure>
+<h2 id="泛型下限"><a href="#泛型下限" class="headerlink" title="泛型下限"></a>泛型下限</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 可以接受E类型，或者E的父类型。</span></span><br><span class="line">? <span class="keyword">super</span> E</span><br></pre></td></tr></table></figure>
 
 <p>super 规定了泛型的下限，当泛型使用 super 时，使用泛型的类所实现的类型都受 super 父类的约束，如果 super 的是一个属性类，属性类里包括 age 和 sex，那么实现泛型的时候就必须要具备这两种属性。</p>
 ]]></content>
@@ -571,20 +567,7 @@
   <entry>
     <title>必知必会面试题之 Java 集合</title>
     <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E9%9B%86%E5%90%88/</url>
-    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
-<ul>
-<li><a href="#List">List</a> <ul>
-<li><a href="#ArrayList%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0">ArrayList 的底层实现</a> </li>
-<li><a href="#ArrayList%E5%A6%82%E4%BD%95%E6%89%A9%E5%AE%B9%EF%BC%9F">ArrayList 如何扩容？</a> </li>
-</ul>
-</li>
-<li><a href="#Map">Map</a> <ul>
-<li><a href="#HashMap%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0">HashMap 的底层实现</a> </li>
-<li><a href="#JDK1.8%E4%B8%ADHashMap%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BC%95%E5%85%A5%E7%BA%A2%E9%BB%91%E6%A0%91%EF%BC%9F">JDK 1.8 中 HashMap 为什么要引入红黑树？</a> </li>
-<li><a href="#HashMap%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%BD%BF%E7%94%A8%E9%93%BE%E8%A1%A8%EF%BC%9F%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%BC%9A%E4%BD%BF%E7%94%A8%E7%BA%A2%E9%BB%91%E6%A0%91%EF%BC%9F">HashMap 什么情况使用链表？什么情况会使用红黑树？</a> </li>
-</ul>
-</li>
-</ul>
+    <content><![CDATA[<p>不定期更新中……</p>
 <hr>
 <span id="more"></span>
 
@@ -692,57 +675,11 @@
   <entry>
     <title>必知必会面试题之 Java 基础</title>
     <url>/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
-<ul>
-<li><a href="#%E6%95%B0%E6%8D%AE%E8%AE%A1%E9%87%8F%E5%8D%95%E4%BD%8D">数据计量单位</a> </li>
-<li><a href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7">面向对象三大特性</a> </li>
-<li><a href="#%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">基础数据类型</a> </li>
-<li><a href="#%E6%B3%A8%E9%87%8A%E6%A0%BC%E5%BC%8F">注释格式</a> </li>
-</ul>
+    <content><![CDATA[<p>不定期更新中……</p>
 <hr>
 <span id="more"></span>
 
 <hr>
-<ul>
-<li><a href="#%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6">访问修饰符</a> </li>
-<li><a href="#%E8%BF%90%E7%AE%97%E7%AC%A6">运算符</a> <ul>
-<li><a href="#%E7%AE%97%E6%95%B0%E8%BF%90%E7%AE%97%E7%AC%A6">算数运算符</a> </li>
-<li><a href="#%E5%85%B3%E7%B3%BB%E8%BF%90%E7%AE%97%E7%AC%A6">关系运算符</a> </li>
-<li><a href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6">位运算符</a> </li>
-<li><a href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6">逻辑运算符</a> </li>
-<li><a href="#%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6">赋值运算符</a> </li>
-<li><a href="#%E4%B8%89%E7%9B%AE%E8%A1%A8%E8%BE%BE%E5%BC%8F">三目表达式</a> </li>
-<li><a href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7">运算符优先级</a> </li>
-</ul>
-</li>
-<li><a href="%E6%8B%B7%E8%B4%9D">拷贝</a> <ul>
-<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B5%85%E6%8B%B7%E8%B4%9D%EF%BC%9F">什么是浅拷贝？</a> </li>
-<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B5%85%E6%8B%B7%E8%B4%9D%EF%BC%9F">什么是浅拷贝？</a> </li>
-</ul>
-</li>
-<li><a href="#%E9%87%8D%E5%86%99%E4%B8%8E%E9%87%8D%E8%BD%BD">重写与重载</a> <ul>
-<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8D%E5%86%99%EF%BC%9F">什么是重写？</a> </li>
-<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8D%E8%BD%BD%EF%BC%9F">什么是重载？</a> </li>
-<li><a href="#%E9%87%8D%E5%86%99%E4%B8%8E%E9%87%8D%E8%BD%BD%E7%9A%84%E5%8C%BA%E5%88%AB">重写与重载的区别</a> </li>
-</ul>
-</li>
-<li><a href="#%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92%E4%B8%8E%E5%80%BC%E4%BC%A0%E9%80%92">引用传递与值传递</a> </li>
-<li><a href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6">类加载机制</a> <ul>
-<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%EF%BC%9F">什么是双亲委派？</a> </li>
-<li><a href="#%E5%A6%82%E4%BD%95%E6%89%93%E7%A0%B4%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%EF%BC%9F">如何打破双亲委派？</a> </li>
-</ul>
-</li>
-<li><a href="#Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B">Java 内存模型</a> <ul>
-<li><a href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE">缓存一致性协议</a> </li>
-<li><a href="#%E7%BC%93%E5%AD%98%E8%A1%8C">缓存行</a> </li>
-<li><a href="#%E7%BC%93%E5%AD%98%E8%A1%8C%E5%AF%B9%E9%BD%90">缓存行对齐</a> </li>
-<li><a href="#%E5%90%88%E5%B9%B6%E5%86%99">合并写</a> </li>
-<li><a href="#Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%8C%85%E6%8B%AC%E5%93%AA%E4%BA%9B%E4%B8%9C%E8%A5%BF%EF%BC%9F">Java 内存模型包括哪些东西？</a> </li>
-<li><a href="#Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E4%B8%AD%EF%BC%8C%E5%93%AA%E4%BA%9B%E5%AF%B9%E8%B1%A1%E6%98%AF%E7%8E%B0%E5%9C%BA%E7%A7%81%E6%9C%89%E7%9A%84%EF%BC%9F%E5%93%AA%E4%BA%9B%E5%AF%B9%E8%B1%A1%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%85%AC%E6%9C%89%E7%9A%84%EF%BC%9F">Java 内存模型中，哪些对象是现场私有的？哪些对象是线程公有的？</a> </li>
-<li><a href="#Java%E5%85%AB%E5%A4%A7%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C">Java 八大原子操作</a> </li>
-</ul>
-</li>
-</ul>
 <h3 id="数据计量单位"><a href="#数据计量单位" class="headerlink" title="数据计量单位"></a>数据计量单位</h3><p>8bit(位)=1Byte(字节) </p>
 <p>1024Byte(字节)=1KB</p>
 <p>1024KB=1MB</p>
@@ -1273,50 +1210,11 @@
   <entry>
     <title>必知必会面试题之 Java 注解</title>
     <url>/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
-<ul>
-<li><p><a href="#%E5%85%83%E6%B3%A8%E8%A7%A3">元注解</a> </p>
-<ul>
-<li><p><a href="#@Documented">@Documented</a> </p>
-</li>
-<li><p><a href="#@Indexed">@Indexed</a> </p>
-</li>
-<li><p><a href="#@Retention">@Retention</a> </p>
-</li>
-<li><p><a href="#@Target">@Target</a> </p>
-</li>
-</ul>
-</li>
-</ul>
+    <content><![CDATA[<p>不定期更新中……</p>
 <hr>
 <span id="more"></span>
 
 <hr>
-<ul>
-<li><p><a href="#%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3">常用注解</a> </p>
-<ul>
-<li><p><a href="#@Deprecated">@Deprecated</a> </p>
-</li>
-<li><p><a href="#@FunctionalInterface">@FunctionalInterface</a> </p>
-</li>
-<li><p><a href="#@Override">@Override</a> </p>
-</li>
-<li><p><a href="#@PostConstruct">@PostConstruct</a> </p>
-</li>
-<li><p><a href="#@SafeVarargs">@SafeVarargs</a> </p>
-</li>
-<li><p><a href="#@SuppressWarnings">@SuppressWarnings</a> </p>
-</li>
-</ul>
-</li>
-<li><p><a href="#%E9%99%84%E5%BD%95">附录</a> </p>
-<ul>
-<li><a href="#ElementType">ElementType</a> </li>
-<li><a href="#RetentionPolicy">RetentionPolicy</a> </li>
-<li><a href="#@SuppressWarnings%E5%85%B3%E9%94%AE%E5%AD%97">@SuppressWarnings 关键字</a> </li>
-</ul>
-</li>
-</ul>
 <h2 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h2><h3 id="Documented"><a href="#Documented" class="headerlink" title="@Documented"></a>@Documented</h3><p>仅用在注解类上，表示在使用 javadoc 工具生成帮助文档时，使用该注解的类会在 API 文档中展示该注解。</p>
 <p><strong>注解版本：1.5+</strong> </p>
 <p><strong>场景举例：</strong> </p>
@@ -1328,10 +1226,10 @@
 <li><p>生成 javadoc（使用 javadoc 命令 或 使用 eclipse、IDEA 等 IDE 提供的 javadoc 生成工具）</p>
 </li>
 <li><p>打开生成的 API 文档（/doc/index.html），如下：</p>
-<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-wKKTIUib-1614172467381)(必知必会之Java注解.assets/image-20210219181622050.png)]</p>
+<p><img src="http://lihuimignxs.github.io/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/image-20210219181622050.png" alt="图1"></p>
 </li>
 <li><p>若删除注解类 TestAnnotation 中的 @Documented 注解，再次生成 javadoc，<strong>注解消失</strong>。</p>
-<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-eBIAda2g-1614172467384)(必知必会之Java注解.assets/image-20210219182152788.png)]</p>
+<p><img src="http://lihuimignxs.github.io/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/image-20210219182152788.png" alt="图2"></p>
 </li>
 </ul>
 <h3 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h3><p>仅用在注解类上，被它修饰的注解具有继承性。也就是说，在一个类上使用被 @Inherited 标注的注解，其子类也会继承这些被 @Inherited 标注的注解。</p>
@@ -1386,15 +1284,23 @@
 
 <h3 id="PostConstruct"><a href="#PostConstruct" class="headerlink" title="@PostConstruct"></a>@PostConstruct</h3><p>@PostConstruct 该注解被用来修饰一个非静态的 void() 方法。被 @PostConstruct 修饰的方法会<strong>在服务器加载 Servlet 的时候运行，并且只会被服务器执行一次</strong>。PostConstruct 在<strong>构造函数之后</strong>执行，<strong>init() 方法之前</strong>执行。</p>
 <p>该注解的方法在 Spring 整个 Bean 初始化中的执行顺序：<strong>Constructor（构造方法） -&gt; @Autowired（依赖注入） -&gt; @PostConstruct（注释的方法）</strong>。</p>
-<p><strong>注解版本：1.0+</strong> </p>
+<p><strong>注解版本：Common Annotations 1.0+</strong> </p>
 <p><strong>场景举例：</strong> </p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> Test test = <span class="keyword">new</span> Test();</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="keyword">private</span> OtherService otherService;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@PostConstruct</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;init&quot;</span>);</span><br><span class="line">    test.otherService = otherService;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h3 id="PreDestroy"><a href="#PreDestroy" class="headerlink" title="@PreDestroy"></a>@PreDestroy</h3><p><strong>注解版本：Common Annotations 1.0+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<h3 id="Qualifier"><a href="#Qualifier" class="headerlink" title="@Qualifier"></a>@Qualifier</h3><p><strong>注解版本：</strong> </p>
+<p><strong>场景举例：</strong> </p>
 <h3 id="SafeVarargs"><a href="#SafeVarargs" class="headerlink" title="@SafeVarargs"></a>@SafeVarargs</h3><p>标注在 static 或 final 方法上，表示被该注解修饰的方法取消显示指定的编译器警告。</p>
 <p><strong>注解版本：1.7+</strong> </p>
 <p><strong>场景举例：</strong> </p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeVarargsClass</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 没有 @SafeVarargs 会有编译警告</span></span><br><span class="line">    display(<span class="string">&quot;10&quot;</span>, <span class="number">20</span>, <span class="number">30</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@SafeVarargs</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">m1</span><span class="params">(T... array)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (T arg : array) &#123;</span><br><span class="line">      System.out.println(arg.getClass().getName() + <span class="string">&quot;：&quot;</span> + arg);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h3 id="Scope"><a href="#Scope" class="headerlink" title="@Scope"></a>@Scope</h3><p><strong>注解版本：</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<h3 id="Singleton"><a href="#Singleton" class="headerlink" title="@Singleton"></a>@Singleton</h3><p><strong>注解版本：</strong> </p>
+<p><strong>场景举例：</strong> </p>
 <h3 id="SuppressWarnings"><a href="#SuppressWarnings" class="headerlink" title="@SuppressWarnings"></a>@SuppressWarnings</h3><p>标注在类或方法上，表示被该注解修饰的程序元素（以及该程序元素中的所有子元素）取消显示指定的编译器警告，且会一直作用于该程序元素的所有子元素。</p>
 <p>注解的使用有以下三种：</p>
 <ul>
@@ -1579,6 +1485,662 @@
       <tags>
         <tag>面试</tag>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql、Oracle、SQL-Server 查询字段值长度</title>
+    <url>/2021/03/09/Mysql%E3%80%81Oracle%E3%80%81SQL-Server%E6%9F%A5%E8%AF%A2%E5%AD%97%E6%AE%B5%E5%80%BC%E9%95%BF%E5%BA%A6/</url>
+    <content><![CDATA[<p>在不同的数据库中，如何查询字段值长度？Mysql、Oracle、SQL-Server 中提供了不同的函数方法。</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<p>示例：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 查询长度为11位的手机号</span></span><br><span class="line"><span class="comment">-- MySQL: length()</span></span><br><span class="line"><span class="keyword">SELECT</span> phone <span class="keyword">FROM</span> address_book <span class="keyword">where</span> length(phone) <span class="operator">=</span> <span class="number">11</span>;</span><br><span class="line"><span class="comment">-- Oracle: length()</span></span><br><span class="line"><span class="keyword">SELECT</span> phone <span class="keyword">FROM</span> address_book <span class="keyword">where</span> length(phone) <span class="operator">=</span> <span class="number">11</span>;</span><br><span class="line"><span class="comment">-- SQL Server: len()</span></span><br><span class="line"><span class="keyword">SELECT</span> phone <span class="keyword">FROM</span> address_book <span class="keyword">where</span> len(phone) <span class="operator">=</span> <span class="number">11</span>;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>Oracle</tag>
+        <tag>SQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>修改 Hosts 解决 Github 访问缓慢问题</title>
+    <url>/2021/03/10/%E4%BF%AE%E6%94%B9Hosts%E8%A7%A3%E5%86%B3Github%E8%AE%BF%E9%97%AE%E7%BC%93%E6%85%A2%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近访问 Github 经常出现访问速度慢的问题，甚至会出现无法连接的情况。有一天，在一次家常聊天中提到了这个事情，有一位热心的 Gitee 朋友就说：你改一下 Hosts 文件就可以了。修改了一下以后，发现果然有效，特来分享。</p>
+<hr>
+<span id="more"></span>
+<hr>
+<h2 id="Hosts-配置"><a href="#Hosts-配置" class="headerlink" title="Hosts 配置"></a>Hosts 配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># github</span></span><br><span class="line">140.82.114.3 github.com</span><br><span class="line">185.199.108.153 assets-cdn.github.com</span><br><span class="line">185.199.109.153 assets-cdn.github.com</span><br><span class="line">185.199.110.153 assets-cdn.github.com</span><br><span class="line">185.199.111.153 assets-cdn.github.com</span><br><span class="line">199.232.5.194 github.global.ssl.fastly.net</span><br><span class="line">140.82.114.4 gist.github.com</span><br><span class="line">199.232.96.133 cloud.githubusercontent.com</span><br><span class="line">199.232.96.133 camo.githubusercontent.com</span><br></pre></td></tr></table></figure>
+
+<p>如果上述配置失效，或者比较慢，可以登录 <a href="http://ping.chinaz.com/github.com">http://ping.chinaz.com/github.com</a> 自行查找，选择延迟最低的节点。</p>
+<h2 id="补充资料"><a href="#补充资料" class="headerlink" title="补充资料"></a>补充资料</h2><p>附上网上一些相关资料，不满足只解决问题的小伙伴，可以去了解一下。</p>
+<ul>
+<li><a href="#https://zhuanlan.zhihu.com/p/107334179">修改 Hosts 解决 Github 访问失败马克</a> </li>
+<li><a href="#https://blog.csdn.net/weixin_44455388/article/details/106915788">GitHub登录不上解决办法(绝对可行)</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>Github</category>
+      </categories>
+      <tags>
+        <tag>Github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从一部电影史上的趣事了解 Spring 中的循环依赖问题</title>
+    <url>/2021/03/10/%E4%BB%8E%E4%B8%80%E9%83%A8%E7%94%B5%E5%BD%B1%E5%8F%B2%E4%B8%8A%E7%9A%84%E8%B6%A3%E4%BA%8B%E4%BA%86%E8%A7%A3Spring%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>今天，我们从电影史上一则有趣的故事来了解 Spring 中的循环依赖问题。</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<blockquote>
+<p>1998 年的某一天，《喜剧之王》和《玻璃樽》两部电影进入了拍摄阶段。</p>
+<p>在《喜剧之王》需要成龙友情客串一个替身演员，而《玻璃樽》需要周星驰客串一个被警犬拖着的警察。</p>
+</blockquote>
+<p>那么，我们想象一下：如果当《喜剧之王》在香港开拍时，《玻璃樽》剧组还在广州，会怎么样？</p>
+<p>在现实生活中，我们可能会调整时间安排来解决这种戏份冲突的问题，但在 Spring 对象加载过程中，对象的加载是顺序性的，并不能像我们现实生活中那么灵活。</p>
+<p>我们将《喜剧之王》和《玻璃樽》分别看做对象 A 和对象 B，将周星驰和成龙分别看做对象 A 中的 资源 x 和对象 B 中的资源 y。</p>
+<ul>
+<li><p>《喜剧之王》（对象 A）中需要成龙（对象 B 中的资源 y）客串完成。</p>
+</li>
+<li><p>《玻璃樽》（对象 B）中需要周星驰（对象 A 中的资源 x）客串完成。</p>
+</li>
+</ul>
+<p>也就是说：对象 A 加载时，需要存在对象 B，对象 A 才能顺利加载。而对象 B 的加载也是相同的情况。</p>
+<p>但由于对象 A 和对象 B 加载顺序一定是一前一后，所以如果不做一定处理，加载是一定不成功的。这也就是我们所说的<strong>循环依赖问题</strong>。</p>
+<h2 id="Bean-的创建流程"><a href="#Bean-的创建流程" class="headerlink" title="Bean 的创建流程"></a>Bean 的创建流程</h2><p>首先，我们根据源码了解一下 Bean 的创建流程：</p>
+<ul>
+<li><p>AbstractBeanFactory#getBean()</p>
+</li>
+<li><p><strong>AbstractBeanFactory#doGetBean(a)</strong> </p>
+<ul>
+<li><p><strong>DefaultSingletonBeanRegistry#getSingleton(beanName)</strong> </p>
+<ul>
+<li><p><strong>getSingleton(beanName, true)</strong> </p>
+<ul>
+<li><p><strong>singletonObjects</strong>：一级缓存尝试获取目标对象。存储的是所有创建好了的单例 Bean。</p>
+</li>
+<li><p><strong>earlySingletonObjects</strong>：二级缓存尝试获取目标对象。对象完成实例化，但未进行属性注入及初始化的对象。</p>
+</li>
+<li><p><strong>singletonFactories</strong>：三级缓存尝试获取目标对象。若获取到对象，将对象从三级缓存中删除，并放入二级缓存。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>if (sharedInstance != null &amp;&amp; args == null)</strong> </p>
+<ul>
+<li><p>**mbd.isSingleton()**：创建单例 Bean</p>
+<ul>
+<li><strong>AbstractAutowireCapableBeanFactory#createBean(beanName, mbd, args)</strong> <ul>
+<li><strong>doCreateBean(beanName, mbdToUse, args)</strong> <ul>
+<li>**createBeanInstance(beanName, mbd, args)**：创建 Bean 实例</li>
+<li><strong>allowCircularReferences</strong>：允许循环引用</li>
+<li>**isSingletonCurrentlyInCreation(beanName)**：查找 beanName 是否在创建中的集合内。</li>
+<li>**getEarlyBeanReference(beanName, mbd, bean)**：循环获取二级缓存中的对象引用</li>
+<li>**addSingletonFactory(beanName, singletonFactory)**：将对象放入一级缓存</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>DefaultSingletonBeanRegistry#getSingleton(beanName, true)</strong> <ul>
+<li>**beforeSingletonCreation(beanName)**：判断是否需要跳过检查，以及将 beanName 添加到创建中的集合。</li>
+<li>**afterSingletonCreation(beanName)**：判断是否需要跳过检查，以及将 beanName 从创建中的集合移除。</li>
+</ul>
+</li>
+<li>**getObjectForBeanInstance(sharedInstance, name, beanName, mbd)**：完成单例 Bean 的创建</li>
+</ul>
+</li>
+<li><p>**mbd.isPrototype()**：创建原型 Bean</p>
+<ul>
+<li>beforePrototypeCreation(beanName)<ul>
+<li>prototypesCurrentlyInCreation.get()：获取当前线程的创建对象信息</li>
+<li>if (curVal == null)：若创建对象信息为 null<ul>
+<li>prototypesCurrentlyInCreation.set(beanName)：设置当前线程的创建对象信息为 beanName</li>
+</ul>
+</li>
+<li>else if (curVal instanceof String)：若实例对象为 String 类型<ul>
+<li>beanNameSet.add((String)curVal)：将现有对象转为字符串存储</li>
+<li>beanNameSet.add(beanName)：将当前 beanName 追加到集合中</li>
+<li>prototypesCurrentlyInCreation.set(beanNameSet)：，设置当前线程的创建对象信息为集合对象</li>
+</ul>
+</li>
+<li>else<ul>
+<li>beanNameSet.add(beanName)：在当前线程的创建对象信息中追加 beanName</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>AbstractAutowireCapableBeanFactory#createBean(beanName, mbd, args)：与单例 Bean 对应方法一致</li>
+<li>afterPrototypeCreation(beanName)<ul>
+<li>prototypesCurrentlyInCreation.get()：获取当前线程的创建对象信息</li>
+<li>if (curVal instanceof String)：若当前线程的创建对象信息为 String<ul>
+<li>prototypesCurrentlyInCreation.remove()：移除当前线程的创建对象信息</li>
+</ul>
+</li>
+<li>else if (curVal instanceof Set)：若当前线程的创建对象信息为 Set 集合<ul>
+<li>beanNameSet.remove(beanName)：移除当前线程的创建对象信息中指定 beanName</li>
+<li>if (beanNameSet.isEmpty())：若 Set 集合为空<ul>
+<li>prototypesCurrentlyInCreation.remove()：移除当前线程的创建对象信息</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>getObjectForBeanInstance(prototypeInstance, name, beanName, mbd)：完成原型 Bean 的创建</li>
+</ul>
+</li>
+<li><p>**mbd.getScope()**：根据作用域创建 Bean</p>
+<ul>
+<li>if (scope == null)：找不到对应的 Scope 报错</li>
+<li>beforePrototypeCreation(beanName)：与原型 Bean 对应方法一致</li>
+<li>AbstractAutowireCapableBeanFactory#createBean(beanName, mbd, args)：与单例 Bean 对应方法一致</li>
+<li>afterPrototypeCreation(beanName)：与原型 Bean 对应方法一致</li>
+<li>scope.get(beanName, objectFactory)：获取 Scope 实例</li>
+<li>getObjectForBeanInstance(scopedInstance, name, beanName, mbd)：完成 Scope Bean 的创建</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>如上所示，这就是一次 Bean 的创建流程。</p>
+<h2 id="测试循环依赖报错问题"><a href="#测试循环依赖报错问题" class="headerlink" title="测试循环依赖报错问题"></a>测试循环依赖报错问题</h2><p>测试使用的依赖：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>创建启动类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    org.springframework.boot.SpringApplication.run(SpringApplication.class, args);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建以下两个类 A、B，其中 A 依赖 B，B 依赖 A。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> CircularB circularB;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">CircularA</span><span class="params">(CircularB circularB)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.circularB = circularB;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> CircularA circularA;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">CircularB</span><span class="params">(CircularA circularA)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.circularA = circularA;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>启动应用，发现如下报错。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2021-03-10 20:18:52.637  INFO 38500 --- [           main] ConditionEvaluationReportLoggingListener : </span><br><span class="line"></span><br><span class="line">Error starting ApplicationContext. To display the conditions report re-run your application with &#39;debug&#39; enabled.</span><br><span class="line">2021-03-10 20:18:52.652 ERROR 38500 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : </span><br><span class="line"></span><br><span class="line">***************************</span><br><span class="line">APPLICATION FAILED TO START</span><br><span class="line">***************************</span><br><span class="line"></span><br><span class="line">Description:</span><br><span class="line"></span><br><span class="line">The dependencies of some of the beans in the application context form a cycle:</span><br><span class="line"></span><br><span class="line">┌─────┐</span><br><span class="line">|  circularA defined in file [&#x2F;Users&#x2F;lihuiming&#x2F;git&#x2F;xs&#x2F;xs-learning&#x2F;xs-learning-spring&#x2F;target&#x2F;classes&#x2F;com&#x2F;xs&#x2F;learning&#x2F;spring&#x2F;dependency&#x2F;CircularA.class]</span><br><span class="line">↑     ↓</span><br><span class="line">|  circularB defined in file [&#x2F;Users&#x2F;lihuiming&#x2F;git&#x2F;xs&#x2F;xs-learning&#x2F;xs-learning-spring&#x2F;target&#x2F;classes&#x2F;com&#x2F;xs&#x2F;learning&#x2F;spring&#x2F;dependency&#x2F;CircularB.class]</span><br><span class="line">└─────┘</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="解决循环依赖的前置条件"><a href="#解决循环依赖的前置条件" class="headerlink" title="解决循环依赖的前置条件"></a>解决循环依赖的前置条件</h2><p>在 Spring 解决循环依赖是有前置条件的：</p>
+<ol>
+<li>出现循环依赖的 Bean 必须是单例</li>
+<li>依赖注入的方式<strong>不能全是构造器注入</strong>的方式</li>
+</ol>
+<p>那么，Spring 如何解决循环依赖问题的呢？这个问题有些抽象，下面举例说明。</p>
+<h2 id="循环依赖的解决办法"><a href="#循环依赖的解决办法" class="headerlink" title="循环依赖的解决办法"></a>循环依赖的解决办法</h2><p>有两种办法：</p>
+<ol>
+<li>将上述测试代码中，先加载的对象（也就是对象 A）改为注解注入的方式。</li>
+<li>将上述测试代码中，将两个对象都改为注解注入的方式。</li>
+</ol>
+<p><strong>注意：如果只修改一个对象的注入方式，一定要修改<font color="red">加载顺序靠前</font>的对象，否则无法解决循环依赖问题！</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="keyword">private</span> CircularB circularB;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> CircularA circularA;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">CircularB</span><span class="params">(CircularA circularA)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.circularA = circularA;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="循环依赖的运行过程"><a href="#循环依赖的运行过程" class="headerlink" title="循环依赖的运行过程"></a>循环依赖的运行过程</h2><ol>
+<li>首先根据 Spring 自然排序规则，先去<strong>获取 A 对象实例</strong>，第一次获取会发现缓存中没有 A 实例对象，返回 null；</li>
+<li>由于未获取到 A 对象实例，进行<strong>创建 A 对象实例</strong>；</li>
+<li>创建 A 对象实例时，发现 A 对象依赖 B 对象，<strong>循环获取二级缓存中的对象引用</strong>，尝试获取 B 对象实例来注入到 A 对象实例中；</li>
+<li>由于缓存中没有 B 对象实例，所以会<strong>创建 B 对象实例</strong>；</li>
+<li>此时，A 对象实例<strong>获取得到 B 对象实例</strong>（已实例化，但未注入属性信息，未初始化），A 对象实例加载完成；</li>
+<li>创建 B 对象实例时，发现 B 对象依赖 A 对象，<strong>获取 A 对象实例</strong>来注入到 B 对象实例中；</li>
+<li>此时，B 对象实例加载完成；</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>必知必会面试题之 Eureka</title>
+    <url>/2021/03/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BEureka/</url>
+    <content><![CDATA[<blockquote>
+<p>本文基于 Eureka:1.10.20 版本分析。</p>
+</blockquote>
+<p>不定期更新中……</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="Eureka-是什么"><a href="#Eureka-是什么" class="headerlink" title="Eureka 是什么"></a>Eureka 是什么</h2><p>Eureka 是 Netflix 的一个子模块，是一个基于 REST 的服务，用于服务发现和故障转移 ，包含 Eureka Server 和 Eureka Client。</p>
+<ul>
+<li>Eureka Server：提供服务注册服务，存储可用服务节点的相关信息（服务名、IP、端口、唯一实例 ID 等）。</li>
+<li>Eureka Client：服务注册客户端，配置在各服务节点中，服务启动后定时向 Eureka Server 发送注册信息</li>
+</ul>
+<h2 id="Eureka-服务注册流程"><a href="#Eureka-服务注册流程" class="headerlink" title="Eureka 服务注册流程"></a>Eureka 服务注册流程</h2><h2 id="客户端启动时如何注册到服务端？"><a href="#客户端启动时如何注册到服务端？" class="headerlink" title="客户端启动时如何注册到服务端？"></a>客户端启动时如何注册到服务端？</h2><p>Eureka 客户端启动后，会通过线程池（heartbeatExecutor）创建一个维持心跳的定时任务，每 30s 向服务端发送心跳信息。</p>
+<p>服务端会对客户端心跳做出响应。</p>
+<ul>
+<li>如果响应状态码为 404 时，表示服务端没有该客户端信息，客户端向服务端发起注册请求，完成注册，返回 true。</li>
+<li>如果响应状态码为 200 时，跳过注册步骤，直接返回 true。</li>
+<li>如果响应码不为 404 或 200 时，跳过注册步骤，返回 false。</li>
+</ul>
+<h2 id="服务端如何保存客户端服务信息？"><a href="#服务端如何保存客户端服务信息？" class="headerlink" title="服务端如何保存客户端服务信息？"></a>服务端如何保存客户端服务信息？</h2><p>在收到客户端的服务注册信息后，服务端将客户端信息放在一个 ConcurrentHashMap 对象中。</p>
+<p>源码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractInstanceRegistry</span> <span class="keyword">implements</span> <span class="title">InstanceRegistry</span> </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ConcurrentHashMap&lt;String, Map&lt;String, Lease&lt;InstanceInfo&gt;&gt;&gt; registry</span><br><span class="line">        = <span class="keyword">new</span> ConcurrentHashMap&lt;String, Map&lt;String, Lease&lt;InstanceInfo&gt;&gt;&gt;();</span><br><span class="line">  ...</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(InstanceInfo registrant, <span class="keyword">int</span> leaseDuration, <span class="keyword">boolean</span> isReplication)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        read.lock();</span><br><span class="line">        Map&lt;String, Lease&lt;InstanceInfo&gt;&gt; gMap = registry.get(registrant.getAppName());</span><br><span class="line">        REGISTER.increment(isReplication);</span><br><span class="line">        <span class="keyword">if</span> (gMap == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">final</span> ConcurrentHashMap&lt;String, Lease&lt;InstanceInfo&gt;&gt; gNewMap = <span class="keyword">new</span> ConcurrentHashMap&lt;String, Lease&lt;InstanceInfo&gt;&gt;();</span><br><span class="line">            gMap = registry.putIfAbsent(registrant.getAppName(), gNewMap);</span><br><span class="line">            <span class="keyword">if</span> (gMap == <span class="keyword">null</span>) &#123;</span><br><span class="line">                gMap = gNewMap;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="客户端如何拉取服务端已保存的服务信息？"><a href="#客户端如何拉取服务端已保存的服务信息？" class="headerlink" title="客户端如何拉取服务端已保存的服务信息？"></a>客户端如何拉取服务端已保存的服务信息？</h2><ol>
+<li>如何构建高可用的Eureka集群？</li>
+<li>心跳和服务剔除机制是什么？</li>
+</ol>
+<h2 id="Eureka-的保活机制"><a href="#Eureka-的保活机制" class="headerlink" title="Eureka 的保活机制"></a>Eureka 的保活机制</h2><p>//什么是失效剔除</p>
+<p>有时候,我们的服务提供方并不一定是正常下线,可能是内存溢出,网络故障等原因导致服务无法正常工作.EurekaServer会将这些失效的服务剔除服务列表.因此它会开启一个定时任务.每隔60秒会对失效的服务进行一次剔除</p>
+<p>//什么是自我保护</p>
+<p>当服务未按时进行心跳续约时,在生产环境下,因为网络原因,此时就把服务从服务列表中剔除并不妥当发,因为服务也有可能未宕机.Eureka就会把当前实例的注册信息保护起来,不允剔除.这种方式在生产环境下很有效,保证了大多数服务依然可用</p>
+<p>​      —-如何自动注册和发现服务.</p>
+<p>​      —-如何实现服务状态的监管.</p>
+<p>​      —-如何实现动态路由,从而实现负载均衡.</p>
+<p>服务如何实现负载均衡</p>
+<p>服务如何解决容灾问题</p>
+<p>//简述什么是CAP,并说明Eureka包含CAP中的哪些?</p>
+<p>CAP理论:一个分布式系统不可能同时满足C (一致性),A(可用性),P(分区容错性).由于分区容错性P在分布式系统中是必须要保证的,因此我们只能从A和C中进行权衡.</p>
+<p>Eureka 遵守 AP</p>
+<p>Eureka各个节点都是平等的,几个节点挂掉不会影响正常节点的工作,神域的节点依然可以提供注册和查询服务.</p>
+<p>而Eureka的客户端在向某个Eureka 注册或查询是如果发现连接失败,则会自动切换至其他节点</p>
+<p>只要有一台Eureka还在,就能保证注册服务可用(保证可用性),只不过查的信息可能不最新的不保证强一致性).</p>
+]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+        <tag>SpringCloud</tag>
+        <tag>Eureka</tag>
+        <tag>服务注册</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2021/02/02/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BSpring%E6%B3%A8%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="必知必会之-Spring-注解"><a href="#必知必会之-Spring-注解" class="headerlink" title="必知必会之 Spring 注解"></a>必知必会之 Spring 注解</h1><p>不定期更新中……</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h2><h3 id="AliasFor"><a href="#AliasFor" class="headerlink" title="@AliasFor"></a>@AliasFor</h3><h3 id="Autowired"><a href="#Autowired" class="headerlink" title="@Autowired"></a>@Autowired</h3><h3 id="Component"><a href="#Component" class="headerlink" title="@Component"></a>@Component</h3><h3 id="Conditional"><a href="#Conditional" class="headerlink" title="@Conditional"></a>@Conditional</h3><h3 id="ConditionalOnMissingBean"><a href="#ConditionalOnMissingBean" class="headerlink" title="@ConditionalOnMissingBean"></a>@ConditionalOnMissingBean</h3><h3 id="ConditionalOnProperty"><a href="#ConditionalOnProperty" class="headerlink" title="@ConditionalOnProperty"></a>@ConditionalOnProperty</h3><h3 id="Controller"><a href="#Controller" class="headerlink" title="@Controller"></a>@Controller</h3><h3 id="Indexed"><a href="#Indexed" class="headerlink" title="@Indexed"></a>@Indexed</h3><h3 id="Repository"><a href="#Repository" class="headerlink" title="@Repository"></a>@Repository</h3><h3 id="Scheduled"><a href="#Scheduled" class="headerlink" title="@Scheduled"></a>@Scheduled</h3><h3 id="Scope"><a href="#Scope" class="headerlink" title="@Scope"></a>@Scope</h3><h3 id="Service"><a href="#Service" class="headerlink" title="@Service"></a>@Service</h3><h3 id="Value"><a href="#Value" class="headerlink" title="@Value"></a>@Value</h3>]]></content>
+  </entry>
+  <entry>
+    <title>必知必会面试题之 JVM</title>
+    <url>/2021/03/04/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B9%8BJVM/</url>
+    <content><![CDATA[<p>不定期更新中……</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="什么是-JVM"><a href="#什么是-JVM" class="headerlink" title="什么是 JVM"></a>什么是 JVM</h2><p>JVM 全称 Java Virtual Machine，意为 Java 虚拟机。JVM 是软件层面的虚拟机器，需要运行在操作系统之上。JVM 包括一套字节码指令集、一组寄存器、一个栈、一个垃圾回收、一个堆和一个存储方法域。</p>
+<h2 id="Java-文件从编译到执行的过程"><a href="#Java-文件从编译到执行的过程" class="headerlink" title="Java 文件从编译到执行的过程"></a>Java 文件从编译到执行的过程</h2><p>Java 文件通过 javac 编译为 class 文件，class 文件和相关 java 类库通过 ClassLoader 加载到内存中，使用字节码解释器和 JIT 及时编译器解析，交由执行引擎进行具体执行。</p>
+<p><img src="http://lihuimignxs.github.io/2021/03/04/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B9%8BJVM/image-20210304233638640.png" alt="image-20210304233638640"></p>
+<h2 id="javac-的过程"><a href="#javac-的过程" class="headerlink" title="javac 的过程"></a>javac 的过程</h2><p>读取源码 &gt;&gt; 词法分析器 &gt;&gt; Token 流 &gt;&gt; 语法分析器 &gt;&gt; 抽象语法树 &gt;&gt; 语义分析器 &gt;&gt; 注解抽象语法树 &gt;&gt; 字节码生成器 &gt;&gt; ByteCode</p>
+<p><img src="http://lihuimignxs.github.io/2021/03/04/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B9%8BJVM/image-20210304233813332.png" alt="image-20210304233813332"></p>
+<h2 id="JDK、JRE、JVM的关系"><a href="#JDK、JRE、JVM的关系" class="headerlink" title="JDK、JRE、JVM的关系"></a>JDK、JRE、JVM的关系</h2><ul>
+<li>JDK = JRE + Development Kit</li>
+<li>JRE = JVM + Core Lib</li>
+<li>JVM</li>
+</ul>
+]]></content>
+      <categories>
+        <category>JVM</category>
+      </categories>
+      <tags>
+        <tag>JVM</tag>
+        <tag>面试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>必知必会面试题之 Spring 基础</title>
+    <url>/2021/03/10/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BSpring%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>不定期更新……</p>
+<hr>
+<span id="more"></span>
+
+<hr>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="Spring-的优点"><a href="#Spring-的优点" class="headerlink" title="Spring 的优点"></a>Spring 的优点</h3><blockquote>
+<p>考察点：考查对 Spring 框架的熟悉程度。</p>
+<p>小贴士：答上来这个问题，说明你对 Spring 框架 有一定的了解。</p>
+<p>难易度：低。</p>
+</blockquote>
+<ol>
+<li>方便解耦，简化开发。</li>
+<li>提供了 BOP（面向 Bean 编程）、IoC（依赖控制反转）、AOP（面向切面编程）等优秀的特性。</li>
+<li>声明式事务管理（TransactionManager）</li>
+<li>强大的工具类（如：JdbcTemplate）</li>
+<li>易于集成其他开源框架</li>
+<li>强大的开源生态（SpringBoot、SpringCloud、SpringCloudAlibaba）</li>
+</ol>
+<h3 id="Spring-有哪些核心模块"><a href="#Spring-有哪些核心模块" class="headerlink" title="Spring 有哪些核心模块"></a>Spring 有哪些核心模块</h3><blockquote>
+<p>考察点：考查对 Spring 框架模块的了解。</p>
+<p>小贴士：答上来这个问题，说明了解了 Spring 架构的拆分和设计，如果聊到自己的项目架构时，可以借鉴。</p>
+<p>难易度：低。</p>
+</blockquote>
+<p>Spring 目前有 21 个模块：</p>
+<ul>
+<li><strong>spring-aop</strong>：核心模块，提供 AOP 的实现。</li>
+<li><strong>spring-aspects</strong>：集成 AspectJ 框架。</li>
+<li><strong>spring-beans</strong>：核心模块，提供 Bean 的管理和 BeanFactory 的实现。</li>
+<li>spring-context-indexer：Spring 5 新增模块，通过索引（编译阶段创建对象列表）来提高启动速度。</li>
+<li>spring-context-support：支持整合第三方库到上下文中，如：EhCache、JCache、Quartz 等。</li>
+<li><strong>spring-context</strong>：核心模块，基于 core 和 beans 模块能力，实现上下文管理如。如：ApplicationContext。</li>
+<li><strong>spring-core</strong>：核心模块，提供框架核心能力和特性，包括控制反转和依赖注入。</li>
+<li><strong>spring-expression</strong>：提供表达式支持，是 EL 表达式在 Spring 框架中的应用和扩展。</li>
+<li>spring-instrument：AOP 的增强模块，提供类植入支持和类加载器的实现。</li>
+<li>spring-jcl：Spring 5 新增模块，提供通用日志的功能。</li>
+<li><strong>spring-jdbc</strong>：提供了 JDBC 的抽象与封装，简化 JDBC 连接方式。如：JdbcTemplate。</li>
+<li><strong>spring-jms</strong>：集成 JMS 服务，用于消息的传递。</li>
+<li>spring-messaging：Spring 4 新增模块，提供消息传递结构和协议的支持。</li>
+<li><strong>spring-orm</strong>：提供 ORM 框架支持，支持创建对象关系映射。</li>
+<li>spring-oxm：提供 Object 和 XML 的映射功能。</li>
+<li>spring-r2dbc：Spring 5 新增模块，提供完全反应式非阻塞的 API 与数据库交互，支持 H2、MariaDB、SQL Server、MySQL、jasync-sql MySQL、Postgres。</li>
+<li><strong>spring-test</strong>：提供了测试功能，支持 JUnit 等测试组件。</li>
+<li><strong>spring-tx</strong>：提供事务的支持。</li>
+<li><strong>spring-web</strong>：提供基本的 Web 开发相关功能的集成。</li>
+<li>spring-webflux：非堵塞函数式 Reactive Web 框架，用来建立异步非阻塞的基于事件驱动的服务。</li>
+<li><strong>spring-webmvc</strong>：Web-Servlet 框架，包含用于应用程序的 Spring MVC 和 REST Web Services 实现。</li>
+<li><strong>spring-websocket</strong>：Spring 4 新增模块，实现双工异步通讯协议，实现了 WebSocket 和 SocketJS，提供 Socket 通信和 web 端的推送功能。</li>
+</ul>
+<h3 id="Spring-用到了哪些设计模式"><a href="#Spring-用到了哪些设计模式" class="headerlink" title="Spring 用到了哪些设计模式"></a>Spring 用到了哪些设计模式</h3><blockquote>
+<p>考察点：考查对 Spring 源码的理解和设计模式。</p>
+<p>小贴士：答上来这个问题，说明了解了 Spring 中的设计模式，继续问下去可能会让举些例子，比如具体的实现类。</p>
+<p>难易度：低。</p>
+</blockquote>
+<ul>
+<li>单例模式：Bean 默认是单例模式。如：FactoryBean。</li>
+<li>工厂模式：BeanFactory 简单工厂，用来创建对象的实例。</li>
+<li>代理模式：JDK 动态代理、CGLIB 字节码生成技术。</li>
+<li>模板方法：RestTemplate、JdbcTemplate。</li>
+<li>观察者模式：ApplicationListener。</li>
+</ul>
+<h3 id="Spring-的事件有哪些"><a href="#Spring-的事件有哪些" class="headerlink" title="Spring 的事件有哪些"></a>Spring 的事件有哪些</h3><blockquote>
+<p>考察点：考查对 Spring Event 的了解，以及 Spring 的运行机制。</p>
+<p>小贴士：答上来这个问题，说明了解了 Spring 事件机制，继续问下去可能会问一些扩展问题，比如和 Java 中的事件的区别。</p>
+<p>难易度：中</p>
+</blockquote>
+<ol>
+<li><p>上下文开始事件（ContextStartedEvent）</p>
+<p>调用 ConfigurableApplicationContext 的 start() 方法（继承自 Lifecycle），启动容器时触发该事件。</p>
+</li>
+<li><p>上下文更新事件（ContextRefreshedEvent）</p>
+<p>调用 ConfigurableApplicationContext 接口中的 refresh() 方法时，更新容器时触发该事件。</p>
+</li>
+<li><p>上下文停止事件（ContextStoppedEvent）</p>
+<p>当容器调用 ConfigurableApplicationContext 的 stop() 方法（继承自 Lifecycle），停止容器时触发该事件。</p>
+</li>
+<li><p>上下文关闭事件（ContextClosedEvent）</p>
+<p>当 ApplicationContext 被关闭时触发该事件。容器被关闭时，其管理的所有单例 Bean 都会被销毁。</p>
+</li>
+<li><p>请求处理事件（RequestHandledEvent）</p>
+<p>当一个 http 请求（request）结束触发该事件。如果一个 Bean 实现了 ApplicationListener 接口，当一个 ApplicationEvent 被发布以后，就会自动通知这个 Bean。</p>
+</li>
+</ol>
+<h3 id="Spring-配置方式"><a href="#Spring-配置方式" class="headerlink" title="Spring 配置方式"></a>Spring 配置方式</h3><blockquote>
+<p>考察点：考查对 Spring 框架的了解。</p>
+<p>小贴士：答上来这个问题，说明了解了 Spring 的配置机制，继续问下去可能会问配置读取进来后是如何实现的，能答上具体的实现类最佳。</p>
+<p>难易度：低</p>
+</blockquote>
+<ul>
+<li>基于注解的配置（推荐）</li>
+<li>基于 Java 代码的配置（推荐）</li>
+<li>XML 配置文件（不推荐，因 XML 标签格式过于繁琐，业内掀起了去 XML 化的“浪潮”）</li>
+</ul>
+<h3 id="Spring-的自动装配"><a href="#Spring-的自动装配" class="headerlink" title="Spring 的自动装配"></a>Spring 的自动装配</h3><blockquote>
+<p>考察点：考查对 Spring 源码的理解和设计模式。</p>
+<p>小贴士：答上来这个问题，说明了解了 Spring 自动装配策略，继续问下去可能会让举例说明。</p>
+<p>难易度：中</p>
+</blockquote>
+<p>Spring 的自动装配是指由 Spring 根据不同场景自动完成 Bean 的装配的方式。</p>
+<p>在 Spring 中提供了 4种自动装配策略：</p>
+<ul>
+<li>AUTOWIRE_NO：无需自动装配（默认策略）</li>
+<li>AUTOWIRE_BY_NAME：按名称自动装配，例如：@Resource、@Qualifier 注解。</li>
+<li>AUTOWIRE_BY_TYPE：按类型自动装配，例如：@Autowired 注解。</li>
+<li>AUTOWIRE_CONSTRUCTOR：按构造器自动装配，例如：在构造器或构造器入参上添加 @Autowired 注解。</li>
+</ul>
+<p>此外，还有 Spring 3.0 以后被废弃的一种装配策略：AUTOWIRE_AUTODETECT（自动探测装配）。自动探测装配会根据不同情况选择不同的装配方式：如果存在默认构造器，则使用构造器装配；否则，使用类型装配。</p>
+<blockquote>
+<p> 笔者猜测有两个原因导致该策略的废弃：</p>
+<ol>
+<li><strong>不符合设计初衷</strong>：“如果条件 A 走 X，如果条件 B 走 Y”，这种方式将选择策略的任务交给了上层应用，不符合 Spring 使开发者更专注于业务的初衷。</li>
+<li><strong>丰富的注解</strong>：Spring 提供了越来越丰富的注解来解决容器对象管理，上层应用根据需求选择合适注解即可。</li>
+</ol>
+</blockquote>
+<h3 id="Spring-事务的实现原理"><a href="#Spring-事务的实现原理" class="headerlink" title="Spring 事务的实现原理"></a>Spring 事务的实现原理</h3><blockquote>
+<p>考察点：考查对 Spring 事务实现机制的了解。</p>
+<p>小贴士：答上来这个问题，说明了解了事务的底层实现机制，继续问下去可能会扯到数据库相关知识。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>Spring 事务是基于数据库的事务封装实现的，最终事务的处理都是由数据库层的事务提交和回滚实现的。</p>
+<h3 id="Spring-事务传播机制（行为）"><a href="#Spring-事务传播机制（行为）" class="headerlink" title="Spring 事务传播机制（行为）"></a>Spring 事务传播机制（行为）</h3><blockquote>
+<p>考察点：考查对 Spring 事务传播机制的了解。</p>
+<p>小贴士：答上来这个问题，说明了解了事务传播机制，继续问下去可能会问在实际项目中的运用。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>Spring 的事务传播机制，实际上是对数据库事务行为的封装，初衷是为上层应用提供一定规则的事务处理方式，简化开发。</p>
+<p>Spring 的 TransactionDefinition 接口中定义了 7 种事务传播机制。</p>
+<ol>
+<li>PROPAGATION_REQUIRED：（默认）如果当前没有事务，就创建一个新事务，如果当前存在事务，就加入该事务。</li>
+<li>PROPAGATION_SUPPORTS：支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就以非事务执行。</li>
+<li>PROPAGATION_NOT_SUPPORTED：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。</li>
+<li>PROPAGATION_REQUIRES_NEW：创建新事务，无论当前存不存在事务，都创建新事务。</li>
+<li>PROPAGATION_MANDATORY：支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就抛出异常。</li>
+<li>PROPAGATION_NEVER：以非事务方式执行，如果当前存在事务，则抛出异常。</li>
+<li>PROPAGATION_NESTED：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则按 REQUIRED 属性执行。</li>
+</ol>
+<h3 id="Spring-事务隔离级别"><a href="#Spring-事务隔离级别" class="headerlink" title="Spring 事务隔离级别"></a>Spring 事务隔离级别</h3><blockquote>
+<p>考察点：考查对 Spring 事务隔离级别的了解。</p>
+<p>小贴士：答上来这个问题，说明了解了事务隔离级别，继续问下去可能会问数据库相关知识。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>由于 Spring 事务是基于底层数据库事务实现的，因此，隔离级别也是一样的。</p>
+<p>Spring 的 TransactionDefinition 接口中定义了 5 种事务隔离级别。</p>
+<ol>
+<li>ISOLATION_DEFAULT：（默认）用底层数据库的设置隔离级别，数据库设置的是什么我就用什么；</li>
+<li>ISOLATION_READ_UNCOMMITTED：未提交读，最低隔离级别、事务未提交前，就可被其他事务读取（会出现幻读、脏读、不可重复读）；</li>
+<li>ISOLATION_READ_COMMITTED：提交读，一个事务提交后才能被其他事务读取到（会造成幻读、不可重复读），SQL server 的默认级别；</li>
+<li>ISOLATION_REPEATABLE_READ：可重复读，保证多次读取同一个数据时，其值都和事务开始时候的内容是一致，禁止读取到别的事务未提交的数据（会造成幻读），MySQL 的默认级别；</li>
+<li>ISOLATION_SERIALIZABLE：序列化，代价最高最可靠的隔离级别，该隔离级别能防止脏读、不可重复读、幻读。</li>
+</ol>
+<h2 id="Bean"><a href="#Bean" class="headerlink" title="Bean"></a>Bean</h2><h3 id="Bean-的作用域"><a href="#Bean-的作用域" class="headerlink" title="Bean 的作用域"></a>Bean 的作用域</h3><blockquote>
+<p>考察点：考查对 Bean 作用域的了解。</p>
+<p>小贴士：答上来这个问题，说明了解了 Bean 的作用域，继续问下去可能会问实际项目中的运用。</p>
+<p>难易度：低</p>
+</blockquote>
+<ul>
+<li><strong>singleton</strong>：默认作用域，每个 Bean 在单个 IOC 容器中只存在一个实例。</li>
+<li><strong>prototype</strong>：一个 Bean 存在多个实例。</li>
+<li><strong>request</strong>：一个 Http 请求对应一个 Bean 实例，作用域范围为单次请求的生命周期，随着请求结束而销毁。</li>
+<li><strong>session</strong>：一个 Http Session 对应一个 Bean 实例。作用域范围为当前 Session 的生命周期，随着 Session 会话结束而销毁。</li>
+<li><strong>global-session</strong>：一个全局的 Http Session 对应一个 Bean 实例。</li>
+</ul>
+<h3 id="Bean-是线程安全的吗"><a href="#Bean-是线程安全的吗" class="headerlink" title="Bean 是线程安全的吗"></a>Bean 是线程安全的吗</h3><blockquote>
+<p>考察点：考查对 Bean 实现机制的了解。</p>
+<p>小贴士：答上来这个问题，说明了解了 Bean 的线程安全性，继续问下去会问如何保证线程安全。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>如果 Bean 是单例的，所有线程共享同一个 Bean 实例，存在资源竞争，此时 Bean 不是线程安全的。</p>
+<p>如果 Bean 是单例无状态的，虽然所有线程共享同一个 Bean 实例，但线程不会对 Bean 的资源执行查询以外的操作，不存在资源竞争，此时 Bean 是线程安全的。</p>
+<p>如果 Bean 是多例的，每个线程都持有一个独有的 Bean 实例，不存在资源竞争，此时 Bean 是线程安全的。</p>
+<h3 id="如何保证-Bean-的线程安全"><a href="#如何保证-Bean-的线程安全" class="headerlink" title="如何保证 Bean 的线程安全"></a>如何保证 Bean 的线程安全</h3><blockquote>
+<p>考察点：考查 Bean 线程安全的解决方案。</p>
+<p>小贴士：答上来这个问题，说明了解了 Bean 的线程安全解决方法，继续问下去可能会问实际项目中的运用。</p>
+<p>难易度：中</p>
+</blockquote>
+<ul>
+<li><p>将 Bean 的作用域改为 prototype。</p>
+</li>
+<li><p>使用 java 中提供的 ThreadLocal。</p>
+</li>
+<li><p>通过 Lock 加锁保证。</p>
+</li>
+</ul>
+<h3 id="Bean-的生命周期"><a href="#Bean-的生命周期" class="headerlink" title="Bean 的生命周期"></a>Bean 的生命周期</h3><blockquote>
+<p>考察点：考查 Bean 的生命周期。</p>
+<p>小贴士：答上来这个问题，说明了解了 Bean 的生命周期，一般不会继续问下去。</p>
+<p>难易度：低</p>
+</blockquote>
+<ol>
+<li><strong>实例化</strong>：Bean 的实例化。</li>
+<li><strong>属性填充</strong>：将 Bean 所需的值和引用填充到 Bean 对应的属性。</li>
+<li><strong>预加载</strong>：根据 Bean 实现的接口，调用对应的方法。<ul>
+<li>若实现 BeanNameAware接口，则调用 setBeanName() 方法，传入 Bean 的名称；</li>
+<li>若实现 BeanFactoryAware 接口，则调用 setBeanFactory() 方法，传入 BeanFactory 实例；</li>
+<li>若实现 ApplicationContextAware 接口，则调用 setApplicationContext() 方法，传入 Bean 所在的应用上下文；</li>
+<li>若实现 BeanPostProcessor 接口，则调用 postProcessBeforeInitialization() 方法，传入 Bean 和 Bean 的名称；</li>
+<li>若实现 InitializingBean 接口或声明了初始化方法，则调用 afterPropertiesSet() 方法；</li>
+<li>若实现了 BeanPostProcessor 接口，则调用 postProcessAfterInitialization() 方法，传入 Bean 和 Bean 的名称。</li>
+</ul>
+</li>
+<li><strong>加载完成</strong>：将 Bean 成功完成加载，可正常调用。</li>
+<li><strong>销毁</strong>：调用 DisposableBean 的 destroy() 接口方法，销毁 Bean。</li>
+</ol>
+<h3 id="BeanFactory-和-FactoryBean-的区别"><a href="#BeanFactory-和-FactoryBean-的区别" class="headerlink" title="BeanFactory 和 FactoryBean 的区别"></a>BeanFactory 和 FactoryBean 的区别</h3><blockquote>
+<p>考察点：考查 Spring 中的核心类。</p>
+<p>小贴士：答上来这个问题，说明了解了 BeanFactory 和 FactoryBean 的特性，一般不会继续问下去。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>BeanFactory 是实现 IOC 容器的核心接口，提供了实例化对象、获取对象的功能。</p>
+<p>FactoryBean 是实现 Bean 的接口，提供了工厂 Bean 的实例化规范。</p>
+<h3 id="BeanFactory-和-ApplicationContext-的区别"><a href="#BeanFactory-和-ApplicationContext-的区别" class="headerlink" title="BeanFactory 和 ApplicationContext 的区别"></a>BeanFactory 和 ApplicationContext 的区别</h3><blockquote>
+<p>考察点：考查 Spring 中的核心类。</p>
+<p>小贴士：答上来这个问题，说明了解了 BeanFactory 和 ApplicationContext 的特性，继续问下去可能 ApplicationContext 是重点。</p>
+<p>难易度：低</p>
+</blockquote>
+<ol>
+<li>BeanFactory 是实现 IOC 容器的基本接口；ApplicationContext 继承并扩展了 BeanFactory。</li>
+<li>BeanFactory 是懒加载的，每次获取对象时创建对象；ApplicationContext 是预加载的，每次容器启动时就回创建所有对象。</li>
+<li>BeanFactory 提供了实例化对象和获取对象的功能。ApplicationContext 提供了更丰富的功能，如：国际化（MessageSource）、访问资源、载入多个上下文、消息发送响应机制（ApplicationEvent）。</li>
+<li>BeanFactory 和 ApplicationContext 都支持 BeanPostProcessor、BeanFactoryPostProcessor 的使用，但两者之间的区别是：BeanFactory 需要手动注册，而 ApplicationContext 则是自动注册。</li>
+</ol>
+<h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><h3 id="什么是-IOC"><a href="#什么是-IOC" class="headerlink" title="什么是 IOC"></a>什么是 IOC</h3><blockquote>
+<p>考察点：考查 IOC 的概念。</p>
+<p>小贴士：答上来这个问题，说明了解了 IOC 的作用，继续问下去可能会问 IOC 的实现原理。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>IOC 全称为 Inversion of Control，意为控制反转。控制反转就是指将对象的控制权不再由具体实现代码掌控，而是由容器来控制。</p>
+<p>在 Spring 中使用 IOC 将对象的创建、管理、装配、配置以及生命周期统一交由容器管理。</p>
+<h3 id="Spring-中-IOC-的实现原理"><a href="#Spring-中-IOC-的实现原理" class="headerlink" title="Spring 中 IOC 的实现原理"></a>Spring 中 IOC 的实现原理</h3><blockquote>
+<p>考察点：考查 IC 的实现原理。</p>
+<p>小贴士：答上来这个问题，说明了解了 IOC 的实现原理，继续问下去可能会问循环依赖的问题。</p>
+<p>难易度：中</p>
+</blockquote>
+<p>工厂模式 + 反射。</p>
+<p>实现基础的 IOC 分为两个步骤：</p>
+<ol>
+<li>加载配置文件，解析成 BeanDefinition 放在 Map 里。</li>
+<li>调用 getBean 的时候，从 BeanDefinition 所属的 Map 里，拿出 Class 对象进行实例化，同时，如果有依赖关系，将递归调用 getBean 方法，完成依赖注入。</li>
+</ol>
+<h3 id="Spring-中-IOC-的实现形式"><a href="#Spring-中-IOC-的实现形式" class="headerlink" title="Spring 中 IOC 的实现形式"></a>Spring 中 IOC 的实现形式</h3><blockquote>
+<p>考察点：考查 Spring 中 IOC 的实现方式。</p>
+<p>小贴士：答上来这个问题，说明了解了 IOC 在 Spring 中的具体实现方式，继续问下去可能会问依赖注入和依赖查找的实现流程。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>依赖注入（Dependency Injection）和依赖查找（Dependency Search）。</p>
+<ul>
+<li><p>依赖注入：应用不再手动管理所需资源，而是由容器动态地将所需资源注入到应用所需的类中。</p>
+</li>
+<li><p>依赖查找：应用不再手动加载所需资源，而是由加载器动态地将所需资源查询并加载到容器中。</p>
+</li>
+</ul>
+<h3 id="Spring-中依赖注入有哪几种方法"><a href="#Spring-中依赖注入有哪几种方法" class="headerlink" title="Spring 中依赖注入有哪几种方法"></a>Spring 中依赖注入有哪几种方法</h3><blockquote>
+<p>考察点：考查依赖注入的实现方式。</p>
+<p>小贴士：答上来这个问题，说明了解了依赖注入的方法，继续问下去可能会问依赖注入的实现流程。</p>
+<p>难易度：低</p>
+</blockquote>
+<ol>
+<li>构造器注入</li>
+<li>使用注解 @Autowird 注入</li>
+<li>使用 Setter 方法注入</li>
+</ol>
+<h3 id="为什么-Spring-推荐使用构造器注入？"><a href="#为什么-Spring-推荐使用构造器注入？" class="headerlink" title="为什么 Spring 推荐使用构造器注入？"></a>为什么 Spring 推荐使用构造器注入？</h3><blockquote>
+<p>考察点：考查构造器注入的优缺点。</p>
+<p>小贴士：答上来这个问题，说明了解了构造器注入，一般不会继续问下去。</p>
+<p>难易度：中</p>
+</blockquote>
+<p>引用 Spring 官方文档的描述：</p>
+<blockquote>
+<p>The Spring team generally advocates constructor injection as it enables one to implement application components as <em>immutable objects</em> and to ensure that required dependencies are not <code>null</code>. Furthermore constructor-injected components are always returned to client (calling) code in a fully initialized state.</p>
+</blockquote>
+<p>主要提到以下几点好处：</p>
+<ul>
+<li>组件不可变：是指 final 关键字，不可变的构造器可以保证使用者每次调用都能够得到稳定可靠的结果。在 IDEA 中如果使用 @Autowired 注解，会提示你使用 final 类型的构造器替代该注解。</li>
+<li>依赖不为空：构造器提供了固定的传入参数，因此可以保证返回的构造器一定是具有一定参数的构造器，可以避免依赖为空导致的空指针报错。</li>
+<li>完全初始化：构造器能够确保装载了所需依赖，保证了返回的对象是完全初始化好了的对象，不会缺少属性。</li>
+</ul>
+<p>但要注意的是：<strong>如果对象之间存在循环依赖，请避免使用构造器注入，防止造成循环依赖报错</strong>。</p>
+<h3 id="Spring-如何解决循环依赖问题"><a href="#Spring-如何解决循环依赖问题" class="headerlink" title="Spring 如何解决循环依赖问题"></a>Spring 如何解决循环依赖问题</h3><blockquote>
+<p>考察点：考查 Spring 中循环依赖的解决方案。</p>
+<p>小贴士：答上来这个问题，说明了解了循环依赖的解决方案，一般不会继续问下去。</p>
+<p>难易度：中</p>
+</blockquote>
+<p>在 Spring 解决循环依赖是有前置条件的：</p>
+<ol>
+<li>出现循环依赖的Bean必须要是单例</li>
+<li>依赖注入的方式不能全是构造器注入的方式</li>
+</ol>
+<p>那么，Spring 如何解决循环依赖问题的呢？这个问题有些抽象，下面举例说明。</p>
+<p>假设有两个类 A、B，其中 A 依赖 B，B 依赖 A。</p>
+<p>在 Spring 中，加载过程如下：</p>
+<ol>
+<li>首先根据 Spring 自然排序规则，先去<strong>获取 A 对象实例</strong>，第一次获取会发现缓存中没有 A 实例对象，返回 null；</li>
+<li>由于未获取到 A 对象实例，进行<strong>创建 A 对象实例</strong>；</li>
+<li>创建 A 对象实例时，发现 A 对象依赖 B 对象，<strong>循环获取二级缓存中的对象引用</strong>，尝试获取 B 对象实例来注入到 A 对象实例中；</li>
+<li>由于缓存中没有 B 对象实例，所以会<strong>创建 B 对象实例</strong>；</li>
+<li>此时，A 对象实例<strong>获取得到 B 对象实例</strong>（已实例化，但未注入属性信息，未初始化），A 对象实例加载完成；</li>
+<li>创建 B 对象实例时，发现 B 对象依赖 A 对象，<strong>获取 A 对象实例</strong>来注入到 B 对象实例中；</li>
+<li>此时，B 对象实例加载完成；</li>
+</ol>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><h3 id="什么是AOP"><a href="#什么是AOP" class="headerlink" title="什么是AOP"></a>什么是AOP</h3><blockquote>
+<p>考察点：考查 AOP 的概念。</p>
+<p>小贴士：答上来这个问题，说明了解了 AOP 的概念，继续问下去可能会问实现原理。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>AOP 全称 Aspect Oriented Programming，即面向切面编程。用于将那些与业务无关，但却对多个对象产生影响的公共行为和逻辑，抽取并封装为一个可重用的模块，这个模块被命名为“切面”（Aspect）。</p>
+<p>AOP 可以减少系统中的重复代码，降低了模块间的耦合度，同时提高了系统的可维护性。</p>
+<p>适用场景包括：权限认证、日志采集、事务处理等。</p>
+<h3 id="Spring-中-AOP-是如何实现的"><a href="#Spring-中-AOP-是如何实现的" class="headerlink" title="Spring 中 AOP 是如何实现的"></a>Spring 中 AOP 是如何实现的</h3><blockquote>
+<p>考察点：考查 AOP 的实现原理。</p>
+<p>小贴士：答上来这个问题，说明了解了 AOP 的实现原理，继续问下去可能会问静态代理和动态代理。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>基于代理实现的，包括静态代理和动态代理。</p>
+<h3 id="什么是静态代理"><a href="#什么是静态代理" class="headerlink" title="什么是静态代理"></a>什么是静态代理</h3><blockquote>
+<p>考察点：考查静态代理的概念。</p>
+<p>小贴士：答上来这个问题，说明了解了静态代理的概念，一般不会继续问下去，动态代理才是重点。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>静态代理是指在<strong>编译阶段</strong>生成代理对象的方法，会在编译阶段将 AspectJ（切面）代码嵌入到 Java 字节码当中。</p>
+<h3 id="什么是动态代理"><a href="#什么是动态代理" class="headerlink" title="什么是动态代理"></a>什么是动态代理</h3><blockquote>
+<p>考察点：考查动态代理的概念。</p>
+<p>小贴士：答上来这个问题，说明了解了静态代理的概念，继续问下去可能会问两种动态代理的区别。</p>
+<p>难易度：低</p>
+</blockquote>
+<p>动态代理是指在<strong>运行阶段</strong>生成代理对象的方法，会在运行阶段动态生成 AOP 代理对象，可以在特定的切点做增强处理，并回到原对象的方法。</p>
+<h3 id="JDK-动态代理与-CGLIB-动态代理的区别"><a href="#JDK-动态代理与-CGLIB-动态代理的区别" class="headerlink" title="JDK 动态代理与 CGLIB 动态代理的区别"></a>JDK 动态代理与 CGLIB 动态代理的区别</h3><blockquote>
+<p>考察点：考查 JDK 和 CGLIB 的实现机制。</p>
+<p>小贴士：答上来这个问题，说明了解了 JDK 和 CGLIB 的实现机制，一般不会继续问下去。</p>
+<p>难易度：中</p>
+</blockquote>
+<p>JDK 动态代理是基于接口的代理，通过 Java 提供的 <strong>InvocationHandler 接口</strong>和 <strong>Proxy 类</strong>实现。分为两个步骤：</p>
+<ol>
+<li>InvocationHandler 通过 invoke() 方法反射来调用目标类中的代码，动态地将横切逻辑和业务编织在一起，生成代理类。</li>
+<li>Proxy 利用 InvocationHandler 生成的代理类，动态创建一个符合该代理类的实例，生成目标类的代理对象。</li>
+</ol>
+<p>CGLIB（Code Generation Library）是一个代码生成的类库，不需要代理类实现 InvocationHandler 接口。通过在运行时动态生成目标类的一个子类对象，覆盖其中特定方法并添加增强代码，从而实现 AOP。</p>
+<p>CGLIB 是通过<strong>继承</strong>的方式做的动态代理，因此如果某个类被标记为 final，那么它是无法使用 CGLIB 做动态代理的。</p>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>面试</tag>
+        <tag>Spring</tag>
       </tags>
   </entry>
 </search>

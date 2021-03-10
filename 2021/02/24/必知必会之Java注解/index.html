@@ -20,19 +20,22 @@
     var CONFIG = {"hostname":"lihuimignxs.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="目录不定期更新中……  元注解   @Documented   @Indexed   @Retention   @Target">
+  <meta name="description" content="不定期更新中……">
 <meta property="og:type" content="article">
 <meta property="og:title" content="必知必会面试题之 Java 注解">
 <meta property="og:url" content="http://lihuimignxs.github.io/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/index.html">
 <meta property="og:site_name" content="江先生的杂货铺">
-<meta property="og:description" content="目录不定期更新中……  元注解   @Documented   @Indexed   @Retention   @Target">
+<meta property="og:description" content="不定期更新中……">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lihuimignxs.github.io/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/image-20210219181622050.png">
+<meta property="og:image" content="http://lihuimignxs.github.io/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/image-20210219182152788.png">
 <meta property="article:published_time" content="2021-02-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-02-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-09T16:00:00.000Z">
 <meta property="article:author" content="西狩">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lihuimignxs.github.io/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/image-20210219181622050.png">
 
 <link rel="canonical" href="http://lihuimignxs.github.io/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/">
 
@@ -223,6 +226,13 @@
 
               <time title="创建时间：2021-02-24 00:00:00" itemprop="dateCreated datePublished" datetime="2021-02-24T00:00:00+08:00">2021-02-24</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-10 00:00:00" itemprop="dateModified" datetime="2021-03-10T00:00:00+08:00">2021-03-10</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -258,50 +268,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
-<ul>
-<li><p><a href="#%E5%85%83%E6%B3%A8%E8%A7%A3">元注解</a> </p>
-<ul>
-<li><p><a href="#@Documented">@Documented</a> </p>
-</li>
-<li><p><a href="#@Indexed">@Indexed</a> </p>
-</li>
-<li><p><a href="#@Retention">@Retention</a> </p>
-</li>
-<li><p><a href="#@Target">@Target</a> </p>
-</li>
-</ul>
-</li>
-</ul>
+        <p>不定期更新中……</p>
 <hr>
 <span id="more"></span>
 
 <hr>
-<ul>
-<li><p><a href="#%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3">常用注解</a> </p>
-<ul>
-<li><p><a href="#@Deprecated">@Deprecated</a> </p>
-</li>
-<li><p><a href="#@FunctionalInterface">@FunctionalInterface</a> </p>
-</li>
-<li><p><a href="#@Override">@Override</a> </p>
-</li>
-<li><p><a href="#@PostConstruct">@PostConstruct</a> </p>
-</li>
-<li><p><a href="#@SafeVarargs">@SafeVarargs</a> </p>
-</li>
-<li><p><a href="#@SuppressWarnings">@SuppressWarnings</a> </p>
-</li>
-</ul>
-</li>
-<li><p><a href="#%E9%99%84%E5%BD%95">附录</a> </p>
-<ul>
-<li><a href="#ElementType">ElementType</a> </li>
-<li><a href="#RetentionPolicy">RetentionPolicy</a> </li>
-<li><a href="#@SuppressWarnings%E5%85%B3%E9%94%AE%E5%AD%97">@SuppressWarnings 关键字</a> </li>
-</ul>
-</li>
-</ul>
 <h2 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h2><h3 id="Documented"><a href="#Documented" class="headerlink" title="@Documented"></a>@Documented</h3><p>仅用在注解类上，表示在使用 javadoc 工具生成帮助文档时，使用该注解的类会在 API 文档中展示该注解。</p>
 <p><strong>注解版本：1.5+</strong> </p>
 <p><strong>场景举例：</strong> </p>
@@ -313,10 +284,10 @@
 <li><p>生成 javadoc（使用 javadoc 命令 或 使用 eclipse、IDEA 等 IDE 提供的 javadoc 生成工具）</p>
 </li>
 <li><p>打开生成的 API 文档（/doc/index.html），如下：</p>
-<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-wKKTIUib-1614172467381)(必知必会之Java注解.assets/image-20210219181622050.png)]</p>
+<p><img src="http://lihuimignxs.github.io/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/image-20210219181622050.png" alt="图1"></p>
 </li>
 <li><p>若删除注解类 TestAnnotation 中的 @Documented 注解，再次生成 javadoc，<strong>注解消失</strong>。</p>
-<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-eBIAda2g-1614172467384)(必知必会之Java注解.assets/image-20210219182152788.png)]</p>
+<p><img src="http://lihuimignxs.github.io/2021/02/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%A8%E8%A7%A3/image-20210219182152788.png" alt="图2"></p>
 </li>
 </ul>
 <h3 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h3><p>仅用在注解类上，被它修饰的注解具有继承性。也就是说，在一个类上使用被 @Inherited 标注的注解，其子类也会继承这些被 @Inherited 标注的注解。</p>
@@ -371,15 +342,23 @@
 
 <h3 id="PostConstruct"><a href="#PostConstruct" class="headerlink" title="@PostConstruct"></a>@PostConstruct</h3><p>@PostConstruct 该注解被用来修饰一个非静态的 void() 方法。被 @PostConstruct 修饰的方法会<strong>在服务器加载 Servlet 的时候运行，并且只会被服务器执行一次</strong>。PostConstruct 在<strong>构造函数之后</strong>执行，<strong>init() 方法之前</strong>执行。</p>
 <p>该注解的方法在 Spring 整个 Bean 初始化中的执行顺序：<strong>Constructor（构造方法） -&gt; @Autowired（依赖注入） -&gt; @PostConstruct（注释的方法）</strong>。</p>
-<p><strong>注解版本：1.0+</strong> </p>
+<p><strong>注解版本：Common Annotations 1.0+</strong> </p>
 <p><strong>场景举例：</strong> </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> Test test = <span class="keyword">new</span> Test();</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="keyword">private</span> OtherService otherService;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@PostConstruct</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;init&quot;</span>);</span><br><span class="line">    test.otherService = otherService;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h3 id="PreDestroy"><a href="#PreDestroy" class="headerlink" title="@PreDestroy"></a>@PreDestroy</h3><p><strong>注解版本：Common Annotations 1.0+</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<h3 id="Qualifier"><a href="#Qualifier" class="headerlink" title="@Qualifier"></a>@Qualifier</h3><p><strong>注解版本：</strong> </p>
+<p><strong>场景举例：</strong> </p>
 <h3 id="SafeVarargs"><a href="#SafeVarargs" class="headerlink" title="@SafeVarargs"></a>@SafeVarargs</h3><p>标注在 static 或 final 方法上，表示被该注解修饰的方法取消显示指定的编译器警告。</p>
 <p><strong>注解版本：1.7+</strong> </p>
 <p><strong>场景举例：</strong> </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeVarargsClass</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 没有 @SafeVarargs 会有编译警告</span></span><br><span class="line">    display(<span class="string">&quot;10&quot;</span>, <span class="number">20</span>, <span class="number">30</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@SafeVarargs</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">m1</span><span class="params">(T... array)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (T arg : array) &#123;</span><br><span class="line">      System.out.println(arg.getClass().getName() + <span class="string">&quot;：&quot;</span> + arg);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h3 id="Scope"><a href="#Scope" class="headerlink" title="@Scope"></a>@Scope</h3><p><strong>注解版本：</strong> </p>
+<p><strong>场景举例：</strong> </p>
+<h3 id="Singleton"><a href="#Singleton" class="headerlink" title="@Singleton"></a>@Singleton</h3><p><strong>注解版本：</strong> </p>
+<p><strong>场景举例：</strong> </p>
 <h3 id="SuppressWarnings"><a href="#SuppressWarnings" class="headerlink" title="@SuppressWarnings"></a>@SuppressWarnings</h3><p>标注在类或方法上，表示被该注解修饰的程序元素（以及该程序元素中的所有子元素）取消显示指定的编译器警告，且会一直作用于该程序元素的所有子元素。</p>
 <p>注解的使用有以下三种：</p>
 <ul>
@@ -576,8 +555,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E5%8F%8D%E5%B0%84/" rel="prev" title="必知必会面试题之 Java 反射">
-      <i class="fa fa-chevron-left"></i> 必知必会面试题之 Java 反射
+    <a href="/2021/02/02/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BSpring%E6%B3%A8%E8%A7%A3/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
     <a href="/2021/02/28/%E5%BC%80%E6%BA%90%E4%B8%96%E7%95%8C%E9%87%8C%E7%9A%84%E9%87%8D%E8%A6%81%E7%90%86%E5%BF%B5%EF%BC%9A%E4%B8%8A%E6%B8%B8%E4%BC%98%E5%85%88%EF%BC%88UpStream-First%EF%BC%89/" rel="next" title="开源世界里的重要理念：上游优先（UpStream First）">
@@ -648,7 +627,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">元注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Documented"><span class="nav-number">2.1.</span> <span class="nav-text">@Documented</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inherited"><span class="nav-number">2.2.</span> <span class="nav-text">@Inherited</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Retention"><span class="nav-number">2.3.</span> <span class="nav-text">@Retention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Target"><span class="nav-number">2.4.</span> <span class="nav-text">@Target</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text">常用注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Deprecated"><span class="nav-number">3.1.</span> <span class="nav-text">@Deprecated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FunctionalInterface"><span class="nav-number">3.2.</span> <span class="nav-text">@FunctionalInterface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Override"><span class="nav-number">3.3.</span> <span class="nav-text">@Override</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PostConstruct"><span class="nav-number">3.4.</span> <span class="nav-text">@PostConstruct</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SafeVarargs"><span class="nav-number">3.5.</span> <span class="nav-text">@SafeVarargs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SuppressWarnings"><span class="nav-number">3.6.</span> <span class="nav-text">@SuppressWarnings</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">4.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ElementType"><span class="nav-number">4.1.</span> <span class="nav-text">ElementType</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RetentionPolicy"><span class="nav-number">4.2.</span> <span class="nav-text">RetentionPolicy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SuppressWarnings-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">4.3.</span> <span class="nav-text">@SuppressWarnings 关键字</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">元注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Documented"><span class="nav-number">1.1.</span> <span class="nav-text">@Documented</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inherited"><span class="nav-number">1.2.</span> <span class="nav-text">@Inherited</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Retention"><span class="nav-number">1.3.</span> <span class="nav-text">@Retention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Target"><span class="nav-number">1.4.</span> <span class="nav-text">@Target</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">常用注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Deprecated"><span class="nav-number">2.1.</span> <span class="nav-text">@Deprecated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FunctionalInterface"><span class="nav-number">2.2.</span> <span class="nav-text">@FunctionalInterface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Override"><span class="nav-number">2.3.</span> <span class="nav-text">@Override</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PostConstruct"><span class="nav-number">2.4.</span> <span class="nav-text">@PostConstruct</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PreDestroy"><span class="nav-number">2.5.</span> <span class="nav-text">@PreDestroy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Qualifier"><span class="nav-number">2.6.</span> <span class="nav-text">@Qualifier</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SafeVarargs"><span class="nav-number">2.7.</span> <span class="nav-text">@SafeVarargs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scope"><span class="nav-number">2.8.</span> <span class="nav-text">@Scope</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Singleton"><span class="nav-number">2.9.</span> <span class="nav-text">@Singleton</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SuppressWarnings"><span class="nav-number">2.10.</span> <span class="nav-text">@SuppressWarnings</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ElementType"><span class="nav-number">3.1.</span> <span class="nav-text">ElementType</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RetentionPolicy"><span class="nav-number">3.2.</span> <span class="nav-text">RetentionPolicy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SuppressWarnings-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">3.3.</span> <span class="nav-text">@SuppressWarnings 关键字</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -664,20 +643,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

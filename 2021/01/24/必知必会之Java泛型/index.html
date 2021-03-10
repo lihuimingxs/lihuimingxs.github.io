@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"lihuimignxs.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="目录不定期更新中……  泛型的类型安全  泛型上限  泛型下限">
+  <meta name="description" content="不定期更新中……">
 <meta property="og:type" content="article">
 <meta property="og:title" content="必知必会面试题之 Java 泛型">
 <meta property="og:url" content="http://lihuimignxs.github.io/2021/01/24/%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A%E4%B9%8BJava%E6%B3%9B%E5%9E%8B/index.html">
 <meta property="og:site_name" content="江先生的杂货铺">
-<meta property="og:description" content="目录不定期更新中……  泛型的类型安全  泛型上限  泛型下限">
+<meta property="og:description" content="不定期更新中……">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-01-23T16:00:00.000Z">
 <meta property="article:modified_time" content="2021-01-23T16:00:00.000Z">
@@ -258,26 +258,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>不定期更新中……</p>
-<ul>
-<li><a href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8">泛型的类型安全</a> </li>
-<li><a href="#%E6%B3%9B%E5%9E%8B%E4%B8%8A%E9%99%90">泛型上限</a> </li>
-<li><a href="#%E6%B3%9B%E5%9E%8B%E4%B8%8B%E9%99%90">泛型下限</a> </li>
-</ul>
+        <p>不定期更新中……</p>
 <hr>
 <span id="more"></span>
 
 <hr>
-<h3 id="泛型的类型安全"><a href="#泛型的类型安全" class="headerlink" title="泛型的类型安全"></a>泛型的类型安全</h3><p>JDK 1.5 以后引入了泛型的概念，通过泛型能够帮助我们在程序处理中将处理逻辑抽象出来，提高代码复用性。泛型的使用一般遵循类型约束，以此保证泛型类型的安全性。举个例子：</p>
+<h2 id="泛型的类型安全"><a href="#泛型的类型安全" class="headerlink" title="泛型的类型安全"></a>泛型的类型安全</h2><p>JDK 1.5 以后引入了泛型的概念，通过泛型能够帮助我们在程序处理中将处理逻辑抽象出来，提高代码复用性。泛型的使用一般遵循类型约束，以此保证泛型类型的安全性。举个例子：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">private</span> T atrribute;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtrribute</span><span class="params">(T atrribute)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.atrribute = atrribute;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getAtrribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    retrun atrribute;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PersonAtrribute</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> height;</span><br><span class="line">  <span class="keyword">private</span> vision;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DuckAtrribute</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> tail;</span><br><span class="line">  <span class="keyword">private</span> wing;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemoService</span>() </span>&#123;</span><br><span class="line">  Person person = <span class="keyword">new</span> Person();</span><br><span class="line">  PersonAtrribute personAtrribute = <span class="keyword">new</span> PersonAtrribute();</span><br><span class="line">  DuckAtrribute duckAtrribute = <span class="keyword">new</span> DuckAtrribute();</span><br><span class="line">  person.setAtrribute(personAtrribute);</span><br><span class="line">  person.setAtrribute(duckAtrribute);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>上述例子中，DemoService 中错误地将 DuckAtrribute 放入了 Person 的扩展属性中，这显然是不合理的，这也就是我们所关注的泛型安全性问题。</p>
 <p>如果没有类型约束，泛型中就可以存放任何类型的东西，那么当你创建这样的一个泛型时，你就无法预知泛型的使用者会拿它做什么。也许有一天，你会发现自己设计的泛型已经在系统里使用地十分混乱，这显然不是我们设计时想要看到的。因此，我们需要对泛型进行约束。</p>
 <p>泛型约束包括两种：extends 和 super。extends 决定了泛型的上限，super 决定了泛型的下限。</p>
-<h3 id="泛型上限"><a href="#泛型上限" class="headerlink" title="泛型上限"></a>泛型上限</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 泛型可以接受E类型或者E的子类类型。</span></span><br><span class="line">? extends E</span><br></pre></td></tr></table></figure>
+<h2 id="泛型上限"><a href="#泛型上限" class="headerlink" title="泛型上限"></a>泛型上限</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 泛型可以接受E类型或者E的子类类型。</span></span><br><span class="line">? extends E</span><br></pre></td></tr></table></figure>
 
 <p>extends 规定了泛型的上限。当泛型使用 extends 时，使用泛型的类所实现的类型都受 extends 继承类的约束，如果继承了 Person，泛型传进来 Duck 就是不被允许的。</p>
-<h3 id="泛型下限"><a href="#泛型下限" class="headerlink" title="泛型下限"></a>泛型下限</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 可以接受E类型，或者E的父类型。</span></span><br><span class="line">? <span class="keyword">super</span> E</span><br></pre></td></tr></table></figure>
+<h2 id="泛型下限"><a href="#泛型下限" class="headerlink" title="泛型下限"></a>泛型下限</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 可以接受E类型，或者E的父类型。</span></span><br><span class="line">? <span class="keyword">super</span> E</span><br></pre></td></tr></table></figure>
 
 <p>super 规定了泛型的下限，当泛型使用 super 时，使用泛型的类所实现的类型都受 super 父类的约束，如果 super 的是一个属性类，属性类里包括 age 和 sex，那么实现泛型的时候就必须要具备这两种属性。</p>
 
@@ -371,7 +366,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8"><span class="nav-number">1.1.</span> <span class="nav-text">泛型的类型安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8A%E9%99%90"><span class="nav-number">1.2.</span> <span class="nav-text">泛型上限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8B%E9%99%90"><span class="nav-number">1.3.</span> <span class="nav-text">泛型下限</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8"><span class="nav-number">1.</span> <span class="nav-text">泛型的类型安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8A%E9%99%90"><span class="nav-number">2.</span> <span class="nav-text">泛型上限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8B%E9%99%90"><span class="nav-number">3.</span> <span class="nav-text">泛型下限</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -387,20 +382,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
